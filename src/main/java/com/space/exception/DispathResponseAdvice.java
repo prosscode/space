@@ -14,10 +14,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /**
  * @describe:统一结果返回
- * @author: 彭爽
- * @date:2019年2月16日
+ * @author:郑锴 kayle.zheng@huolala.cn
+ * @date:2018年8月17日 下午7:29:57
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class DispathResponseAdvice implements ResponseBodyAdvice<Object>{
 
 	public boolean supports(MethodParameter paramMethodParameter, Class<? extends HttpMessageConverter<?>> paramClass) {

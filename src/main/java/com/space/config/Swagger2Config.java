@@ -1,10 +1,9 @@
 package com.space.config;
 
-import com.google.common.base.Predicates;
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -21,29 +20,22 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class Swagger2Config {
-
-    /**
-     * apiInfo创建该Api的基本信息（这些基本信息会展现在文档页面中）
-     * @return
-     */
+    @Value("${swagger2.enable}")
+    private boolean enable;
+    
+    /**apiInfo创建该Api的基本信息（这些基本信息会展现在文档页面中）*/
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Space项目 APIs")
-//                .description("系统后台APIs")
-                .termsOfServiceUrl("http://localhost:9999/swagger-ui.html")
-                .contact(new Contact("pross","https://pross.space","rukiapr0ss@foxmail.com"))
+                .termsOfServiceUrl("https://pross.space")
+                .contact(new Contact("pross","","rukiapr0ss@foxmail.com"))
                 .version("1.0")
                 .build();
     }
 
-    /**
-     * createUserApi，用户管理
-     * @return
-     */
-    @Bean("LoginAndRegister")
+    @Bean("createUserApi")
     public Docket createUserApi(){
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
                 // 指定模块区分
                 .groupName("登录注册模块")
                 // select()函数返回一个ApiSelectorBuilder实例用来控制哪些接口暴露给Swagger-ui来展现
@@ -54,7 +46,9 @@ public class Swagger2Config {
                 // 指定被扫描的url路径来定义的api，对应的controller一定要@Api注解
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(PathSelectors.regex("/user.*"))
-                .build();
+                .build()
+                .apiInfo(apiInfo())
+                .enable(enable);
     }
 
 }
