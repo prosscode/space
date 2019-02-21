@@ -4,6 +4,7 @@ import com.space.entity.Login;
 import com.space.mapper.LoginMapper;
 import com.space.service.LoginService;
 import com.space.utils.InfoEncryption;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class LoginServiceImpl implements LoginService {
      * @return
      */
     @Transactional
-    public String registered(Login login) throws Exception {
+    public void registered(Login login) throws Exception {
         logger.info("LoginServiceImpl|registered,barName:"+login.getBarName());
         try{
             String currentTime = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
@@ -47,13 +48,11 @@ public class LoginServiceImpl implements LoginService {
             String password = login.getPassword();
             // 进行加密存储
             String passwordBASE64 = InfoEncryption.encryptBASE64(password);
-            loginMapper.insertLogin(userName,password);
+            loginMapper.insertLogin(userName,passwordBASE64);
 
         }catch (Exception e){
             logger.error("LoginServiceImpl|registered,error message:" + e.getMessage() ,e);
         }
-
-        return null;
     }
 
     /**
@@ -62,7 +61,6 @@ public class LoginServiceImpl implements LoginService {
      * @return
      */
     public Integer checkUserName(String userName) {
-        System.out.println("=========");
         return loginMapper.checkUserName(userName);
     }
 
@@ -80,8 +78,17 @@ public class LoginServiceImpl implements LoginService {
      * @param userName
      * @return
      */
-    public String login(String userName) {
-        return null;
+    public void login(String userName,String password) throws Exception {
+        // 拿出数据库的加密的密码
+        String passwordDB = loginMapper.login(userName);
+        // 解密
+        String passwordBASE64 = InfoEncryption.decryptBASE64(passwordDB);
+        // 比较
+        if(password.equals(passwordBASE64)){
+
+        }else{
+            throw new Exception("用户名/密码错误");
+        }
     }
 
     public static void main(String[] args) {

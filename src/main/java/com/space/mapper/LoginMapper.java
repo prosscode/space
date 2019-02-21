@@ -19,5 +19,6 @@ public interface LoginMapper {
 
     public int checkBarName(@Param("barName") String barName);
 
+    /** 登录验证*/
     public String login(@Param("userName")String userName);
 }

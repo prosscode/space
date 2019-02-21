@@ -38,4 +38,8 @@
         SELECT COUNT(*) FROM space_shop WHERE shop_name = #{barName}
     </select>
 
+    <select id="login" parameterType="String" resultType="String">
+        SELECT login_pwd FROM space_login WHERE login_name = #{userName}
+    </select>
+
 </mapper>

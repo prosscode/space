@@ -1,10 +1,12 @@
 package com.space.controller;
 
 import com.space.entity.Login;
+import com.space.exception.BaseExceptionHandler;
 import com.space.service.LoginService;
 import com.space.utils.InfoEncryption;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/user")
 @Api(tags="登录注册校验")
-public class LoginController {
+public class LoginController extends BaseExceptionHandler {
 
     private static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -35,10 +37,9 @@ public class LoginController {
      */
     @ApiOperation(value = "注册接口")
     @RequestMapping(value = "/registered",method = RequestMethod.POST)
-    public String registered(@RequestBody Login login) throws Exception {
+    public void registered(@RequestBody Login login) throws Exception {
         logger.info("LoginController|registered,param: "+login);
         loginService.registered(login);
-        return "hello "+login.getUserName();
     }
 
     /**
@@ -75,15 +76,18 @@ public class LoginController {
 
     /**
      * 登录接口
-     * @param login
      * @throws Exception
      */
     @ApiOperation(value = "登录接口")
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public void login(@RequestBody Login login) throws Exception {
-        String userName = login.getUserName();
-        String password = login.getPassword();
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userName", dataType = "String", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "password", dataType = "String", required = true, paramType = "query")
+    })
+    public void login(@RequestParam(name = "userName",required = true)String userName,
+                      @RequestParam(name = "password",required = true)String password) throws Exception {
+        logger.info("LoginController|login,userName="+userName);
+        loginService.login(userName,password);
 
-        String passwordBASE64 = InfoEncryption.encryptBASE64(password);
     }
 }
