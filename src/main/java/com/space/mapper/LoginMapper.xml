@@ -2,5 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.space.mapper.LoginMapper">
 
+    <resultMap id="Login" type="com.space.entity.Login">
+        <id column="shop_id" property="shopId" />
+        <result column="shop_name" property="barName" />
+        <result column="shop_provice" property="provice" />
+        <result column="shop_city" property="city" />
+        <result column="shop_address" property="address" />
+        <result column="shop_create_date" property="currentTime" />
+    </resultMap>
+
+    <!--注册-->
+    <insert id="registered" parameterType="com.space.entity.Login" useGeneratedKeys="true" keyProperty="shopId">
+        INSERT INTO space_shop (shop_name,shop_provice,shop_city,shop_address,shop_create_date)
+		VALUES (#{barName},#{provice},#{city},#{address},#{currentTime})
+    </insert>
+
+    <!--生成商家编号-->
+    <insert id="insertShopMark">
+        UPDATE space_shop SET shop_mark = #{shopMark} where shop_id=#{shopId}
+    </insert>
+
+    <!--登录信息-->
+    <insert id="insertLogin">
+        INSERT INTO space_login (login_name,login_pwd)
+		VALUES (#{userName},#{password})
+    </insert>
+
+    <!--检测是否有同名用户名-->
+    <select id="checkUserName" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM space_login WHERE login_name = #{userName}
+    </select>
+
+    <!--检测是否有同名店铺名称-->
+    <select id="checkBarName" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM space_shop WHERE shop_name = #{barName}
+    </select>
 
 </mapper>
