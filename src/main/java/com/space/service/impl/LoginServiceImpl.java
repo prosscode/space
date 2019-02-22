@@ -38,7 +38,9 @@ public class LoginServiceImpl implements LoginService {
             String currentTime = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
             login.setCurrentTime(currentTime);
             // 注册到店铺信息
-            int shopId = loginMapper.registered(login);
+
+            int count = loginMapper.registered(login);
+            Integer shopId = login.getShopId();
             String mark = DateFormatUtils.format(new Date(),"yyyyMMdd");
             String uniqueMark = "A"+mark+Integer.toString(shopId);
             // 插入商家编号

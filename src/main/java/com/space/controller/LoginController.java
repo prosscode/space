@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/user")
-@Api(tags="登录注册校验")
+@Api(tags="登录注册模块")
 public class LoginController extends BaseExceptionHandler {
 
     private static Logger logger = LoggerFactory.getLogger(LoginController.class);

@@ -38,7 +38,7 @@ public class Swagger2Config {
      * createUserApi，用户管理
      * @return
      */
-    @Bean("LoginAndRegister")
+    @Bean("createUserApi")
     public Docket createUserApi(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
@@ -52,6 +52,27 @@ public class Swagger2Config {
                 // 指定被扫描的url路径来定义的api，对应的controller一定要@Api注解
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(PathSelectors.regex("/user.*"))
+                .build();
+    }
+
+    /**
+     * 商品管理模块
+     * @return
+     */
+    @Bean("createCommodityApi")
+    public Docket createCommodityApi(){
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                // 指定模块区分
+                .groupName("商品管理模块")
+                // select()函数返回一个ApiSelectorBuilder实例用来控制哪些接口暴露给Swagger-ui来展现
+                .select()
+                // 采用指定扫描的包路径来定义，Swagger2会扫描该包下所有Controller定义的API，除了被@ApiIgnore指定的请求外
+                //.apis(RequestHandlerSelectors.basePackage("com.space.controller"))
+                //.paths(PathSelectors.any())
+                // 指定被扫描的url路径来定义的api，对应的controller一定要@Api注解
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                .paths(PathSelectors.regex("/commodity.*"))
                 .build();
     }
 
