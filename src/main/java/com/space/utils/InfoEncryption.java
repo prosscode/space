@@ -3,9 +3,6 @@ package com.space.utils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-import java.io.IOException;
-import java.security.MessageDigest;
-
 /**
  * @describe:
  * @author: 彭爽pross
@@ -36,8 +33,7 @@ public class InfoEncryption {
 
 
     public static void main(String[] args) throws Exception {
-        System.out.println(
-                InfoEncryption.decryptBASE64(InfoEncryption.encryptBASE64("pengshuang~/.。!")));
+        System.out.println(InfoEncryption.encryptBASE64("/tmp/test/test.sh"));
     }
 
 }

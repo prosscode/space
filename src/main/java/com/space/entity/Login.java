@@ -2,6 +2,8 @@ package com.space.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @describe: 登录实体类
  * @author: 彭爽pross
@@ -9,7 +11,9 @@ import lombok.Data;
  */
 
 @Data
-public class Login {
+public class Login implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Integer shopId;
     // 用户名密码
     private String userName;
