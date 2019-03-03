@@ -51,23 +51,22 @@ public class CommodityServiceImpl implements CommodityService {
     /**删除和上架商品*/
     @Override
     public int deleteAndUpGoods(List<Integer> productIds, List<Object> opNumber) {
+        int returnNum=0;
         try{
             // 取出相应的操作
             int opInt = Integer.parseInt(opNumber.get(0).toString());
             if(opInt == 0){
                 // 删除
-
+                returnNum = commodityMapper.deleteProducts(productIds);
             }
-
             if(opInt == 1){
                 // 上架
-
+                returnNum = commodityMapper.upProduct(productIds);
             }
-
         }catch (Exception e){
             logger.error("CommodityServiceImpl|deleteAndUpGoods,error message:" + e.getMessage() ,e);
         }
-        return 0;
+        return returnNum;
     }
 
     /** 删除商品时，检查商品中是否 存在上架商品*/

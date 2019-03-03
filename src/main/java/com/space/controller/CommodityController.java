@@ -50,12 +50,12 @@ public class CommodityController extends BaseExceptionHandler {
         return commodityService.addGood(commodity);
     }
 
+
     /**删除和上架商品*/
     @ApiOperation(value = "删除和上架商品")
     @RequestMapping(value = "/deleteAndUpGood")
     public int deleteAndUpGoods(@RequestBody Map<String,List<Object>> param) throws Exception {
         List<Object> Ids = param.get("productIds");
-        logger.info("CommodityController|deleteAndUpGood,productIds:" + Ids);
         //转化List<Integer>
         List<Integer> productIds=new ArrayList<>();
         String strIds="";
@@ -63,7 +63,7 @@ public class CommodityController extends BaseExceptionHandler {
             Integer parseInt = Integer.parseInt(id.toString());
             productIds.add(parseInt);
         }
-
+        logger.info("CommodityController|deleteAndUpGood,productIds:" + productIds.toString());
         List<Object> opNumber = param.get("opNumber");
 
         int opInt = Integer.parseInt(opNumber.get(0).toString());

@@ -17,11 +17,11 @@ public interface CommodityMapper {
     public int addGood(Commodity commodity);
 
     /** 检查商品中是否 存在上架商品*/
-    public int checkProductUp(List<Integer> productIds);
+    public int checkProductUp(@Param("productIds") List<Integer> productIds);
 
     /**删除商品*/
-    public int deleteProducts(List<Integer> productIds);
+    public int deleteProducts(@Param("productIds") List<Integer> productIds);
 
     /**上架商品*/
-    public int upProduct();
+    public int upProduct(@Param("productIds") List<Integer> productIds);
 }

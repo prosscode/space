@@ -58,4 +58,14 @@
         </if>
     </delete>
 
+    <!--上架商品，改变状态值-->
+    <update id="upProduct" parameterType="java.util.List">
+        <if test="productIds!=null and productIds.size() > 0">
+            UPDATE product_info set product_status = 1 where product_id in
+            <foreach collection="productIds" item="productId" open="(" close=")" separator=",">
+                #{productId}
+            </foreach>
+        </if>
+    </update>
+
 </mapper>
