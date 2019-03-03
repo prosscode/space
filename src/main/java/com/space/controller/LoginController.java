@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @author: 彭爽pross
  * @date: 2019/02/16
  */
+
 @RestController
 @RequestMapping(value = "/user")
 @Api(tags="登录注册模块")
@@ -55,7 +56,6 @@ public class LoginController extends BaseExceptionHandler {
         if(checkUserName > 0 ){
             throw new Exception("用户名已存在");
         }
-
     }
 
     /**

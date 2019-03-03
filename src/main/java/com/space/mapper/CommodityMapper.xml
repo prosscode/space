@@ -2,9 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.space.mapper.CommodityMapper">
 
-    <select id="checkProductName" resultType="Integer">
-        SELECT count(*) FROM product_info where product_name = #{productName}
+    <resultMap id="Commodity" type="com.space.entity.Commodity">
+        <id column="product_id" property="productId" />
+        <result column="shop_id" property="shopId" />
+        <result column="product_name" property="productName" />
+        <result column="product_image" property="productImage" />
+        <result column="product_description" property="productDesc" />
+        <result column="product_category" property="productCategory" />
+        <result column="product_stocks" property="productStocks" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="product_status" property="productStatus" />
+
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="product_price" property="productPrice" />
+        <result column="offer_price" property="offerPrice" />
+    </resultMap>
+
+    <!-- 检查是否有相同的商品名称-->
+    <select id="checkProductName" parameterType="String" resultType="Integer">
+        SELECT count(*) FROM product_info where product_name = #{productName,jdbcType=VARCHAR}
     </select>
 
+    <insert id="addGood" parameterType="com.space.entity.Commodity">
+        INSERT INTO product_info(shop_id,product_name,product_image,product_description,product_category,product_stocks,create_time)
+        VALUES (
+            #{shopId},
+            #{productName},
+            #{productImage},
+            #{productDesc},
+            #{productCategory},
+            #{productStocks},
+            #{createTime}
+        )
+    </insert>
+
+    <!-- 检查需要删除的商品有没有上架-->
+    <select id="checkProductUp" parameterType="java.util.List">
+        <if test="productIds!=null and productIds.size() > 0">
+            SELECT COUNT(*) FROM product_info WHERE product_status = 1 and product_id in
+            <foreach collection="productIds" item="productId" open="(" close=")" separator=",">
+                #{productId}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 删除商品 -->
+    <delete id="deleteProduct" parameterType="java.util.List">
+        <if test="productIds!=null and productIds.size() > 0">
+            DELETE FROM product_info where product_id in
+            <foreach collection="productIds" item="productId" open="(" close=")" separator=",">
+                #{productId}
+            </foreach>
+        </if>
+    </delete>
 
 </mapper>

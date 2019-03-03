@@ -22,7 +22,7 @@ public class Commodity implements Serializable {
     // 图片
     private String productImage;
     // 描述
-    private String productDescription;
+    private String productDesc;
     // 分类
     private String productCategory;
     // 库存

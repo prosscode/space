@@ -87,7 +87,7 @@ public class LoginServiceImpl implements LoginService {
         String passwordBASE64 = InfoEncryption.decryptBASE64(passwordDB);
         // 比较
         if(password.equals(passwordBASE64)){
-
+            return;
         }else{
             throw new Exception("用户名/密码错误");
         }

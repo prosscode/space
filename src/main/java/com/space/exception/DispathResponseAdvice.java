@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * @author: 彭爽
  * @date:2019年2月16日
  */
-//@ControllerAdvice
+@ControllerAdvice
 public class DispathResponseAdvice implements ResponseBodyAdvice<Object>{
 
 	public boolean supports(MethodParameter paramMethodParameter, Class<? extends HttpMessageConverter<?>> paramClass) {
