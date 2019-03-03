@@ -3,6 +3,7 @@ package com.space.controller;
 import com.space.entity.Commodity;
 import com.space.entity.Login;
 import com.space.exception.BaseExceptionHandler;
+import com.space.exception.PageEntity;
 import com.space.service.CommodityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -34,6 +35,19 @@ public class CommodityController extends BaseExceptionHandler {
     @Autowired
     private CommodityService commodityService;
 
+    /** 展示商品*/
+    @ApiOperation(value = "展示商品")
+    @RequestMapping(value = "/getGoods",method = RequestMethod.GET)
+    public PageEntity getGoods(@RequestParam(name="productName",defaultValue="")String productName,
+                               @RequestParam(name="pageNo",defaultValue="1")Integer pageNo ,
+                               @RequestParam(name="pageSize",defaultValue="20") Integer pageSize){
+        logger.info("CommodityController|getGoods,productName: "+productName);
+        pageNo = (pageNo -1) * pageSize;
+        PageEntity pageEntity = commodityService.getGoods(productName,pageNo,pageSize);
+        return pageEntity;
+    }
+
+
     /**发布商品*/
     @ApiOperation(value = "发布商品")
     @RequestMapping(value = "/publishGoods",method = RequestMethod.POST)
@@ -51,7 +65,7 @@ public class CommodityController extends BaseExceptionHandler {
     }
 
 
-    /**删除和上架商品*/
+    /** 删除和上架商品*/
     @ApiOperation(value = "删除和上架商品")
     @RequestMapping(value = "/deleteAndUpGood")
     public int deleteAndUpGoods(@RequestBody Map<String,List<Object>> param) throws Exception {
@@ -77,5 +91,14 @@ public class CommodityController extends BaseExceptionHandler {
         }
        return commodityService.deleteAndUpGoods(productIds, opNumber);
 
+    }
+
+
+    /** 更新商品*/
+    @ApiOperation(value = "更新商品")
+    @RequestMapping(value = "/updateGood")
+    public int updateGood(@RequestBody Commodity commodity) {
+        logger.info("CommodityController|updateGood,commodity: "+commodity);
+        return commodityService.updateGood(commodity);
     }
 }

@@ -1,10 +1,13 @@
 package com.space.service;
 
 import com.space.entity.Commodity;
+import com.space.exception.PageEntity;
 
 import java.util.List;
 
 public interface CommodityService {
+    /**查询商品*/
+    public PageEntity getGoods(String productName,Integer pageNo,Integer pageSize);
 
     /** 检查是否有相同的商品名*/
     public int checkProductName(String productName);
@@ -17,5 +20,8 @@ public interface CommodityService {
 
     /**删除商品*/
     public int deleteAndUpGoods(List<Integer> productIds,List<Object> opNumber);
+
+    /** 更新商品*/
+    public int updateGood(Commodity commodity);
 
 }

@@ -1,6 +1,7 @@
 package com.space.service.impl;
 
 import com.space.entity.Commodity;
+import com.space.exception.PageEntity;
 import com.space.mapper.CommodityMapper;
 import com.space.service.CommodityService;
 import org.slf4j.Logger;
@@ -24,6 +25,20 @@ public class CommodityServiceImpl implements CommodityService {
     @Autowired
     private CommodityMapper commodityMapper;
 
+
+    /** 查询商品*/
+    @Override
+    public PageEntity getGoods(String productName,Integer pageNo,Integer pageSize) {
+        logger.info("CommodityServiceImpl|getGoods,productName:"+productName+",pageNo:"+pageNo+",pageSize"+pageSize);
+        // 查询
+        List<Commodity> goods = commodityMapper.getGoods(productName,pageNo,pageSize);
+        // 总数
+        int goodsCount = commodityMapper.getGoodsCount(productName);
+        PageEntity pageEntity = new PageEntity();
+        pageEntity.setList(goods);
+        pageEntity.setCount(goodsCount);
+        return pageEntity;
+    }
 
     /** 判断添加商品，商品名称是否存在*/
     @Override
@@ -56,8 +71,9 @@ public class CommodityServiceImpl implements CommodityService {
             // 取出相应的操作
             int opInt = Integer.parseInt(opNumber.get(0).toString());
             if(opInt == 0){
-                // 删除
+                // 删除商品和删除价格
                 returnNum = commodityMapper.deleteProducts(productIds);
+                commodityMapper.deletePrice(productIds);
             }
             if(opInt == 1){
                 // 上架
@@ -69,10 +85,20 @@ public class CommodityServiceImpl implements CommodityService {
         return returnNum;
     }
 
+    /** 更新商品*/
+    @Override
+    public int updateGood(Commodity commodity) {
+        return commodityMapper.updateGood(commodity);
+    }
+
     /** 删除商品时，检查商品中是否 存在上架商品*/
     @Override
     public int checkProductUp(List<Integer> productIds) {
         logger.info("CommodityServiceImpl|checkProductUp,productIds:"+productIds.toString());
         return commodityMapper.checkProductUp(productIds);
     }
+
+
+
+
 }
