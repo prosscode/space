@@ -51,7 +51,7 @@ public class Swagger2Config {
                 //.paths(PathSelectors.any())
                 // 指定被扫描的url路径来定义的api，对应的controller一定要@Api注解
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
-                .paths(PathSelectors.regex("/user.*"))
+                .paths(PathSelectors.regex("/before.*"))
                 .build();
     }
 

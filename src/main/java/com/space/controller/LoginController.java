@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/before")
 @Api(tags="登录注册模块")
 public class LoginController extends BaseExceptionHandler {
 
@@ -37,9 +37,10 @@ public class LoginController extends BaseExceptionHandler {
      */
     @ApiOperation(value = "注册接口")
     @RequestMapping(value = "/registered",method = RequestMethod.POST)
-    public void registered(@RequestBody Login login) throws Exception {
+    public int registered(@RequestBody Login login) throws Exception {
         logger.info("LoginController|registered,param: "+login);
-        loginService.registered(login);
+        int registered = loginService.registered(login);
+        return registered;
     }
 
     /**

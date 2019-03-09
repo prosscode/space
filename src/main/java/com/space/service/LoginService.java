@@ -4,7 +4,7 @@ import com.space.entity.Login;
 
 public interface LoginService {
 
-    public void registered(Login login) throws Exception;
+    public int registered(Login login) throws Exception;
 
     public Integer checkUserName(String userName);
 

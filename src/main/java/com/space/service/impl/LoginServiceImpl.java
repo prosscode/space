@@ -32,8 +32,9 @@ public class LoginServiceImpl implements LoginService {
      * @return
      */
     @Transactional
-    public void registered(Login login) throws Exception {
+    public int registered(Login login) throws Exception {
         logger.info("LoginServiceImpl|registered,barName:"+login.getBarName());
+        int returnNum = 0;
         try{
             String currentTime = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
             login.setCurrentTime(currentTime);
@@ -50,11 +51,12 @@ public class LoginServiceImpl implements LoginService {
             String password = login.getPassword();
             // 进行加密存储
             String passwordBASE64 = InfoEncryption.encryptBASE64(password);
-            loginMapper.insertLogin(userName,passwordBASE64);
+            returnNum = loginMapper.insertLogin(userName, passwordBASE64);
 
         }catch (Exception e){
             logger.error("LoginServiceImpl|registered,error message:" + e.getMessage() ,e);
         }
+        return returnNum;
     }
 
     /**
