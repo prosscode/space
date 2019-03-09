@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.*;
  * @author: 彭爽pross
  * @date: 2019/03/09
  */
-
 @RestController
 @RequestMapping(value = "/user")
-@Api(tags="用户管理模块")
 public class UserController {
 
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
