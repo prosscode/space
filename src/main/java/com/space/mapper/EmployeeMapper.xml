@@ -5,17 +5,22 @@
 
     <!--添加员工分类-->
     <insert id="addStaffType" parameterType="com.space.entity.StaffType">
-        insert into shop_staff_info(shop_mark,staff_type_name,staff_type_commission,staff_type_desc,staff_type_number)
+        insert into shop_staff_type(shop_mark,staff_type_name,staff_type_commission,staff_type_desc,staff_type_number)
         values (#{shopMark},#{staffTypeName},#{staffTypeCommission},#{staffTypeDesc},#{staffTypeNumber})
     </insert>
 
     <!--查看是否同名分类-->
     <select id="checkStaffType" resultType="Integer">
-        select count(*) from shop_staff_info where shop_mark=#{shopMark} and staff_type_name=#{staffTypeName}
+        select count(*) from shop_staff_type where shop_mark=#{shopMark} and staff_type_name=#{staffTypeName}
     </select>
 
     <!--删除员工分类-->
     <delete id="deleteStaffType">
-        delete from shop_staff_info where shop_mark=#{shopMark} and staff_type_Name=#{staffTypeName}
+        delete from shop_staff_type where shop_mark=#{shopMark} and staff_type_Name=#{staffTypeName}
     </delete>
+
+    <!--添加员工-->
+    <insert id="addStaff"  useGeneratedKeys="true" keyProperty="shopId">
+        insert into shop_staff()
+    </insert>
 </mapper>

@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @describe: 区间价格
  * @author: 彭爽pross
- * @date: 2019/03/03
+ * @date: 2019/02/20
  */
 
 @Data

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * @describe: 商品
  * @author: 彭爽pross
- * @date: 2019/03/03
+ * @date: 2019/02/23
  */
 @Data
 public class Commodity implements Serializable {

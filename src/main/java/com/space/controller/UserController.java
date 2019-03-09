@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @describe: 用户管理模块
  * @author: 彭爽pross
- * @date: 2019/03/09
+ * @date: 2019/03/03
  */
 @RestController
 @RequestMapping(value = "/user")
