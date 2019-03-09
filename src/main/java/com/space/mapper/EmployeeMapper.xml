@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.space.mapper.EmployeeMapper">
 
+    <resultMap id="BaseResultMap" type="com.space.entity.Staff">
+        <id column="staff_id" property="staffId" />
+        <result column="staff_name" property="staffName" />
+        <result column="staff_mark" property="staffMark" />
+        <result column="staff_type" property="staffType" />
+        <result column="staff_image" property="staffImage" />
+        <result column="staff_phone" property="staffPhone" />
+        <result column="staff_sale" property="staffSale" />
+        <result column="staff_date" property="staffDate" />
+        <result column="shop_Mark" property="shopMark" />
+        <result column="staff_gender" property="staffGender" />
+        <result column="staff_desc" property="staffDesc" />
+    </resultMap>
 
     <!--添加员工分类-->
     <insert id="addStaffType" parameterType="com.space.entity.StaffType">
@@ -20,7 +33,54 @@
     </delete>
 
     <!--添加员工-->
-    <insert id="addStaff"  useGeneratedKeys="true" keyProperty="shopId">
-        insert into shop_staff()
+    <insert id="addStaff"  useGeneratedKeys="true" keyProperty="staffId">
+        insert into shop_staff(staff_name,staff_type,staff_phone,staff_date,shop_mark,staff_gender,staff_desc)
+        values (#{staffName},#{staffType},#{staffPhone},#{staffDate},#{shopMark},#{staffGender},#{staffDesc})
     </insert>
+
+
+    <update id="insertStaffMark">
+        update shop_staff set staff_mark=#{staffMark} where staff_id=#{staffId}
+    </update>
+    <!--得到员工分类-->
+    <select id="getStaffTypes" resultType="String">
+        select staff_type_name from shop_staff_type where shop_mark=#{shopMark}
+    </select>
+
+    <!--查询员工-->
+    <select id="getStaffs" resultMap="BaseResultMap">
+        select * from shop_staff where shop_mark = #{shopMark}
+        <if test="staffName!=null and staffName!=''">
+            and staff_name = #{staffName}
+        </if>
+        <if test="staffType!=null and staffType!=''">
+            and staff_type = #{staffType}
+        </if>
+        <if test="dateFrom!=null and dateFrom!=''">
+            and staff_date &gt;= #{dateFrom}
+        </if>
+        <if test="dateTo!=null and dateTo!=''">
+            and staff_date &lt;= #{dateTo}
+        </if>
+        <if test="pageNo >= 0 and pageSize > 0">
+            limit #{pageNo},#{pageSize}
+        </if>
+    </select>
+
+    <!--查询员工总数-->
+    <select id="getStaffsCount" resultType="Integer">
+        select count(*) from shop_staff where shop_mark = #{shopMark}
+        <if test="staffName!=null and staffName!=''">
+            and staff_name = #{staffName}
+        </if>
+        <if test="staffType!=null and staffType!=''">
+            and staff_type = #{staffType}
+        </if>
+        <if test="dateFrom!=null and dateFrom!=''">
+            and staff_date &gt;= #{dateFrom}
+        </if>
+        <if test="dateTo!=null and dateTo!=''">
+            and staff_date &lt;= #{dateTo}
+        </if>
+    </select>
 </mapper>
