@@ -2,10 +2,69 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.space.mapper.UserMapper">
 
+    <resultMap id="BaseResultMap" type="com.space.entity.User">
+        <id column="user_id" property="userId" />
+        <result column="shop_id" property="shopId" />
+        <result column="user_name" property="userName" />
+        <result column="shop_mark" property="shopMark" />
+        <result column="user_phone" property="userPhone" />
+        <result column="user_wechat" property="userWechat" />
+        <result column="user_pay" property="userPay" />
+        <result column="user_rebate" property="userRebate" />
+        <result column="user_withdrawal" property="userWithdrawal" />
+        <result column="user_offline" property="userOffline" />
+        <result column="user_role" property="userRole" />
+    </resultMap>
 
+    <!--添加用户-->
     <insert id="addUser" parameterType="com.space.entity.User">
         insert into shop_user(user_name,shop_mark,user_phone,user_wechat)
         values (#{userName},#{shopMark},#{userPhone},#{userWechat})
     </insert>
 
+    <!--开启关闭分销-->
+    <update id="openDistribution">
+        update space_shop set shop_distribution = #{openFlag} where shop_mark=#{shopMark}
+    </update>
+
+    <!--查询用户-->
+    <select id="getUsers" resultMap="BaseResultMap">
+        select * from shop_user where shop_mark = #{shopMark}
+
+        <if test="userName != null and userName!=''">
+            user_name = #{userName},
+        </if>
+        <if test="userPhone != null and userPhone!=''">
+            user_phone = #{userPhone},
+        </if>
+        <if test="userWechat != null and userWechat!=''">
+            user_wechat = #{userWechat},
+        </if>
+        <if test="userRole > -1 and userRole != null">
+            user_role = #{userRole}
+        </if>
+        <if test="pageNo >= 0 and pageSize > 0">
+            limit #{pageNo},#{pageSize}
+        </if>
+
+    </select>
+
+    <!--查询用户数量-->
+    <select id="getUsersCount" resultType="Integer">
+        select count(*) from shop_user where shop_mark = #{shopMark}
+
+        <if test="userName != null and userName!=''">
+            user_name = #{userName},
+        </if>
+        <if test="userPhone != null and userPhone!=''">
+            user_phone = #{userPhone},
+        </if>
+        <if test="userWechat != null and userWechat!=''">
+            user_wechat = #{userWechat},
+        </if>
+        <if test="userRole > -1 and userRole != null">
+            user_role = #{userRole}
+        </if>
+
+    </select>
 </mapper>
