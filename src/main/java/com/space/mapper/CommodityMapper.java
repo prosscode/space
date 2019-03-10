@@ -10,6 +10,17 @@ import java.util.List;
 @Mapper
 public interface CommodityMapper {
 
+    /**增加商品分组*/
+    public int addGoodType(@Param("typeName")String typeName,@Param("shopId")Integer shopId,@Param("currentTime") String currentTime);
+
+    /**增加商家座位分组*/
+    public int addSeatType(@Param("typeName")String typeName,@Param("shopId")Integer shopId,@Param("seatNumber")Integer seatNumber,
+                           @Param("currentTime") String currentTime,@Param("role")Integer role);
+
+    /** 查询座位分组*/
+    public List<String> getSeatType(@Param("shopId")Integer shopId);
+
+
     /** 查询商品*/
     public List<Commodity> getGoods(@Param("productName") String productName,
                                     @Param("pageNo")Integer pageNo,

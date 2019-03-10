@@ -20,7 +20,20 @@
         <result column="offer_price" property="offerPrice" />
     </resultMap>
 
+    <!--新增分组，商品和座位-->
+    <insert id="addGoodType">
+        insert into product_type(shop_id,type_name,create_time)
+        values (#{shopId},#{typeName},#{currentTime})
+    </insert>
+    <insert id="addSeatType">
+        insert into product_type(shop_id,type_name,seat_number,create_time,role)
+        values (#{shopId},#{typeName},#{seatNumber},#{currentTime},#{role})
+    </insert>
 
+    <!--查询座位区域分组-->
+    <select id="getSeatType" resultType="String">
+        select type_name from product_type where shop_id=#{shopId} and role=1
+    </select>
     <!--查询商品-->
     <select id="getGoods" resultMap="BaseResultMap">
         SELECT product_id,shop_id,product_name,product_category,product_stocks,product_description,create_time,product_status

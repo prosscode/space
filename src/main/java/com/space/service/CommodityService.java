@@ -6,6 +6,16 @@ import com.space.exception.PageEntity;
 import java.util.List;
 
 public interface CommodityService {
+
+    /**增加分组*/
+    public int addGoodType(String typeName, Integer shopId);
+
+    /**增加商家座位分组*/
+    public int addSeatType(String seatType, Integer shopId,Integer seatNumber);
+
+    /**查询得到所有的座位分类*/
+    public List<String> getSeatType(Integer shopId);
+
     /**查询商品*/
     public PageEntity getGoods(String productName,Integer pageNo,Integer pageSize);
 

@@ -38,7 +38,7 @@
         values (#{staffName},#{staffType},#{staffPhone},#{staffDate},#{shopMark},#{staffGender},#{staffDesc})
     </insert>
 
-
+    <!--回溯增加员工编号-->
     <update id="insertStaffMark">
         update shop_staff set staff_mark=#{staffMark} where staff_id=#{staffId}
     </update>

@@ -4,11 +4,13 @@ import com.space.entity.Commodity;
 import com.space.exception.PageEntity;
 import com.space.mapper.CommodityMapper;
 import com.space.service.CommodityService;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -25,6 +27,29 @@ public class CommodityServiceImpl implements CommodityService {
     @Autowired
     private CommodityMapper commodityMapper;
 
+
+    /**增加商品分组/座位区域分组*/
+    @Override
+    public int addGoodType(String typeName, Integer shopId) {
+        //时间
+        String currentTime = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
+        return commodityMapper.addGoodType(typeName,shopId,currentTime);
+    }
+    @Override
+    public int addSeatType(String seatTypeName, Integer shopId, Integer seatNumber) {
+        //时间
+        String currentTime = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
+        // 角色
+        int role = 1;
+        return commodityMapper.addSeatType(seatTypeName,shopId,seatNumber,currentTime,role);
+    }
+
+    /** 查询座位分组*/
+    @Override
+    public List<String> getSeatType(Integer shopId) {
+        List<String> type = commodityMapper.getSeatType(shopId);
+        return type;
+    }
 
     /** 查询商品*/
     @Override

@@ -32,6 +32,33 @@ public class CommodityController extends BaseExceptionHandler {
     @Autowired
     private CommodityService commodityService;
 
+    /** 新建商品分组*/
+    @RequestMapping(value = "/addGoodType",method = RequestMethod.GET)
+    public int addGoodType(@RequestParam(name="typeName",required = true)String typeName,
+                            @RequestParam(name="shopId",required = true)Integer shopId
+                            ){
+        logger.info("CommodityController|addGoodType,typeName:"+typeName+",shopId："+shopId);
+        int goodType = commodityService.addGoodType(typeName, shopId);
+        return goodType;
+    }
+
+    /** 增加商家座位分组*/
+    @RequestMapping(value = "/addSeatType",method = RequestMethod.GET)
+    public int addSeatType(@RequestParam(name="seatTypeName",required = true)String seatTypeName,
+                           @RequestParam(name="seatNumber",required = true)Integer seatNumber,
+                           @RequestParam(name="shopId",required = true)Integer shopId){
+        logger.info("CommodityController|addSeatType,seatTypeName:"+seatTypeName+",shopId："+shopId);
+        int seatType = commodityService.addSeatType(seatTypeName,shopId,seatNumber);
+        return seatType;
+    }
+
+    /** 查询区域座位*/
+    @RequestMapping(value = "/getSeatType",method = RequestMethod.GET)
+    public List<String> getSeatType(@RequestParam(name="shopId",required = true)Integer shopId){
+        logger.info("CommodityController|getSeatType,shopId:"+shopId);
+        return commodityService.getSeatType(shopId);
+    }
+
     /** 展示商品*/
     @ApiOperation(value = "展示商品")
     @RequestMapping(value = "/getGoods",method = RequestMethod.GET)
