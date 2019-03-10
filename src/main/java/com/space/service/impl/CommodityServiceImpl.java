@@ -2,6 +2,7 @@ package com.space.service.impl;
 
 import com.space.entity.Commodity;
 import com.space.entity.CommodityType;
+import com.space.entity.ShopSeat;
 import com.space.exception.PageEntity;
 import com.space.mapper.CommodityMapper;
 import com.space.service.CommodityService;
@@ -36,16 +37,12 @@ public class CommodityServiceImpl implements CommodityService {
         int num=0;
         // 添加时间 为当前时间
         String currentTime = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
-        if(StringUtils.isBlank(typeSubName) && seatNumber == -1){
+        if(StringUtils.isBlank(typeSubName) && seatNumber == 0){
             // 添加商品父分组
             num = commodityMapper.addGoodType(typeName,shopId,currentTime);
         }
-        if(seatNumber != -1 && StringUtils.isBlank(typeSubName)){
-            //添加座位父分组
-            role = 1;
-            num = commodityMapper.addSeatType(typeName,shopId,currentTime,role);
-        }
-        if(seatNumber != -1 && !StringUtils.isBlank(typeSubName)){
+
+        if(seatNumber != 0 && !StringUtils.isBlank(typeSubName)){
             // 添加子分组
             role = 1;
             num = commodityMapper.addGoodSubType(typeName,typeSubName,shopId,seatNumber,currentTime,role);
@@ -140,6 +137,30 @@ public class CommodityServiceImpl implements CommodityService {
     @Override
     public int updateGood(Commodity commodity) {
         return commodityMapper.updateGood(commodity);
+    }
+
+
+    /**添加座位编号*/
+    @Override
+    public int addSeatMark(Integer shopId, String seatType, String seatPrefix, Integer seatNum, Integer seatCount) {
+        String seatMark = seatPrefix+seatNum;
+        return commodityMapper.addSeatMark(shopId,seatType,seatMark,seatCount);
+    }
+
+    /**查询桌位*/
+    @Override
+    public PageEntity getSeat(Integer shopId) {
+        List<ShopSeat> seat = commodityMapper.getSeat(shopId);
+        PageEntity entity = new PageEntity();
+        entity.setList(seat);
+        entity.setCount(0);
+        return entity;
+    }
+
+    /**删除桌位*/
+    @Override
+    public int deleteSeat(Integer seatId, Integer shopId) {
+        return commodityMapper.deleteSeat(seatId,shopId);
     }
 
     /** 删除商品时，检查商品中是否 存在上架商品*/

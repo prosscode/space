@@ -38,7 +38,7 @@ public class CommodityController extends BaseExceptionHandler {
     public int addGoodType(@RequestParam(name="shopId",required = true)Integer shopId,
                            @RequestParam(name="typeName",required = true)String typeName,
                            @RequestParam(name="typeSubName",defaultValue = "")String typeSubName,
-                           @RequestParam(name="seatNumber",defaultValue = "0")Integer seatNumber,
+                           @RequestParam(name="seatNumber",defaultValue = "-1")Integer seatNumber,
                            @RequestParam(name="role",defaultValue = "0") Integer role){
         logger.info("CommodityController|addGoodType,typeName:"+typeName+",shopId："+shopId+",role:"+role);
         int goodType = commodityService.addGoodType(shopId,typeName,typeSubName,seatNumber,role);
@@ -101,7 +101,7 @@ public class CommodityController extends BaseExceptionHandler {
 
     /** 删除和上架商品*/
     @ApiOperation(value = "删除和上架商品")
-    @RequestMapping(value = "/deleteAndUpGood")
+    @RequestMapping(value = "/deleteAndUpGood",method = RequestMethod.POST)
     public int deleteAndUpGoods(@RequestBody Map<String,List<Object>> param) throws Exception {
         List<Object> Ids = param.get("productIds");
         //转化List<Integer>
@@ -127,12 +127,40 @@ public class CommodityController extends BaseExceptionHandler {
 
     }
 
-
     /** 更新商品*/
-    @ApiOperation(value = "更新商品")
-    @RequestMapping(value = "/updateGood")
+    @RequestMapping(value = "/updateGood",method = RequestMethod.POST)
     public int updateGood(@RequestBody Commodity commodity) {
         logger.info("CommodityController|updateGood,commodity: "+commodity);
         return commodityService.updateGood(commodity);
     }
+
+    /**增加桌位编号/编辑桌位*/
+    @RequestMapping(value = "/addSeatMark",method = RequestMethod.GET)
+    public int addSeatMark(@RequestParam(name="shopId",required = true)Integer shopId,
+                           @RequestParam(name="seatType",required = true)String seatType,
+                           @RequestParam(name="seatPrefix",required = true)String seatPrefix,
+                           @RequestParam(name="seatNum",required = true) Integer seatNum,
+                           @RequestParam(name="seatCount",required = true) Integer seatCount){
+        logger.info("CommodityController|addSeatMark,seatType:"+seatType+",seatPrefix"+seatPrefix+",shopId:"+shopId);
+        return commodityService.addSeatMark(shopId,seatType,seatPrefix,seatNum,seatCount);
+
+    }
+
+    /**查询桌位*/
+    @RequestMapping(value = "/getSeat",method = RequestMethod.GET)
+    public PageEntity getSeat(@RequestParam(name="shopId",required = true)Integer shopId){
+        logger.info("CommodityController|getSeat,shopId:"+shopId);
+        PageEntity seat = commodityService.getSeat(shopId);
+        return seat;
+    }
+
+
+    /**删除桌位*/
+    @RequestMapping(value = "/deleteSeat",method = RequestMethod.GET)
+    public int deleteSeat(@RequestParam(name="seatId",required = true)Integer seatId,
+                          @RequestParam(name="shopId",required = true)Integer shopId){
+        logger.info("CommodityController|deleteSeat,seatId:"+seatId+",shopId:"+shopId);
+        return commodityService.deleteSeat(seatId,shopId);
+    }
+
 }

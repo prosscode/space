@@ -36,4 +36,13 @@ public interface CommodityService {
     /** 更新商品*/
     public int updateGood(Commodity commodity);
 
+    /**添加桌位编号*/
+    public int addSeatMark(Integer shopId,String seatType,String seatPrefix,Integer seatNum,Integer seatCount);
+
+    /**查询桌位*/
+    public PageEntity getSeat(Integer shopId);
+
+    /**删除桌位*/
+    public int deleteSeat(Integer seatId,Integer shopId);
+
 }

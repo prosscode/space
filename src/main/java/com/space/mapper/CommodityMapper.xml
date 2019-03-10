@@ -30,14 +30,18 @@
         <result column="role" property="role"/>
     </resultMap>
 
+    <resultMap id="ShopSeat" type="com.space.entity.ShopSeat">
+        <id column="seat_id" property="seatId" />
+        <result column="shop_id" property="shopId"/>
+        <result column="seat_mark" property="seatMark"/>
+        <result column="seat_type" property="seatType"/>
+        <result column="seat_num" property="seatNum"/>
+    </resultMap>
+
     <!--新增分组，商品和座位-->
     <insert id="addGoodType">
         insert into product_type(shop_id,type_name,create_time)
         values (#{shopId},#{typeName},#{currentTime})
-    </insert>
-    <insert id="addSeatType">
-        insert into product_type(shop_id,type_name,create_time,role)
-        values (#{shopId},#{typeName},#{currentTime},#{role})
     </insert>
     <!--新增子分组-->
     <insert id="addGoodSubType">
@@ -163,4 +167,18 @@
         WHERE product_id = #{productId}
     </update>
 
+    <!--新增座位编号-->
+    <insert id="addSeatMark">
+        insert into shop_seat(shop_id,seat_type,seat_mark,seat_num)
+        values (#{shopId},#{seatType},#{seatMark},#{seatCount})
+    </insert>
+
+    <!--查询桌位-->
+    <select id="getSeat" resultMap="ShopSeat">
+        select * from shop_seat where shop_id=#{shopId}
+    </select>
+    <!--删除桌位-->
+    <delete id="deleteSeat">
+        delete from shop_seat where seat_id=#{seatId} and shop_id=#{shopId}
+    </delete>
 </mapper>
