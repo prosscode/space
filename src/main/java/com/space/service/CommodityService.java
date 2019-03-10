@@ -13,8 +13,14 @@ public interface CommodityService {
     /**增加商家座位分组*/
     public int addSeatType(String seatType, Integer shopId,Integer seatNumber);
 
-    /**查询得到所有的座位分类*/
-    public List<String> getSeatType(Integer shopId);
+    /**查询所有分类*/
+    public PageEntity getGoodType(Integer shopId);
+
+    /** 删除分组*/
+    public int deleteGoodType(Integer shopId,String typeName);
+    /** 编辑分组*/
+    public int updateGoodType(Integer typeId,Integer shopId,String typeName);
+
 
     /**查询商品*/
     public PageEntity getGoods(String productName,Integer pageNo,Integer pageSize);

@@ -52,11 +52,28 @@ public class CommodityController extends BaseExceptionHandler {
         return seatType;
     }
 
-    /** 查询区域座位*/
-    @RequestMapping(value = "/getSeatType",method = RequestMethod.GET)
-    public List<String> getSeatType(@RequestParam(name="shopId",required = true)Integer shopId){
-        logger.info("CommodityController|getSeatType,shopId:"+shopId);
-        return commodityService.getSeatType(shopId);
+    /** 查询所有分组*/
+    @RequestMapping(value = "/getGoodType",method = RequestMethod.GET)
+    public PageEntity getGoodType(@RequestParam(name="shopId",required = true)Integer shopId){
+        logger.info("CommodityController|getGoodType,shopId:"+shopId);
+        return commodityService.getGoodType(shopId);
+    }
+
+    /**重新编辑*/
+    @RequestMapping(value = "/updateGoodType",method = RequestMethod.GET)
+    public int updateGoodType(@RequestParam(name="typeId",required = true)Integer typeId,
+                              @RequestParam(name="shopId",required = true)Integer shopId,
+                              @RequestParam(name="typeName",required = true)String typeName){
+        logger.info("CommodityController|updateGoodType,shopId:"+shopId+"，typeName"+typeName);
+        return commodityService.updateGoodType(typeId,shopId,typeName);
+    }
+
+    /** 删除商品分组*/
+    @RequestMapping(value = "/deleteGoodType",method = RequestMethod.GET)
+    public int deleteGoodType(@RequestParam(name="shopId",required = true)Integer shopId,
+                              @RequestParam(name="typeName",required = true)String typeName){
+        logger.info("CommodityController|deleteGoodType,shopId:"+shopId+"，typeName"+typeName);
+        return commodityService.deleteGoodType(shopId,typeName);
     }
 
     /** 展示商品*/

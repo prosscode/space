@@ -2,6 +2,7 @@ package com.space.mapper;
 
 
 import com.space.entity.Commodity;
+import com.space.entity.CommodityType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,8 +18,14 @@ public interface CommodityMapper {
     public int addSeatType(@Param("typeName")String typeName,@Param("shopId")Integer shopId,@Param("seatNumber")Integer seatNumber,
                            @Param("currentTime") String currentTime,@Param("role")Integer role);
 
-    /** 查询座位分组*/
-    public List<String> getSeatType(@Param("shopId")Integer shopId);
+    /** 查询所有分组*/
+    public List<CommodityType> getGoodType(@Param("shopId")Integer shopId);
+
+    /** 删除分组*/
+    public int deleteGoodType(@Param("shopId")Integer shopId,@Param("typeName")String typeName);
+
+    /** 编辑分组*/
+    public int updateGoodType(@Param("typeId")Integer typeId,@Param("shopId")Integer shopId,@Param("typeName")String typeName);
 
 
     /** 查询商品*/

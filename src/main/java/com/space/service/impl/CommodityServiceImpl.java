@@ -1,6 +1,7 @@
 package com.space.service.impl;
 
 import com.space.entity.Commodity;
+import com.space.entity.CommodityType;
 import com.space.exception.PageEntity;
 import com.space.mapper.CommodityMapper;
 import com.space.service.CommodityService;
@@ -46,9 +47,25 @@ public class CommodityServiceImpl implements CommodityService {
 
     /** 查询座位分组*/
     @Override
-    public List<String> getSeatType(Integer shopId) {
-        List<String> type = commodityMapper.getSeatType(shopId);
-        return type;
+    public PageEntity getGoodType(Integer shopId) {
+        List<CommodityType> type = commodityMapper.getGoodType(shopId);
+        PageEntity entity = new PageEntity();
+        entity.setList(type);
+        entity.setCount(0);
+        return entity;
+    }
+
+    /** 删除分组*/
+    @Override
+    public int deleteGoodType(Integer shopId, String typeName) {
+        return  commodityMapper.deleteGoodType(shopId,typeName);
+    }
+
+    /**编辑分组*/
+    @Override
+    public int updateGoodType(Integer typeId,Integer shopId, String typeName) {
+        return commodityMapper.updateGoodType(typeId,shopId,typeName);
+
     }
 
     /** 查询商品*/

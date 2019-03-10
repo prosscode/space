@@ -20,6 +20,15 @@
         <result column="offer_price" property="offerPrice" />
     </resultMap>
 
+    <resultMap id="CommodityType" type="com.space.entity.CommodityType">
+        <id column="type_id" property="typeId" />
+        <result column="shop_id" property="shopId"/>
+        <result column="type_name" property="typeName"/>
+        <result column="seat_number" property="seatNumber"/>
+        <result column="create_time" property="createTime"/>
+        <result column="role" property="role"/>
+    </resultMap>
+
     <!--新增分组，商品和座位-->
     <insert id="addGoodType">
         insert into product_type(shop_id,type_name,create_time)
@@ -30,10 +39,19 @@
         values (#{shopId},#{typeName},#{seatNumber},#{currentTime},#{role})
     </insert>
 
-    <!--查询座位区域分组-->
-    <select id="getSeatType" resultType="String">
-        select type_name from product_type where shop_id=#{shopId} and role=1
+    <!--查询分组-->
+    <select id="getGoodType" resultMap="CommodityType">
+        select * from product_type where shop_id=#{shopId}
     </select>
+    <!--删除分组-->
+    <delete id="deleteGoodType">
+        delete from product_type where shop_id=#{shopId} and type_name=#{typeName}
+    </delete>
+    <!--编辑分组-->
+    <update id="updateGoodType">
+        update product_type set type_name=#{typeName} where shop_id=#{shopId} and type_id=#{typeId}
+    </update>
+
     <!--查询商品-->
     <select id="getGoods" resultMap="BaseResultMap">
         SELECT product_id,shop_id,product_name,product_category,product_stocks,product_description,create_time,product_status
