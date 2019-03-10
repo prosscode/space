@@ -8,10 +8,7 @@ import java.util.List;
 public interface CommodityService {
 
     /**增加分组*/
-    public int addGoodType(String typeName, Integer shopId);
-
-    /**增加商家座位分组*/
-    public int addSeatType(String seatType, Integer shopId,Integer seatNumber);
+    public int addGoodType(Integer shopId,String typeName,String typeSubName,Integer seatNumber,Integer role);
 
     /**查询所有分类*/
     public PageEntity getGoodType(Integer shopId);
@@ -20,7 +17,6 @@ public interface CommodityService {
     public int deleteGoodType(Integer shopId,String typeName);
     /** 编辑分组*/
     public int updateGoodType(Integer typeId,Integer shopId,String typeName);
-
 
     /**查询商品*/
     public PageEntity getGoods(String productName,Integer pageNo,Integer pageSize);

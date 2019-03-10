@@ -5,6 +5,7 @@ import com.space.entity.CommodityType;
 import com.space.exception.PageEntity;
 import com.space.mapper.CommodityMapper;
 import com.space.service.CommodityService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,20 +30,28 @@ public class CommodityServiceImpl implements CommodityService {
     private CommodityMapper commodityMapper;
 
 
-    /**增加商品分组/座位区域分组*/
+    /** 添加分组*/
     @Override
-    public int addGoodType(String typeName, Integer shopId) {
-        //时间
+    public int addGoodType(Integer shopId, String typeName, String typeSubName,Integer seatNumber, Integer role) {
+        int num=0;
+        // 添加时间 为当前时间
         String currentTime = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
-        return commodityMapper.addGoodType(typeName,shopId,currentTime);
-    }
-    @Override
-    public int addSeatType(String seatTypeName, Integer shopId, Integer seatNumber) {
-        //时间
-        String currentTime = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
-        // 角色
-        int role = 1;
-        return commodityMapper.addSeatType(seatTypeName,shopId,seatNumber,currentTime,role);
+        if(StringUtils.isBlank(typeSubName) && seatNumber == -1){
+            // 添加商品父分组
+            num = commodityMapper.addGoodType(typeName,shopId,currentTime);
+        }
+        if(seatNumber != -1 && StringUtils.isBlank(typeSubName)){
+            //添加座位父分组
+            role = 1;
+            num = commodityMapper.addSeatType(typeName,shopId,currentTime,role);
+        }
+        if(seatNumber != -1 && !StringUtils.isBlank(typeSubName)){
+            // 添加子分组
+            role = 1;
+            num = commodityMapper.addGoodSubType(typeName,typeSubName,shopId,seatNumber,currentTime,role);
+        }
+
+        return num;
     }
 
     /** 查询座位分组*/

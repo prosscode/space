@@ -24,6 +24,7 @@
         <id column="type_id" property="typeId" />
         <result column="shop_id" property="shopId"/>
         <result column="type_name" property="typeName"/>
+        <result column="type_name_sub" property="typeNameSub"/>
         <result column="seat_number" property="seatNumber"/>
         <result column="create_time" property="createTime"/>
         <result column="role" property="role"/>
@@ -35,8 +36,13 @@
         values (#{shopId},#{typeName},#{currentTime})
     </insert>
     <insert id="addSeatType">
-        insert into product_type(shop_id,type_name,seat_number,create_time,role)
-        values (#{shopId},#{typeName},#{seatNumber},#{currentTime},#{role})
+        insert into product_type(shop_id,type_name,create_time,role)
+        values (#{shopId},#{typeName},#{currentTime},#{role})
+    </insert>
+    <!--新增子分组-->
+    <insert id="addGoodSubType">
+        insert into product_type(shop_id,type_name,type_name_sub,seat_number,create_time,role)
+        values (#{shopId},#{typeName},#{typeSubName},#{seatNumber},#{currentTime},#{role})
     </insert>
 
     <!--查询分组-->

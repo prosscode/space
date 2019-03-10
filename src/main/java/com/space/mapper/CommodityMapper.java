@@ -15,8 +15,10 @@ public interface CommodityMapper {
     public int addGoodType(@Param("typeName")String typeName,@Param("shopId")Integer shopId,@Param("currentTime") String currentTime);
 
     /**增加商家座位分组*/
-    public int addSeatType(@Param("typeName")String typeName,@Param("shopId")Integer shopId,@Param("seatNumber")Integer seatNumber,
-                           @Param("currentTime") String currentTime,@Param("role")Integer role);
+    public int addSeatType(@Param("typeName")String typeName,
+                           @Param("shopId")Integer shopId,
+                           @Param("currentTime") String currentTime,
+                           @Param("role")Integer role);
 
     /** 查询所有分组*/
     public List<CommodityType> getGoodType(@Param("shopId")Integer shopId);
@@ -27,13 +29,19 @@ public interface CommodityMapper {
     /** 编辑分组*/
     public int updateGoodType(@Param("typeId")Integer typeId,@Param("shopId")Integer shopId,@Param("typeName")String typeName);
 
+    /** 添加子分组*/
+    public int addGoodSubType(@Param("typeName")String typeName,
+                              @Param("typeSubName")String typeSubName,
+                              @Param("shopId")Integer shopId,
+                              @Param("seatNumber")Integer seatNumber,
+                              @Param("currentTime") String currentTime,
+                              @Param("role")Integer role);
 
     /** 查询商品*/
     public List<Commodity> getGoods(@Param("productName") String productName,
                                     @Param("pageNo")Integer pageNo,
                                     @Param("pageSize")Integer pageSize);
 
-    /***/
     public int getGoodsCount(@Param("productName") String productName);
 
     /** 检查是否有相同的商品名*/

@@ -6,6 +6,7 @@ import com.space.exception.PageEntity;
 import com.space.service.CommodityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,22 +35,14 @@ public class CommodityController extends BaseExceptionHandler {
 
     /** 新建商品分组*/
     @RequestMapping(value = "/addGoodType",method = RequestMethod.GET)
-    public int addGoodType(@RequestParam(name="typeName",required = true)String typeName,
-                            @RequestParam(name="shopId",required = true)Integer shopId
-                            ){
-        logger.info("CommodityController|addGoodType,typeName:"+typeName+",shopId："+shopId);
-        int goodType = commodityService.addGoodType(typeName, shopId);
+    public int addGoodType(@RequestParam(name="shopId",required = true)Integer shopId,
+                           @RequestParam(name="typeName",required = true)String typeName,
+                           @RequestParam(name="typeSubName",defaultValue = "")String typeSubName,
+                           @RequestParam(name="seatNumber",defaultValue = "0")Integer seatNumber,
+                           @RequestParam(name="role",defaultValue = "0") Integer role){
+        logger.info("CommodityController|addGoodType,typeName:"+typeName+",shopId："+shopId+",role:"+role);
+        int goodType = commodityService.addGoodType(shopId,typeName,typeSubName,seatNumber,role);
         return goodType;
-    }
-
-    /** 增加商家座位分组*/
-    @RequestMapping(value = "/addSeatType",method = RequestMethod.GET)
-    public int addSeatType(@RequestParam(name="seatTypeName",required = true)String seatTypeName,
-                           @RequestParam(name="seatNumber",required = true)Integer seatNumber,
-                           @RequestParam(name="shopId",required = true)Integer shopId){
-        logger.info("CommodityController|addSeatType,seatTypeName:"+seatTypeName+",shopId："+shopId);
-        int seatType = commodityService.addSeatType(seatTypeName,shopId,seatNumber);
-        return seatType;
     }
 
     /** 查询所有分组*/
@@ -59,7 +52,7 @@ public class CommodityController extends BaseExceptionHandler {
         return commodityService.getGoodType(shopId);
     }
 
-    /**重新编辑*/
+    /**编辑分组*/
     @RequestMapping(value = "/updateGoodType",method = RequestMethod.GET)
     public int updateGoodType(@RequestParam(name="typeId",required = true)Integer typeId,
                               @RequestParam(name="shopId",required = true)Integer shopId,

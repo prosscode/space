@@ -15,6 +15,7 @@ public class CommodityType {
     private Integer typeId;
     private Integer shopId;
     private String typeName;
+    private String typeNameSub;
     private Integer seatNumber;
     private String createTime;
     private Integer role;
