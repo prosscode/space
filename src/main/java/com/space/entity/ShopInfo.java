@@ -11,12 +11,12 @@ import java.io.Serializable;
  */
 
 @Data
-public class Login implements Serializable {
+public class ShopInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer shopId;
     private String shopMark;
-    // 用户名密码
+    // 用户名-
     private String userName;
     private String password;
     //酒吧名行业
@@ -27,10 +27,18 @@ public class Login implements Serializable {
     private String city;
     private String address;
     private String inCharge;
+    private Integer status;
     //创建时间
     private String currentTime;
-
     //是否开启分销
     private Integer shopDistribution;
+
+    /**设置详细商家信息，新增*/
+    private String shopLicense;
+    private String shopAuthentication;
+    private String shopCateringPermit;
+    private String shopDoorPhoto;
+    private String shopLogoPhoto;
+    private String shopDesc;
 
 }

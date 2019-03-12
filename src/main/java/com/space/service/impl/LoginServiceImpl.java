@@ -1,10 +1,9 @@
 package com.space.service.impl;
 
-import com.space.entity.Login;
+import com.space.entity.ShopInfo;
 import com.space.mapper.LoginMapper;
 import com.space.service.LoginService;
 import com.space.utils.InfoEncryption;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ public class LoginServiceImpl implements LoginService {
      * @return
      */
     @Transactional
-    public int registered(Login login) throws Exception {
+    public int registered(ShopInfo login) throws Exception {
         logger.info("LoginServiceImpl|registered,barName:"+login.getBarName());
         int returnNum = 0;
         try{
@@ -49,9 +48,10 @@ public class LoginServiceImpl implements LoginService {
             // 生成登录账号，可以进行登录
             String userName = login.getUserName();
             String password = login.getPassword();
+            int shopIdPass = login.getShopId();
             // 进行加密存储
             String passwordBASE64 = InfoEncryption.encryptBASE64(password);
-            returnNum = loginMapper.insertLogin(userName, passwordBASE64);
+            returnNum = loginMapper.insertLogin(userName, passwordBASE64,shopIdPass);
 
         }catch (Exception e){
             logger.error("LoginServiceImpl|registered,error message:" + e.getMessage() ,e);

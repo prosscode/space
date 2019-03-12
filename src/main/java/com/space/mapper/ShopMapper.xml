@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.ShopMapper">
+
+    <resultMap id="BaseResultMap" type="com.space.entity.ShopInfo">
+        <id column="shop_id" property="shopId" />
+        <result column="shop_mark" property="shopMark" />
+        <result column="shop_name" property="barName" />
+        <result column="shop_phone" property="userName"/>
+        <result column="shop_industry" property="industry"/>
+        <result column="shop_provice" property="provice" />
+        <result column="shop_city" property="city" />
+        <result column="shop_address" property="address" />
+        <result column="shop_create_date" property="currentTime" />
+        <result column="shop_status" property="status"/>
+        <result column="shop_incharge" property="inCharge"/>
+        <result column="shop_distribution" property="shopDistribution" />
+
+        <result column="shop_license" property="shopLicense"/>
+        <result column="shop_authentication" property="shopAuthentication" />
+        <result column="shop_catering_permit" property="shopCateringPermit"/>
+        <result column="shop_door_photo" property="shopDoorPhoto" />
+        <result column="shop_logo_photo" property="shopLogoPhoto"/>
+        <result column="shop_desc" property="shopDesc"/>
+
+    </resultMap>
+
+    <select id="getShopInfo" resultMap="BaseResultMap">
+        select * from space_shop where shop_id=#{shopId}
+    </select>
+
+</mapper>

@@ -1,6 +1,6 @@
 package com.space.controller;
 
-import com.space.entity.Login;
+import com.space.entity.ShopInfo;
 import com.space.exception.BaseExceptionHandler;
 import com.space.service.LoginService;
 import io.swagger.annotations.Api;
@@ -36,7 +36,7 @@ public class LoginController extends BaseExceptionHandler {
      */
     @ApiOperation(value = "注册接口")
     @RequestMapping(value = "/registered",method = RequestMethod.POST)
-    public int registered(@RequestBody Login login) throws Exception {
+    public int registered(@RequestBody ShopInfo login) throws Exception {
         logger.info("LoginController|registered,param: "+login);
         int registered = loginService.registered(login);
         return registered;
@@ -80,10 +80,6 @@ public class LoginController extends BaseExceptionHandler {
      */
     @ApiOperation(value = "登录接口")
     @RequestMapping(value = "/login",method = RequestMethod.GET)
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userName", dataType = "String", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "password", dataType = "String", required = true, paramType = "query")
-    })
     public void login(@RequestParam(name = "userName",required = true)String userName,
                       @RequestParam(name = "password",required = true)String password) throws Exception {
         logger.info("LoginController|login,userName="+userName);

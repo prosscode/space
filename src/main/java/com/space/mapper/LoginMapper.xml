@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.space.mapper.LoginMapper">
 
-    <resultMap id="Login" type="com.space.entity.Login">
+    <resultMap id="Login" type="com.space.entity.ShopInfo">
         <id column="shop_id" property="shopId" />
         <result column="shop_name" property="barName" />
         <result column="shop_provice" property="provice" />
@@ -12,9 +12,9 @@
     </resultMap>
 
     <!--注册-->
-    <insert id="registered" parameterType="com.space.entity.Login" useGeneratedKeys="true" keyProperty="shopId">
-        INSERT INTO space_shop (shop_name,shop_provice,shop_city,shop_address,shop_create_date)
-		VALUES (#{barName},#{provice},#{city},#{address},#{currentTime})
+    <insert id="registered" parameterType="com.space.entity.ShopInfo" useGeneratedKeys="true" keyProperty="shopId">
+        INSERT INTO space_shop (shop_name,shop_phone,shop_industry,shop_provice,shop_city,shop_address,shop_create_date)
+		VALUES (#{barName},#{userName},#{industry},#{provice},#{city},#{address},#{currentTime})
     </insert>
 
     <!--生成商家编号-->
@@ -24,8 +24,8 @@
 
     <!--登录信息-->
     <insert id="insertLogin">
-        INSERT INTO space_login (login_name,login_pwd)
-		VALUES (#{userName},#{password})
+        INSERT INTO space_login (shop_id,login_name,login_pwd)
+		VALUES (#{shopId},#{userName},#{password})
     </insert>
 
     <!--检测是否有同名用户名-->

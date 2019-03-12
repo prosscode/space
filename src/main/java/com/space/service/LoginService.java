@@ -1,10 +1,10 @@
 package com.space.service;
 
-import com.space.entity.Login;
+import com.space.entity.ShopInfo;
 
 public interface LoginService {
 
-    public int registered(Login login) throws Exception;
+    public int registered(ShopInfo login) throws Exception;
 
     public Integer checkUserName(String userName);
 
