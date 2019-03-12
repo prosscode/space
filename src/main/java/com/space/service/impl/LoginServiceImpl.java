@@ -4,6 +4,7 @@ import com.space.entity.ShopInfo;
 import com.space.mapper.LoginMapper;
 import com.space.service.LoginService;
 import com.space.utils.InfoEncryption;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ public class LoginServiceImpl implements LoginService {
         int returnNum = 0;
         try{
             String currentTime = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
-            login.setCurrentTime(currentTime);
+            login.setCreateDate(currentTime);
             // 注册到店铺信息
 
             int count = loginMapper.registered(login);
@@ -85,6 +86,9 @@ public class LoginServiceImpl implements LoginService {
     public void login(String userName,String password) throws Exception {
         // 拿出数据库的加密的密码
         String passwordDB = loginMapper.login(userName);
+        if(StringUtils.isBlank(passwordDB)){
+            throw new Exception("用户名/密码错误");
+        }
         // 解密
         String passwordBASE64 = InfoEncryption.decryptBASE64(passwordDB);
         // 比较

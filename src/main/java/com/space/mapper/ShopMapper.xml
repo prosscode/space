@@ -11,7 +11,7 @@
         <result column="shop_provice" property="provice" />
         <result column="shop_city" property="city" />
         <result column="shop_address" property="address" />
-        <result column="shop_create_date" property="currentTime" />
+        <result column="shop_create_date" property="createDate" />
         <result column="shop_status" property="status"/>
         <result column="shop_incharge" property="inCharge"/>
         <result column="shop_distribution" property="shopDistribution" />

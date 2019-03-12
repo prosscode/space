@@ -29,7 +29,7 @@ public class ShopInfo implements Serializable {
     private String inCharge;
     private Integer status;
     //创建时间
-    private String currentTime;
+    private String createDate;
     //是否开启分销
     private Integer shopDistribution;
 
