@@ -1,5 +1,6 @@
 package com.space.controller;
 
+import com.space.entity.OrderParam;
 import com.space.exception.PageEntity;
 import com.space.service.OrderService;
 import com.sun.xml.internal.stream.events.NamedEvent;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @describe: 订单管理
@@ -44,14 +46,14 @@ public class OrderController {
 
     /** 总成交金额*/
     @RequestMapping(value = "/totalPrice")
-    public Double totalPrice(@RequestParam(name = "shopId")Integer shopId){
+    public List<OrderParam> totalPrice(@RequestParam(name = "shopId")Integer shopId){
         logger.info("OrderController|totalPrice,shopId:"+shopId);
         return orderService.totalPrice(shopId);
     }
 
     /** 昨日成交金额*/
     @RequestMapping(value = "/yesterdayPrice")
-    public Double yesterdayPrice(@RequestParam(name = "shopId")Integer shopId){
+    public List<OrderParam> yesterdayPrice(@RequestParam(name = "shopId")Integer shopId){
         logger.info("OrderController|yesterdayPrice,shopId:"+shopId);
         return orderService.yesterdayPrice(shopId);
     }

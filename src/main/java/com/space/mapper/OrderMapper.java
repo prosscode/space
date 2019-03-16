@@ -1,6 +1,7 @@
 package com.space.mapper;
 
 import com.space.entity.Order;
+import com.space.entity.OrderParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,7 +28,7 @@ public interface OrderMapper {
                              @Param("dateFrom")String dateFrom,
                              @Param("dateTo")String dateTo);
 
-    public Double totalPrice(@Param("shopId")Integer shopId);
+    public List<OrderParam> totalPrice(@Param("shopId")Integer shopId);
 
-    public Double yesterdayPrice(@Param("shopId")Integer shopId,@Param("yesterday")String yesterday,@Param("today")String today);
+    public List<OrderParam> yesterdayPrice(@Param("shopId")Integer shopId,@Param("yesterday")String yesterday,@Param("today")String today);
 }

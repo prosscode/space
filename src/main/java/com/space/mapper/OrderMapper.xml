@@ -19,6 +19,11 @@
         <result column="signer" property="signer" />
     </resultMap>
 
+    <resultMap id="CalCount" type="com.space.entity.OrderParam">
+        <result column="cal_price" property="calPrice" />
+        <result column="order_count" property="orderCount" />
+    </resultMap>
+
     <select id="getOrders" resultMap="BaseResultMap">
         select * from shop_order where shop_id = #{shopId}
         <if test="orderMark != null and orderMark!=''">
@@ -68,12 +73,12 @@
         </if>
     </select>
     
-    <select id="totalPrice" resultType="Double">
-        select sum(order_price) from shop_order where shop_id=#{shopId}
+    <select id="totalPrice" resultMap="CalCount">
+        select sum(order_price) as cal_price,count(*) as oder_count from shop_order where shop_id=#{shopId}
     </select>
 
-    <select id="yesterdayPrice" resultType="Double">
-        select sum(order_price) from shop_order where shop_id=#{shopId}
+    <select id="yesterdayPrice" resultMap="CalCount">
+        select sum(order_price)as cal_price,count(*) as oder_count from shop_order where shop_id=#{shopId}
         and order_date &gt;= #{yesterday}
         and order_date &lt;= #{today}
     </select>

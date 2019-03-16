@@ -2,6 +2,7 @@ package com.space.service.impl;
 
 import com.space.controller.OrderController;
 import com.space.entity.Order;
+import com.space.entity.OrderParam;
 import com.space.exception.PageEntity;
 import com.space.mapper.OrderMapper;
 import com.space.service.OrderService;
@@ -43,14 +44,14 @@ public class OrderServiceImpl implements OrderService {
 
     /**总价*/
     @Override
-    public Double totalPrice(Integer shopId) {
-        Double totalPrice = orderMapper.totalPrice(shopId);
-        return  totalPrice;
+    public List<OrderParam> totalPrice(Integer shopId) {
+        List<OrderParam> params = orderMapper.totalPrice(shopId);
+        return  params;
     }
 
     /**昨日销售*/
     @Override
-    public Double yesterdayPrice(Integer shopId) {
+    public List<OrderParam> yesterdayPrice(Integer shopId) {
         // 昨天时间
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE,   -1);
@@ -60,6 +61,7 @@ public class OrderServiceImpl implements OrderService {
         calendar.add(Calendar.DATE,   0);
         String today = new SimpleDateFormat( "yyyy-MM-dd 00:00:00").format(calendar.getTime());
 
-        return orderMapper.yesterdayPrice(shopId,yesterday,today);
+        List<OrderParam> orderParams = orderMapper.yesterdayPrice(shopId, yesterday, today);
+        return orderParams;
     }
 }
