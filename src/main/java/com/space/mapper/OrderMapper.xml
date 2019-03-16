@@ -67,4 +67,14 @@
             and order_date &lt;= #{dateTo}
         </if>
     </select>
+    
+    <select id="totalPrice" resultType="Double">
+        select sum(order_price) from shop_order where shop_id=#{shopId}
+    </select>
+
+    <select id="yesterdayPrice" resultType="Double">
+        select sum(order_price) from shop_order where shop_id=#{shopId}
+        and order_date &gt;= #{yesterday}
+        and order_date &lt;= #{today}
+    </select>
 </mapper>

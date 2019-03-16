@@ -26,4 +26,8 @@ public interface OrderMapper {
                              @Param("orderStatus")Integer orderStatus,
                              @Param("dateFrom")String dateFrom,
                              @Param("dateTo")String dateTo);
+
+    public Double totalPrice(@Param("shopId")Integer shopId);
+
+    public Double yesterdayPrice(@Param("shopId")Integer shopId,@Param("yesterday")String yesterday,@Param("today")String today);
 }

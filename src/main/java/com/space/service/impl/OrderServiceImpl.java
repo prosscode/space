@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -37,5 +39,27 @@ public class OrderServiceImpl implements OrderService {
         entity.setList(orders);
         entity.setCount(count);
         return entity;
+    }
+
+    /**总价*/
+    @Override
+    public Double totalPrice(Integer shopId) {
+        Double totalPrice = orderMapper.totalPrice(shopId);
+        return  totalPrice;
+    }
+
+    /**昨日销售*/
+    @Override
+    public Double yesterdayPrice(Integer shopId) {
+        // 昨天时间
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE,   -1);
+        String yesterday = new SimpleDateFormat( "yyyy-MM-dd 00:00:00").format(cal.getTime());
+        // 今天整点
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE,   0);
+        String today = new SimpleDateFormat( "yyyy-MM-dd 00:00:00").format(calendar.getTime());
+
+        return orderMapper.yesterdayPrice(shopId,yesterday,today);
     }
 }

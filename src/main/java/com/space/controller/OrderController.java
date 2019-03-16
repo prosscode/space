@@ -41,4 +41,18 @@ public class OrderController {
         pageNo = (pageNo -1) * pageSize;
         return orderService.getOrders(shopId,orderMark,orderName,orderType,orderStatus,dateFrom,dateTo,pageNo, pageSize);
     }
+
+    /** 总成交金额*/
+    @RequestMapping(value = "/totalPrice")
+    public Double totalPrice(@RequestParam(name = "shopId")Integer shopId){
+        logger.info("OrderController|totalPrice,shopId:"+shopId);
+        return orderService.totalPrice(shopId);
+    }
+
+    /** 昨日成交金额*/
+    @RequestMapping(value = "/yesterdayPrice")
+    public Double yesterdayPrice(@RequestParam(name = "shopId")Integer shopId){
+        logger.info("OrderController|yesterdayPrice,shopId:"+shopId);
+        return orderService.yesterdayPrice(shopId);
+    }
 }
