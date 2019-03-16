@@ -18,5 +18,6 @@ public interface EmployeeService {
 
     public int addStaff(Staff staff);
 
-    public PageEntity getStaffs(String shopMark,String staffName, String staffType, Date dateFrom, Date dateTo, Integer pageNo, Integer pageSize);
+    public PageEntity getStaffs(String shopMark,String staffName, String staffType, Date dateFrom, Date dateTo,
+                                Integer pageNo, Integer pageSize);
 }
