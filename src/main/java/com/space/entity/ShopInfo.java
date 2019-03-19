@@ -41,4 +41,7 @@ public class ShopInfo implements Serializable {
     private String shopLogoPhoto;
     private String shopDesc;
 
+    //人均消费
+    private Integer perCapitaConsumption;
+
 }

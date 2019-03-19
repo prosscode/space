@@ -1,7 +1,10 @@
 package com.space.controller;
 
+import com.space.exception.PageEntity;
+import com.space.service.WXHomeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,24 +21,34 @@ public class WXHomeController {
 
     private static Logger logger = LoggerFactory.getLogger(WXHomeController.class);
 
+    @Autowired
+    private WXHomeService wxHomeService;
+
     /**登录*/
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public void userLogin(){
 
     }
 
-    /**主页搜索查询*/
+    /**
+     * 查询商家基本信息
+     * @param filter 筛选，默认排序0，评分最高1，人均消费2，离我最近3
+     * @param provice，省
+     * @param city，市
+     * @param district，区
+     * @param type，商家类型
+     * @param barName，名字
+     */
     @RequestMapping(value = "/getShop",method = RequestMethod.GET)
-    public void getShop(@RequestParam(name="consumption",defaultValue = "0")Integer consumption,
-                        @RequestParam(name="score",defaultValue = "0")Integer score,
-                        @RequestParam(name="location",defaultValue = "")String location,
-                        @RequestParam(name="type",defaultValue = "")String type){
-
-        logger.info("WXHomeController|getShop,type:"+type+",location:"+location);
-        // 人均消费，评分，地点，类型
-
-
-
+    public PageEntity getShop(@RequestParam(name="filter",defaultValue = "0")Integer filter,
+                        @RequestParam(name="provice",defaultValue = "")String provice,
+                        @RequestParam(name="city",defaultValue = "")String city,
+                        @RequestParam(name="district",defaultValue = "")String district,
+                        @RequestParam(name="type",defaultValue = "")String type,
+                        @RequestParam(name="barName",defaultValue = "")String barName){
+        logger.info("WXHomeController|getShop,type:"+type+",filter:"+filter);
+        PageEntity shop = wxHomeService.getShop(filter, provice, city, district, type, barName);
+        return shop;
     }
 
 }
