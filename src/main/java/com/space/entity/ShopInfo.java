@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * @describe: 登录实体类
+ * @describe:
  * @author: 彭爽pross
  * @date: 2019/02/19
  */
