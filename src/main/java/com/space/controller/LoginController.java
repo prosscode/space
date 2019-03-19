@@ -5,8 +5,6 @@ import com.space.exception.BaseExceptionHandler;
 import com.space.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
  * @author: 彭爽pross
  * @date: 2019/02/16
  */
-
 @RestController
 @RequestMapping(value = "/before")
 @Api(tags="登录注册模块")
@@ -34,7 +31,6 @@ public class LoginController extends BaseExceptionHandler {
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "注册接口")
     @RequestMapping(value = "/registered",method = RequestMethod.POST)
     public int registered(@RequestBody ShopInfo login) throws Exception {
         logger.info("LoginController|registered,param: "+login);
@@ -47,7 +43,6 @@ public class LoginController extends BaseExceptionHandler {
      * @param userName
      * @return
      */
-    @ApiOperation(value = "检查用户名是否存在")
     @RequestMapping(value = "/checkUserName",method = RequestMethod.GET)
     @ApiImplicitParam(name = "userName",dataType="String",required = true,paramType = "query")
     public void checkUserName(@RequestParam(name = "userName",required = true)String userName) throws Exception {
@@ -63,7 +58,6 @@ public class LoginController extends BaseExceptionHandler {
      * @param barName
      * @return
      */
-    @ApiOperation(value = "检查商家名称是否存在")
     @RequestMapping(value = "/checkBarName",method = RequestMethod.GET)
     @ApiImplicitParam(name = "barName",dataType="String",required = true,paramType = "query")
     public void checkBarName(@RequestParam(name = "barName",required = true)String barName) throws Exception {
@@ -78,7 +72,6 @@ public class LoginController extends BaseExceptionHandler {
      * 登录接口
      * @throws Exception
      */
-    @ApiOperation(value = "登录接口")
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public void login(@RequestParam(name = "userName",required = true)String userName,
                       @RequestParam(name = "password",required = true)String password) throws Exception {
