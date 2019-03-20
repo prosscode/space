@@ -26,4 +26,5 @@ public class Staff {
     private String staffGender;
     private String staffDesc;
 
+    private Integer staffStatus;
 }

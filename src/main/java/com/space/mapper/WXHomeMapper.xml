@@ -7,19 +7,64 @@
         <result column="shop_mark" property="shopMark" />
         <result column="shop_name" property="barName" />
         <result column="shop_industry" property="industry"/>
-
         <result column="shop_door_photo" property="shopDoorPhoto" />
         <result column="shop_logo_photo" property="shopLogoPhoto"/>
         <!--人均消费-->
         <result column="per_capita_consumption" property="perCapitaConsumption" />
+        <result column="shop_address" property="shopAddress" />
+    </resultMap>
 
+    <resultMap id="GoodInfo" type="com.space.entity.Commodity">
+        <id column="product_id" property="productId" />
+        <result column="shop_id" property="shopId" />
+        <result column="product_name" property="productName" />
+        <result column="product_image" property="productImage"/>
+        <result column="product_description" property="productDescription" />
+        <result column="product_category" property="productCategory" />
+    </resultMap>
+
+    <resultMap id="SeatInfo" type="com.space.entity.SeatInfo">
+        <result column="shop_id" property="shopId" />
+        <result column="seat_mark" property="seatMark" />
+        <result column="seat_num" property="seatNum" />
+        <result column="type_name" property="typeName"/>
+        <result column="seat_status" property="seatStatus" />
+        <result column="seat_count" property="seatCount" />
+    </resultMap>
+    
+    <resultMap id="CouponInfo" type="com.space.entity.CouponInfo">
+        <id column="id" property="id" />
+        <result column="shopId" property="shopId" />
+        <result column="securitiesNo" property="securitiesNo" />
+        <result column="securitiesType" property="securitiesType" />
+        <result column="worth" property="worth"/>
+        <result column="useCondition" property="useCondition" />
+        <result column="amontCondition" property="amontCondition" />
+        <result column="activeDateType" property="activeDateType" />
+        <result column="activeRange" property="activeRange"/>
+        <result column="useDesc" property="useDesc"/>
+    </resultMap>
+
+    <resultMap id="StaffInfo" type="com.space.entity.Staff">
+        <id column="staff_id" property="staffId"/>
+        <result column="staff_name" property="staffName"/>
+        <result column="staff_mark" property="staffMark"/>
+        <result column="staff_type_name" property="staffTypeName"/>
+        <result column="staff_image" property="staffImage"/>
+        <result column="staff_phone" property="staffPhone"/>
+        <result column="staff_sale" property="staffSale"/>
+        <result column="staff_date" property="staffDate"/>
+        <result column="shop_mark" property="shopMark"/>
+        <result column="staff_gender" property="staffGender"/>
+        <result column="staff_desc" property="staffDesc"/>
+        <result column="staff_status" property="staffStatus"/>
     </resultMap>
 
     <!--查询商家基本信息-->
     <select id="getShop" resultMap="BaseResultMap">
-        select shop.shop_id,shop.shop_logo_photo,shop.shop_name,shop.shop_industry,info.per_capita_consumption
-        from space_shop shop left join shop_info info
-        on shop.shop_id=info.shop_id where 1=1
+        select shop.shop_id,shop.shop_mark,shop.shop_logo_photo,shop.shop_name,shop.shop_industry,
+        shop.per_capita_consumption,shop.shop_address
+        from space_shop shop where 1=1
         <if test="provice!=null and provice!=''">
             and shop.shop_provice = #{provice}
         </if>
@@ -41,6 +86,32 @@
         <if test="filter==2">
             order by info.per_capita_consumption
         </if>
+    </select>
+
+    <!--查询商品信息-->
+    <select id="getGoodInfo" resultMap="GoodInfo">
+        select * from product_info where shop_id=#{shopId}
+        <if test="productName!=null and productName!=''">
+            product_name like '%${productName}%'
+        </if>
+    </select>
+
+    <!--查询座位信息-->
+    <select id="getSeatInfo" resultMap="SeatInfo">
+        select seat.shop_id,seat.seat_mark,seat.seat_num,area.type_name,area.seat_count,seat.seat_status
+        from shop_seat seat left join area_type_info area on seat.type_id=area.type_id
+        where seat.shop_id=#{shopId}
+    </select>
+
+    <!--查询优惠券-->
+    <select id="getCouponInfo" resultMap="CouponInfo">
+        select id,shopId,securitiesNo,securitiesType,worth,useCondition,amontCondition,activeDateType,activeRange,useDesc
+        from shop_market_securities where shopId=#{shopId}
+    </select>
+
+    <!--查询服务员-->
+    <select id="getWaiterInfo" resultMap="StaffInfo">
+        select * from shop_staff where shop_mark = #{shopMark} and staff_type_name like '%服务员%'
     </select>
 </mapper>
 

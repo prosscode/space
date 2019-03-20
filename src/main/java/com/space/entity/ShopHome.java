@@ -27,4 +27,6 @@ public class ShopHome implements Serializable {
     //人均消费
     private Integer perCapitaConsumption;
 
+    private String shopAddress;
+
 }
