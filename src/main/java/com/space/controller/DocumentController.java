@@ -46,6 +46,7 @@ public class DocumentController extends BaseExceptionHandler {
         List<DocumentInfo> documents =new ArrayList<>();
         if(files.length>0){
             for(MultipartFile file:files){
+                String path="";
                 //文件名称
                 String fileName = file.getOriginalFilename();
                 //文件类型
