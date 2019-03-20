@@ -13,7 +13,8 @@ public class Staff {
     private Integer staffId;
     private String staffName;
     private String staffMark;
-    private String staffType;
+    //员工类型名称
+    private String staffTypeName;
     private String staffImage;
     private String staffPhone;
     private Double staffSale;

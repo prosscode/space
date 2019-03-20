@@ -14,7 +14,7 @@ public interface EmployeeService {
 
     public int deleteStaffType(String shopMark,String staffTypeName);
 
-    public List<String> getStaffTypes(String shopMark);
+    public  List<StaffType> getStaffTypes(String shopMark,String staffTypeName,Integer pageNo,Integer pageSize);
 
     public int addStaff(Staff staff);
 

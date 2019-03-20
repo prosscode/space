@@ -47,9 +47,12 @@ public class EmployeeController {
 
     /** 得到商家的员工分类*/
     @RequestMapping(value = "getStaffTypes",method = RequestMethod.GET)
-    public List<String> getStaffTypes(@RequestParam(name = "shopMark",required = true)String shopMark){
+    public List<StaffType> getStaffTypes(@RequestParam(name = "shopMark",required = true)String shopMark
+            ,@RequestParam(name = "staffTypeName",required = true)String staffTypeName
+            ,@RequestParam(name = "pageNo",required = true)Integer pageNo
+            ,@RequestParam(name = "pageSize",required = true)Integer pageSize){
         logger.info("EmployeeController|getStaffTypes,shopMark:"+shopMark);
-        return employeeService.getStaffTypes(shopMark);
+        return employeeService.getStaffTypes(shopMark,staffTypeName,pageNo,pageSize);
     }
 
     /** 添加员工*/

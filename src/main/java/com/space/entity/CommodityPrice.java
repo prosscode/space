@@ -2,6 +2,8 @@ package com.space.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @describe: 区间价格
  * @author: 彭爽pross
@@ -9,10 +11,9 @@ import lombok.Data;
  */
 
 @Data
-public class CommodityPrice extends Commodity{
-    private Integer startTime;
-    private Integer endTime;
-    private Integer productPrice;
-    private Integer offerPrice;
-
+public class CommodityPrice extends Commodity implements Serializable {
+    private Integer startTime; //开始时间 整点数
+    private Integer endTime;    //结束时间 整点数
+    private Double productPrice; //商品价格
+    private Double offerPrice;  //活动价格
 }

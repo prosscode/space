@@ -1,16 +1,14 @@
 package com.space.mapper;
 
 
-import com.space.entity.Commodity;
-import com.space.entity.CommodityType;
-import com.space.entity.ShopSeat;
+import com.space.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
-public interface CommodityMapper {
+public  interface CommodityMapper {
 
     /**增加商品分组*/
     public int addGoodType(@Param("typeName")String typeName,@Param("shopId")Integer shopId,@Param("currentTime") String currentTime);
@@ -35,7 +33,11 @@ public interface CommodityMapper {
     /** 查询商品*/
     public List<Commodity> getGoods(@Param("productName") String productName,
                                     @Param("pageNo")Integer pageNo,
-                                    @Param("pageSize")Integer pageSize);
+                                    @Param("pageSize")Integer pageSize,
+                                    @Param("productCategoryNo")Integer productCategoryNo,
+                                    @Param("shopId")Integer shopId,
+                                    @Param("productStatus")Integer productStatus,
+                                    @Param("keyWord")String keyWord);
 
     public int getGoodsCount(@Param("productName") String productName);
 
@@ -51,11 +53,10 @@ public interface CommodityMapper {
     /**删除商品*/
     public int deleteProducts(@Param("productIds") List<Integer> productIds);
 
-    /**上架商品*/
-    public int upProduct(@Param("productIds") List<Integer> productIds);
+    /**上架、下架、修改分类、分销等商品*/
+    public int upProduct(@Param("optNum")Integer optNum,@Param("productIds") List<Integer> productIds,@Param("setValues")List<Object> setValues);
 
-    /** 删除价格区间的数据*/
-    public int deletePrice(@Param("productIds") List<Integer> productIds);
+
 
     /** 更新任务*/
     public int updateGood(@Param("commodity") Commodity commodity);
@@ -71,4 +72,29 @@ public interface CommodityMapper {
 
     /**删除桌位*/
     public int deleteSeat(@Param("seatId")Integer seatId,@Param("shopId")Integer shopId);
+
+   /*  <!--//////////////////商品关联文档/////////////////////-->*/
+    /**查询所有*/
+    public List<CommodityDocument> getCommodityDocuments(@Param("commodityIds")List<Integer> commodityIds);
+    /**增加*/
+    public int  addCommodityDocument(@Param("CommodityDocument") CommodityDocument commodityDocument);
+    /**删除 根据商品ID*/
+    public int  deleteCommodityDocumentByCommodityId(@Param("commodityId")Integer commodityId);
+
+    /**删除 根据多个商品ID*/
+    public int  deleteCommodityDocumentByCommodityIds(@Param("commodityIds")List<Integer> commodityIds);
+
+    /*  <!--//////////////////商品关联价格/////////////////////-->*/
+    /** 删除价格区间的数据 根据商品ID*/
+    public int deletePriceByCommodityId(@Param("commodityId") Integer commodityId);
+    /** 删除价格区间的数据 根据商品ID*/
+    public int deletePrice(@Param("commodityIds") List<Integer> commodityIds);
+    /** 查询商品价格数据*/
+    public List<CommodityPrice>   getCommodityPrices(
+            @Param("shopId")Integer shopId
+            ,@Param("commodityId")Integer commodityId
+            ,@Param("commodityName")String commodityName);
+    /** 添加商品价格数据 */
+    public int  addCommodityPrices(@Param("CommodityPrice") CommodityPrice commodityPrice);
+
 }

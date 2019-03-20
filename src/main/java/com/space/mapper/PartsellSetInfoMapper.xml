@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.PartsellSetInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.space.entity.PartsellSetInfo">
+        <id column="id" property="id"/>
+        <result column="shopId" property="shopId"/>
+        <result column="partSellLevel" property="partSellLevel"/>
+        <result column="commissionRolePartA" property="commissionRolePartA"/>
+        <result column="commissionRolePartB" property="commissionRolePartB"/>
+        <result column="isJoin" property="isJoin"/>
+        <result column="partSellerLableName" property="partSellerLableName"/>
+        <result column="toCashHowMuch" property="toCashHowMuch"/>
+        <result column="modityDate" property="modityDate"/>
+    </resultMap>
+    <!--新增-->
+    <insert id="add" parameterType="com.space.entity.PartsellSetInfo" keyProperty="id" useGeneratedKeys="true">
+        INSERT  into partsell_set_info (shopId,partSellLevel,commissionRolePartA,commissionRolePartB,isJoin,partSellerLableName,toCashHowMuch)
+        VALUES (#{shopId},#{partSellLevel},#{commissionRolePartA} ,#{commissionRolePartB},#{isJoin},#{partSellerLableName},#{toCashHowMuch})
+    </insert>
+    <!--删除 根据id-->
+    <delete id="deleteById">
+        DELETE from partsell_set_info
+        where id =#{id}
+     </delete>
+    <!--修改-->
+    <update id="update" parameterType="com.space.entity.PartsellSetInfo">
+        update partsell_set_info
+        set shopId=#{shopId},
+        partSellLevel=#{partSellLevel},
+        commissionRolePartA=#{commissionRolePartA},
+        commissionRolePartB=#{commissionRolePartB},
+        isJoin=#{isJoin},
+        partSellerLableName=#{partSellerLableName},
+        toCashHowMuch=#{toCashHowMuch},
+        staff_desc=#{staffDesc},
+        staff_sale=#{staffSale}
+        where id=#{id}
+    </update>
+    <!--查询 根据ID-->
+    <select id="getInfoById" resultMap="BaseResultMap">
+        select * from partsell_set_info
+        where id =#{id}
+    </select>
+    <!--查询 根据商户ID-->
+    <select id="getInfoByShopId" resultMap="BaseResultMap">
+        select * from partsell_set_info
+        where shopId =#{shopId}
+        Limit 0,1
+    </select>
+</mapper>

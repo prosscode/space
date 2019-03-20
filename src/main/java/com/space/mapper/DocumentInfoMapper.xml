@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.DocumentInfoMapper">
+
+    <resultMap id="documentInfoResMap" type="com.space.entity.DocumentInfo">
+        <id column="id" property="id" />
+        <result column="parentId" property="parentId" />
+        <result column="name" property="name" />
+        <result column="categoryDesc" property="categoryDesc" />
+        <result column="modityDate" property="modityDate" />
+        <result column="shopId" property="shopId" />
+    </resultMap>
+
+    <!--  &lt;!&ndash;添加用户&ndash;&gt;
+      <insert id="addUser" parameterType="com.space.entity.User">
+          insert into shop_user(user_name,shop_mark,user_phone,user_wechat)
+          values (#{userName},#{shopMark},#{userPhone},#{userWechat})
+      </insert>
+  -->
+
+    <!--查询文档-->
+    <select id="getByIds" resultMap="documentInfoResMap" >
+        select * from document_info
+        where documentId in
+        <if test="documentIds!=null and documentIds.length>0">
+            <foreach collection="documentIds" item="documentId" open="(" close=")" separator=",">
+                #{documentId,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+    </select>
+    <delete id="deleteByIds" >
+        DELETE from document_info
+        where documentId in
+        <if test="documentIds!=null and documentIds.length>0">
+            <foreach collection="documentIds" item="documentId" open="(" close=")" separator=",">
+                 #{documentId,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+    </delete>
+    <insert id="add" parameterType="com.space.entity.DocumentInfo">
+        INSERT  into document_info VALUES (#{documentId},#{documentType},#{contentType}
+        ,#{refCategory},#{refId},#{refSequenceNo},#{title},#{summary}
+        ,#{url},#{markers},#{state})
+    </insert>
+
+</mapper>

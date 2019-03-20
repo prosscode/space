@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.RoleInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.space.entity.RoleInfo">
+        <id column="role_id" property="roleId"/>
+        <result column="shop_Id" property="shopId"/>
+        <result column="role_name" property="roleName"/>
+        <result column="role_remark" property="roleRemark"/>
+        <result column="is_active" property="isActive"/>
+        <result column="create_date" property="createDate"/>
+        <result column="is_show_shop" property="isShowShop"/>
+        <result column="is_show_sys" property="isShowSys"/>
+    </resultMap>
+    <!--新增-->
+    <insert id="add" parameterType="com.space.entity.RoleInfo" keyProperty="id" useGeneratedKeys="true">
+        INSERT  into role_info (shop_id,role_name,role_remark,is_active,create_date,is_show_shop,is_show_sys)
+        VALUES (#{shopId},#{roleName},#{roleRemark} ,#{isActive},#{createDate},#{isShowShop},#{isShowSys})
+    </insert>
+    <!--删除 根据id-->
+    <delete id="deleteById">
+        DELETE from role_info
+        where role_id =#{roleId}
+    </delete>
+    <!--修改-->
+    <update id="update" parameterType="com.space.entity.RoleInfo">
+        update role_info
+        set shop_Id=#{shopId},
+        role_name=#{roleName},
+        role_remark=#{roleRemark},
+        commissionRolePartB=#{isActive},
+        is_active=#{createDate},
+        is_show_shop=#{isShowShop},
+        is_show_sys=#{isShowSys}
+        where role_id=#{roleId}
+    </update>
+    <!--查询 根据ID-->
+    <select id="getInfoById" resultMap="BaseResultMap">
+        select * from role_info
+        where role_id =#{roleId}
+    </select>
+
+    <!--条件 查询-->
+    <select id="getList" resultMap="BaseResultMap">
+        select * from role_info WHERE 1=1
+        <if test="shopId>0">
+            and shop_id &lt;= #{shopId}
+        </if>
+        <if test="roleName!=null and roleName!=''">
+            and role_name  like  '%#{roleName}%'
+        </if>
+        <if test="pageNo >=1 and pageSize > 0">
+            limit (#{pageNo}-1)*(#{pageSize}),#{pageSize}
+        </if>
+
+    </select>
+    <select id="getRolesCount"  resultType="Integer">
+        select COUNT(*) from role_info WHERE 1=1
+        <if test="shopId>0">
+            and shop_id &lt;= #{shopId}
+        </if>
+        <if test="roleName!=null and roleName!=''">
+            and role_name  like  '%#{roleName}%'
+        </if>
+
+    </select>
+
+</mapper>
