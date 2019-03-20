@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.WXHomeMapper">
+
+    <resultMap id="BaseResultMap" type="com.space.entity.ShopHome">
+        <id column="shop_id" property="shopId" />
+        <result column="shop_mark" property="shopMark" />
+        <result column="shop_name" property="barName" />
+        <result column="shop_industry" property="industry"/>
+
+        <result column="shop_door_photo" property="shopDoorPhoto" />
+        <result column="shop_logo_photo" property="shopLogoPhoto"/>
+        <!--人均消费-->
+        <result column="per_capita_consumption" property="perCapitaConsumption" />
+
+    </resultMap>
+
+    <!--查询商家基本信息-->
+    <select id="getShop" resultMap="BaseResultMap">
+        select shop.shop_id,shop.shop_logo_photo,shop.shop_name,shop.shop_industry,info.per_capita_consumption
+        from space_shop shop left join shop_info info
+        on shop.shop_id=info.shop_id where 1=1
+        <if test="provice!=null and provice!=''">
+            and shop.shop_provice = #{provice}
+        </if>
+        <if test="city!=null and city!=''">
+            and shop.shop_city = #{city}
+        </if>
+        <if test="district!=null and district!=''">
+            and shop.shop_district = #{district}
+        </if>
+        <if test="type!=null and type!=''">
+            and shop.shop_industry like '%${type}%'
+        </if>
+        <if test="filter==0">
+            and 1=1
+        </if>
+        <if test="filter==1">
+            and 1=1
+        </if>
+        <if test="filter==2">
+            order by info.per_capita_consumption
+        </if>
+    </select>
+</mapper>
+
