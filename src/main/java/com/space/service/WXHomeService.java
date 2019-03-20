@@ -12,4 +12,6 @@ public interface WXHomeService {
 
     public PageEntity getCouponInfo(Integer shopId);
 
+    public PageEntity getWaiterInfo(String shopMark);
+
 }

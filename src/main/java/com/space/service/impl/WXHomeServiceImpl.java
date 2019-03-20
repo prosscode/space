@@ -3,6 +3,7 @@ package com.space.service.impl;
 import com.space.entity.CouponInfo;
 import com.space.entity.SeatInfo;
 import com.space.entity.ShopHome;
+import com.space.entity.Staff;
 import com.space.exception.PageEntity;
 import com.space.mapper.WXHomeMapper;
 import com.space.service.WXHomeService;
@@ -63,6 +64,16 @@ public class WXHomeServiceImpl implements WXHomeService {
         List<CouponInfo> couponInfo = wxHomeMapper.getCouponInfo(shopId);
         PageEntity entity = new PageEntity();
         entity.setList(couponInfo);
+        entity.setCount(0);
+        return entity;
+    }
+
+    /**拿服务员信息*/
+    @Override
+    public PageEntity getWaiterInfo(String shopMark) {
+        List<Staff> waiterInfo = wxHomeMapper.getWaiterInfo(shopMark);
+        PageEntity entity = new PageEntity();
+        entity.setList(waiterInfo);
         entity.setCount(0);
         return entity;
     }

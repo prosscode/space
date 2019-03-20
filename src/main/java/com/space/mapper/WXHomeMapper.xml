@@ -45,6 +45,21 @@
         <result column="useDesc" property="useDesc"/>
     </resultMap>
 
+    <resultMap id="StaffInfo" type="com.space.entity.Staff">
+        <id column="staff_id" property="staffId"/>
+        <result column="staff_name" property="staffName"/>
+        <result column="staff_mark" property="staffMark"/>
+        <result column="staff_type_name" property="staffTypeName"/>
+        <result column="staff_image" property="staffImage"/>
+        <result column="staff_phone" property="staffPhone"/>
+        <result column="staff_sale" property="staffSale"/>
+        <result column="staff_date" property="staffDate"/>
+        <result column="shop_mark" property="shopMark"/>
+        <result column="staff_gender" property="staffGender"/>
+        <result column="staff_desc" property="staffDesc"/>
+        <result column="staff_status" property="staffStatus"/>
+    </resultMap>
+
     <!--查询商家基本信息-->
     <select id="getShop" resultMap="BaseResultMap">
         select shop.shop_id,shop.shop_mark,shop.shop_logo_photo,shop.shop_name,shop.shop_industry,
@@ -91,7 +106,12 @@
     <!--查询优惠券-->
     <select id="getCouponInfo" resultMap="CouponInfo">
         select id,shopId,securitiesNo,securitiesType,worth,useCondition,amontCondition,activeDateType,activeRange,useDesc
-         from shop_market_securities where shopId=#{shopId}
+        from shop_market_securities where shopId=#{shopId}
+    </select>
+
+    <!--查询服务员-->
+    <select id="getWaiterInfo" resultMap="StaffInfo">
+        select * from shop_staff where shop_mark = #{shopMark} and staff_type_name like '%服务员%'
     </select>
 </mapper>
 

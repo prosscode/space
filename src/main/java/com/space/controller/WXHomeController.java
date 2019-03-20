@@ -72,4 +72,10 @@ public class WXHomeController {
         return info;
     }
 
+    /**拿到服务员信息*/
+    @RequestMapping(value = "/getWaiterInfo")
+    public PageEntity getWaiterInfo(@RequestParam(name="shopMark")String shopMark){
+        logger.info("WXHomeController|getWaiterInfo,shopMark:"+shopMark);
+        return wxHomeService.getWaiterInfo(shopMark);
+    }
 }
