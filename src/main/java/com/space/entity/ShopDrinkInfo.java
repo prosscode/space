@@ -13,6 +13,18 @@ import java.util.Date;
  * @date: 2019/03/16
  */
 @Data
-public class ShopDrinkInfo {
-
+public class ShopDrinkInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private  Integer id;
+    private  Integer shopId;
+    private  String userName;
+    private  String phone;
+    private  Integer startTime;
+    private  Integer endTime;
+    private  Integer drinkName;
+    private  Integer drinkCount;
+    private  String brokeRage;
+    private  String type;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone= "GMT+8")
+    private  Date modifyDate;
 }

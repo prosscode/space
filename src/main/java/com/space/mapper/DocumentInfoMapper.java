@@ -13,6 +13,8 @@ import java.util.List;
 public interface DocumentInfoMapper {
     /** 查询文档*/
     public List<DocumentInfo> getByIds(@Param("documentIds")String[] documentIds);
+    /** 查询文档 根据文档ID*/
+    public DocumentInfo getById(@Param("documentId")String documentId);
     /** 删除文档*/
     public int deleteByIds(@Param("documentIds")String[] documentIds);
     /** 添加文档*/

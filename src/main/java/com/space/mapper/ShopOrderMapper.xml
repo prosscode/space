@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.space.mapper.OrderMapper">
+<mapper namespace="com.space.mapper.ShopOrderMapper">
 
     <resultMap id="BaseResultMap" type="com.space.entity.Order">
         <id column="order_id" property="orderId" />
-        <result column="order_mark" property="orderMark" />
+        <result column="order_no" property="orderMark" />
         <result column="order_name" property="orderName" />
         <result column="order_price" property="orderPrice" />
         <result column="order_waiter_id" property="orderWaiterId" />
@@ -20,16 +20,14 @@
         <result column="pay_method" property="payMethod" />
         <result column="modify_date" property="modifyDate" />
     </resultMap>
-
-    <resultMap id="CalCount" type="com.space.entity.OrderParam">
-        <result column="cal_price" property="calPrice" />
-        <result column="order_count" property="orderCount" />
-    </resultMap>
-
-    <select id="getOrders" resultMap="BaseResultMap">
-        select * from shop_order where shop_id = #{shopId}
-        <if test="orderMark != null and orderMark!=''">
-            and order_no = '%#{orderMark}%'
+    <!--查询 分页、多条件查询-->
+    <select id="getList" resultMap="BaseResultMap">
+        select * from shop_order where 1=1
+        <if test="shopId>0">
+            AND  shop_id = #{shopId}
+        </if>
+        <if test="orderNo != null and orderNo!=''">
+            and order_no = '%#{orderNo}%'
         </if>
         <if test="orderName!=null and orderName!=''">
             and order_name = '%#{orderName}%'
@@ -46,42 +44,33 @@
         <if test="dateTo!=null and dateTo!=''">
             and order_date &lt;= #{dateTo}
         </if>
-
         <if test="pageNo >= 0 and pageSize > 0">
             limit #{pageNo},#{pageSize}
         </if>
     </select>
-
-
-    <select id="getOrderCount" resultType="Integer">
-        select count(*) from shop_order where shop_id = #{shopId}
-        <if test="orderMark != null and orderMark!=''">
-            and order_no = '%#{orderMark}%'
-        </if>
-        <if test="orderName!=null and orderName!=''">
-            and order_name = '%#{orderName}%'
-        </if>
-        <if test="orderType >= 0">
-            and order_type = #{orderType}
-        </if>
-        <if test="orderStatus >= 0">
-            and order_status = #{orderStatus}
-        </if>
-        <if test="dateFrom !=null and dateFrom!=''">
-            and order_date &gt;= #{dateFrom}
-        </if>
-        <if test="dateTo!=null and dateTo!=''">
-            and order_date &lt;= #{dateTo}
-        </if>
+    <!--查询 详情 根据ID-->
+    <select id="getInfoById" resultMap="BaseResultMap">
+          select * from shop_order where order_id = #{orderId}
     </select>
-    
-    <select id="totalPrice" resultMap="CalCount">
-        select sum(order_price) as cal_price,count(*) as oder_count from shop_order where shop_id=#{shopId}
+    <!--查询 详情 根据订单号-->
+    <select id="getInfoByNo" resultMap="BaseResultMap">
+        select * from shop_order where order_no = #{orderNo}
     </select>
+    <!--删除 根据Id-->
+    <delete id="deleteById" >
+        DELETE  FROM  shop_order
+        WHERE  order_id = #{orderId}
+    </delete>
 
-    <select id="yesterdayPrice" resultMap="CalCount">
-        select sum(order_price)as cal_price,count(*) as oder_count from shop_order where shop_id=#{shopId}
-        and order_date &gt;= #{yesterday}
-        and order_date &lt;= #{today}
-    </select>
+    <!--删除 根据多个ID-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        <if test="orderIds!=null and orderIds.length>0">
+            DELETE  FROM  shop_order
+            where order_id in
+            <foreach collection="orderIds" item="orderId" open="(" close=")" separator=",">
+                #{orderId}
+            </foreach>
+        </if>
+    </delete>
+
 </mapper>

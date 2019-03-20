@@ -78,11 +78,12 @@ public class CommodityController extends BaseExceptionHandler {
                                @RequestParam(name="productCategoryNo") Integer productCategoryNo,
                                @RequestParam(name="shopId") Integer shopId,
                                @RequestParam(name="productStatus") Integer productStatus,
-                               @RequestParam(name="keyWord") String keyWord){
+                               @RequestParam(name="keyWord") String keyWord,
+                               @RequestParam(name="keyWord",defaultValue = "0")Integer optNum){
         logger.info("CommodityController|getGoods,productName: "+productName);
         pageNo = (pageNo -1) * pageSize;
 
-        PageEntity pageEntity = commodityService.getGoods(productName,pageNo,pageSize,productCategoryNo,shopId,productStatus,keyWord);
+        PageEntity pageEntity = commodityService.getGoods(productName,pageNo,pageSize,productCategoryNo,shopId,productStatus,keyWord,optNum);
         return pageEntity;
     }
 

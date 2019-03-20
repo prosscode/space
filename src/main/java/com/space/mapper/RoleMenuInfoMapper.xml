@@ -4,14 +4,14 @@
 
     <resultMap id="BaseResultMap" type="com.space.entity.RoleMenuInfo">
         <id column="id" property="id"/>
-        <id column="role_id" property="roleId"/>
+        <result column="role_id" property="roleId"/>
         <result column="shop_id" property="shopId"/>
         <result column="menu_id" property="menuId"/>
     </resultMap>
     <!--新增 批量插入-->
     <insert id="insertBatch" parameterType="java.util.List">
         <if test="roleMenuInfos!=null and roleMenuInfos.size()>0">
-            INSERT  into role_menu_info(role_id,menu_id,shop_id)
+            INSERT  into role_menu_info(role_id,menu_id,shop_id) VALUES
             <foreach collection="roleMenuInfos" item="item" index="index" separator=",">
                 (#{item.roleId,jdbcType=INTEGER}, #{item.menuId,jdbcType=INTEGER},#{item.shopId,jdbcType=INTEGER})
             </foreach>

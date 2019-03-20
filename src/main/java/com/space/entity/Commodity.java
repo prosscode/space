@@ -51,8 +51,13 @@ public class Commodity implements Serializable {
     private Date publishTime;
 
     //-------------------------------返回结果字段-----------------------------------
-    //商品文档关联
-    public List<CommodityDocument> CommodityDocumentList;
+    //商品单价 根据时间点自动计算
+    public  double Price;
+    //默认展示图片
+    public  DocumentInfo defaultDocument;
+
+    //文档数据
+    public  List<DocumentInfo> documentInfos;
     //商品价格关联
     public List<CommodityPrice> CommodityPriceList;
 }

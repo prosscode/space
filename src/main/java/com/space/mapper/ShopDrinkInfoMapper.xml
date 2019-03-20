@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.ShopDrinkInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.space.entity.ShopDrinkInfo">
+        <id column="id" property="id"/>
+        <result column="shopId" property="shopId"/>
+        <result column="userName" property="userName"/>
+        <result column="phone" property="phone"/>
+        <result column="startTime" property="startTime"/>
+        <result column="endTime" property="endTime"/>
+        <result column="commodityNo" property="commodityNo"/>
+        <result column="drinkName" property="drinkName"/>
+        <result column="drinkCount" property="drinkCount"/>
+        <result column="brokeRage" property="brokeRage"/>
+        <result column="type" property="type"/>
+        <result column="modifyDate" property="modifyDate"/>
+    </resultMap>
+
+    <!--新增 批量插入-->
+    <insert id="add" parameterType="java.util.List">
+        INSERT  into role_menu_info(shopId,userName,phone,startTime,endTime,commodityNo,drinkName,drinkCount,brokeRage,type)
+        VALUES  (#{shopId},#{userName},#{phone},#{startTime},#{endTime},#{commodityNo},#{drinkName},#{drinkCount},#{brokeRage},#{type})
+    </insert>
+    <!--删除 根据角色ID-->
+    <delete id="deleteById">
+        delete from shop_drink_info WHERE  id=#{id}
+    </delete>
+    <!--修改-->
+    <update id="update" parameterType="com.space.entity.ShopDrinkInfo">
+        UPDATE shop_drink_info
+        SET  shopId=#{shopId},
+        userName=#{userName},
+        phone=#{phone},
+        startTime=#{startTime},
+        endTime=#{endTime},
+        commodityNo=#{commodityNo},
+        drinkName=#{drinkName},
+        drinkCount=#{drinkCount},
+        brokeRage=#{brokeRage}
+        WHERE id=#{id}
+    </update>
+    <!--查询 根据ID-->
+    <select id="getInfoById" resultMap="BaseResultMap">
+        SELECT  * FROM  shop_drink_info WHERE  role_id =#{roleId}
+    </select>
+
+    <!--查询 分页、多条件查询-->
+    <select id="getList" resultMap="BaseResultMap">
+        SELECT  * FROM  shop_drink_info WHERE  1=1
+        <if test="shopId>0">
+            AND  shopId=#{shopId}
+        </if>
+        <if test="type!=null and type!=''">
+            AND  type=#{type}
+        </if>
+        <if test="keyWord!=null and keyWord!=''">
+            AND   (userName  LIKE  '%#{keyWord}%' OR  drinkName LIKE  '%#{keyWord}%')
+        </if>
+        <if test="pageNo >=1 and pageSize > 0">
+            limit (#{pageNo}-1)*(#{pageSize}),#{pageSize}
+        </if>
+    </select>
+
+    <!--查询行数 分页、多条件查询-->
+    <select id="getCount" resultType="Integer">
+        SELECT  * FROM  shop_drink_info WHERE  1=1
+        <if test="shopId>0">
+            AND  shopId=#{shopId}
+        </if>
+        <if test="type!=null and type!=''">
+            AND  type=#{type}
+        </if>
+        <if test="keyWord!=null and keyWord!=''">
+            AND   (userName  LIKE  '%#{keyWord}%' OR  drinkName LIKE  '%#{keyWord}%')
+        </if>
+    </select>
+</mapper>

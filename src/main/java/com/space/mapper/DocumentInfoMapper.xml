@@ -28,6 +28,11 @@
             </foreach>
         </if>
     </select>
+    <!--查询文档 根据文档ID-->
+    <select id="getById" resultMap="documentInfoResMap" >
+        select * from document_info
+        where documentId =#{documentId]}
+    </select>
     <delete id="deleteByIds" >
         DELETE from document_info
         where documentId in

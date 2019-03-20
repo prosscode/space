@@ -226,6 +226,9 @@
         ,publish_time = #{publishTime}
         WHERE product_id = #{productId}
     </update>
+    <select id="getCommodityById" resultMap="BaseResultMap">
+          SELECT * FROM product_info where product_id = #{commodityId}
+    </select>
 
     <!--新增座位编号-->
     <insert id="addSeatMark">

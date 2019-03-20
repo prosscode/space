@@ -11,21 +11,54 @@ import java.util.Date;
  */
 @Data
 public class Order {
-    private Integer orderId;
-    private Integer shopId;
-    private String orderName;
-    private Double orderPrice;
-    private String orderWaiter;
-    private String orderUser;
-    private String orderSeat;
-    private Double orderCommission;
-    private Date orderDate;
-    private Integer orderStatus;
 
-    // 订单类型
+    //订单自增id
+    private Integer orderId;
+    //商户ID
+    private Integer shopId;
+    //订单号
+    private  String orderNo;
+    //订单名称
+    private String orderName;
+    //订单价格
+    private Double orderPrice;
+    //订单服务员ID
+    private Integer orderWaiterId;
+    //订单用户名称
+    private String orderUser;
+    //订单桌位 台号
+    private String orderSeat;
+    //订单用户手机号
+    private String orderUserPhone;
+    //订单佣金
+    private Double orderCommission;
+    //订单类型
     private Integer orderType;
-    //拼单人
-    private String joinUser;
-    // 签单人
-    private String signer;
+    //订单创建时间
+    private Date orderDate;
+    //订单状态，0-待付款  1-待服务 2-已服务 3-已完成 4-已关闭  105-退款中  106-退款成功 107-退款失败
+    private Integer orderStatus;
+    //拼吧订单参与人 暂定逗号分隔 “张三,李四”
+    private  String joinUser;
+    //签单人用户ID
+    private  Integer signerId;
+    //订单支付类型
+    //1.人民币
+    //2.微信
+    //3.支护宝
+    //4.刷卡
+    //5.挂账 等同于签单操作
+    private  Integer payMethod;
+    //流水更新时间
+    private Date  modifyDate;
+
+ /*   结果返回字段 不用于数据库字段*/
+    // 签单人名称
+    public String signer;
+    //服务员名称
+    public  String orderWaiterName;
+    //订单状态
+    public  String OrderStatusStr;
+
+
 }

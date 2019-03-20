@@ -25,7 +25,8 @@ public interface CommodityService {
                                Integer productCategoryNo,
                                Integer shopId,
                                Integer productStatus,
-                               String keyWord);
+                               String keyWord,
+                               Integer optNum);
 
     /** 检查是否有相同的商品名*/
     public int checkProductName(String productName);
@@ -41,6 +42,8 @@ public interface CommodityService {
 
     /** 更新商品*/
     public int updateGood(Commodity commodity);
+    /** 商品详情  根据ID optNum<=0时 商品基础数据,当等于1时 返回携带文档。价格关联数据*/
+    public Commodity GetGoodById(Integer commodityId, Integer optNum);
 
     /**添加桌位编号*/
     public int addSeatMark(Integer shopId,String seatType,String seatPrefix,Integer seatNum,Integer seatCount);

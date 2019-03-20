@@ -61,6 +61,9 @@ public  interface CommodityMapper {
     /** 更新任务*/
     public int updateGood(@Param("commodity") Commodity commodity);
 
+    /** 商品详情*/
+    public Commodity getCommodityById(@Param("commdityId") Integer commdityId);
+
     /**新增桌位编号*/
     public int addSeatMark(@Param("shopId") Integer shopId,
                            @Param("seatType") String seatType,
@@ -89,6 +92,8 @@ public  interface CommodityMapper {
     public int deletePriceByCommodityId(@Param("commodityId") Integer commodityId);
     /** 删除价格区间的数据 根据商品ID*/
     public int deletePrice(@Param("commodityIds") List<Integer> commodityIds);
+    /** 查询商品价格数据 根据商品ID*/
+    public List<CommodityPrice> getPricesByCommodityId(@Param("commodityId")Integer commodityId);
     /** 查询商品价格数据*/
     public List<CommodityPrice>   getCommodityPrices(
             @Param("shopId")Integer shopId

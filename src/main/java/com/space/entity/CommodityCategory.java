@@ -29,8 +29,10 @@ public class CommodityCategory implements Serializable {
     private Date modifyDate;
     //商品分类描述
     private String categoryDesc;
-
+    //商家ID
     private  Integer shopId;
+
+    //返回字段
     //子级分类
     private List<CommodityCategory> children;
 }
