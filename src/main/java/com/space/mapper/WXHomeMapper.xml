@@ -7,19 +7,34 @@
         <result column="shop_mark" property="shopMark" />
         <result column="shop_name" property="barName" />
         <result column="shop_industry" property="industry"/>
-
         <result column="shop_door_photo" property="shopDoorPhoto" />
         <result column="shop_logo_photo" property="shopLogoPhoto"/>
         <!--人均消费-->
         <result column="per_capita_consumption" property="perCapitaConsumption" />
+    </resultMap>
 
+    <resultMap id="GoodInfo" type="com.space.entity.Commodity">
+        <id column="product_id" property="productId" />
+        <result column="shop_id" property="shopId" />
+        <result column="product_name" property="productName" />
+        <result column="product_image" property="productImage"/>
+        <result column="product_description" property="productDescription" />
+        <result column="product_category" property="productCategory" />
+    </resultMap>
+
+    <resultMap id="SeatInfo" type="com.space.entity.SeatInfo">
+        <result column="shop_id" property="shopId" />
+        <result column="seat_mark" property="seatMark" />
+        <result column="seat_num" property="seatNum" />
+        <result column="type_name" property="typeName"/>
+        <result column="seat_status" property="seatStatus" />
+        <result column="seat_count" property="seatCount" />
     </resultMap>
 
     <!--查询商家基本信息-->
     <select id="getShop" resultMap="BaseResultMap">
-        select shop.shop_id,shop.shop_logo_photo,shop.shop_name,shop.shop_industry,info.per_capita_consumption
-        from space_shop shop left join shop_info info
-        on shop.shop_id=info.shop_id where 1=1
+        select shop.shop_id,shop.shop_mark,shop.shop_logo_photo,shop.shop_name,shop.shop_industry,shop.per_capita_consumption
+        from space_shop shop where 1=1
         <if test="provice!=null and provice!=''">
             and shop.shop_provice = #{provice}
         </if>
@@ -41,6 +56,21 @@
         <if test="filter==2">
             order by info.per_capita_consumption
         </if>
+    </select>
+
+    <!--查询商品信息-->
+    <select id="getGoodInfo" resultMap="GoodInfo">
+        select * from product_info where shop_id=#{shopId}
+        <if test="productName!=null and productName!=''">
+            product_name like '%${productName}%'
+        </if>
+    </select>
+
+    <!--查询座位信息-->
+    <select id="getSeatInfo" resultMap="SeatInfo">
+        select seat.shop_id,seat.seat_mark,seat.seat_num,area.type_name,area.seat_count,seat.seat_status
+        from shop_seat seat left join area_type_info area on seat.type_id=area.type_id
+        where seat.shop_id=#{shopId}
     </select>
 </mapper>
 

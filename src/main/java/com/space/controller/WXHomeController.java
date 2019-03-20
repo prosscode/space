@@ -24,12 +24,6 @@ public class WXHomeController {
     @Autowired
     private WXHomeService wxHomeService;
 
-    /**登录*/
-    @RequestMapping(value = "/login",method = RequestMethod.GET)
-    public void userLogin(){
-
-    }
-
     /**
      * 查询商家基本信息
      * @param filter 筛选，默认排序0，评分最高1，人均消费2，离我最近3
@@ -49,6 +43,24 @@ public class WXHomeController {
         logger.info("WXHomeController|getShop,type:"+type+",filter:"+filter);
         PageEntity shop = wxHomeService.getShop(filter, provice, city, district, type, barName);
         return shop;
+    }
+
+    /**
+     * 通过shopId，拿到商品信息
+     * @param shopId
+     */
+    @RequestMapping(value = "/getGoodInfo")
+    public void getGoodInfo(@RequestParam(name="shopId",required = true)Integer shopId,
+                            @RequestParam(name="productName",defaultValue = "")String productName){
+        logger.info("WXHomeController|getGoodInfo,shopId:"+shopId+",productName:"+productName);
+        wxHomeService.getGoodInfo(shopId,productName);
+    }
+
+    @RequestMapping(value = "/getSeatInfo")
+    public PageEntity getSeatInfo(@RequestParam(name="shopId")Integer shopId){
+        logger.info("WXHomeController|getSeatInfo,shopId:"+shopId);
+        PageEntity seatInfo = wxHomeService.getSeatInfo(shopId);
+        return seatInfo;
     }
 
 }
