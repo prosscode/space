@@ -1,10 +1,9 @@
 package com.space.service.impl;
 
-import com.space.entity.Commodity;
-import com.space.entity.CommodityType;
-import com.space.entity.ShopSeat;
+import com.space.entity.*;
 import com.space.exception.PageEntity;
 import com.space.mapper.CommodityMapper;
+import com.space.mapper.DocumentInfoMapper;
 import com.space.service.CommodityService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -13,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +30,8 @@ public class CommodityServiceImpl implements CommodityService {
 
     @Autowired
     private CommodityMapper commodityMapper;
-
+    @Autowired
+    private DocumentInfoMapper documentInfoMapper;
 
     /** 添加分组*/
     @Override
@@ -54,8 +56,8 @@ public class CommodityServiceImpl implements CommodityService {
     /** 查询座位分组*/
     @Override
     public PageEntity getGoodType(Integer shopId) {
-        List<CommodityType> type = commodityMapper.getGoodType(shopId);
         PageEntity entity = new PageEntity();
+        List<CommodityType> type = commodityMapper.getGoodType(shopId);
         entity.setList(type);
         entity.setCount(0);
         return entity;
@@ -76,10 +78,16 @@ public class CommodityServiceImpl implements CommodityService {
 
     /** 查询商品*/
     @Override
-    public PageEntity getGoods(String productName,Integer pageNo,Integer pageSize) {
+    public PageEntity getGoods(String productName,
+                               Integer pageNo,
+                               Integer pageSize,
+                               Integer productCategoryNo,
+                               Integer shopId,
+                               Integer productStatus,
+                               String keyWord) {
         logger.info("CommodityServiceImpl|getGoods,productName:"+productName+",pageNo:"+pageNo+",pageSize"+pageSize);
         // 查询
-        List<Commodity> goods = commodityMapper.getGoods(productName,pageNo,pageSize);
+        List<Commodity> goods = commodityMapper.getGoods(productName,pageNo,pageSize,productCategoryNo,shopId,productStatus,keyWord);
         // 总数
         int goodsCount = commodityMapper.getGoodsCount(productName);
         PageEntity pageEntity = new PageEntity();
@@ -87,6 +95,7 @@ public class CommodityServiceImpl implements CommodityService {
         pageEntity.setCount(goodsCount);
         return pageEntity;
     }
+
 
     /** 判断添加商品，商品名称是否存在*/
     @Override
@@ -102,8 +111,23 @@ public class CommodityServiceImpl implements CommodityService {
         int addGood = 0;
         try {
             logger.info("CommodityServiceImpl|publishGoods,commodity:"+commodity.toString());
+            commodity.setCreateTime(new Date());
             addGood = commodityMapper.addGood(commodity);
-
+             List<CommodityDocument> CommodityDocumentList =commodity.getCommodityDocumentList();
+            //商品价格关联
+             List<CommodityPrice> CommodityPriceList=commodity.getCommodityPriceList();
+            //添加商品图片
+            if(CommodityDocumentList!=null&&CommodityDocumentList.size()>0){
+                for (CommodityDocument ditem:CommodityDocumentList){
+                    commodityMapper.addCommodityDocument(ditem);
+                }
+            }
+            //添加商品价格时间设置
+            if(CommodityPriceList!=null&&CommodityPriceList.size()>0){
+                for (CommodityPrice pitem:CommodityPriceList){
+                    commodityMapper.addCommodityPrices(pitem);
+                }
+            }
         }catch (Exception e){
             logger.error("CommodityServiceImpl|publishGoods,error message:" + e.getMessage() ,e);
         }
@@ -113,19 +137,33 @@ public class CommodityServiceImpl implements CommodityService {
 
     /**删除和上架商品*/
     @Override
-    public int deleteAndUpGoods(List<Integer> productIds, List<Object> opNumber) {
+    public int deleteAndUpGoods(List<Integer> productIds,Integer opNumber,List<Object> setValues) {
         int returnNum=0;
         try{
-            // 取出相应的操作
-            int opInt = Integer.parseInt(opNumber.get(0).toString());
-            if(opInt == 0){
-                // 删除商品和删除价格
+
+            if(opNumber == 0){
+                //关联文档
+                List<CommodityDocument> commodityDocumentList=commodityMapper.getCommodityDocuments(productIds);
+                // 删除商品和删除价格和删除关联文档
                 returnNum = commodityMapper.deleteProducts(productIds);
+                //删除商品价格
                 commodityMapper.deletePrice(productIds);
+                //删除关联文档
+                commodityMapper.deleteCommodityDocumentByCommodityIds(productIds);
+                if(commodityDocumentList!=null&&commodityDocumentList.size()>0){
+                    List<String>  documentIds =new ArrayList<>();
+                    for (CommodityDocument citem:commodityDocumentList){
+                        documentIds.add(citem.getDocumentId());
+                    }
+                    String[] array=documentIds.toArray(new String[documentIds.size()]);
+
+                    documentInfoMapper.deleteByIds(array);
+                }
+
             }
-            if(opInt == 1){
+            else{
                 // 上架
-                returnNum = commodityMapper.upProduct(productIds);
+                returnNum=  commodityMapper.upProduct(opNumber,productIds,setValues);
             }
         }catch (Exception e){
             logger.error("CommodityServiceImpl|deleteAndUpGoods,error message:" + e.getMessage() ,e);
@@ -136,8 +174,32 @@ public class CommodityServiceImpl implements CommodityService {
     /** 更新商品*/
     @Override
     public int updateGood(Commodity commodity) {
-        return commodityMapper.updateGood(commodity);
+        try{
+            List<CommodityDocument> CommodityDocumentList =commodity.getCommodityDocumentList();
+            //商品价格关联
+            List<CommodityPrice> CommodityPriceList=commodity.getCommodityPriceList();
+            //添加商品图片
+            commodityMapper.deleteCommodityDocumentByCommodityId(commodity.getProductId());
+            if(CommodityDocumentList!=null&&CommodityDocumentList.size()>0){
+                for (CommodityDocument ditem:CommodityDocumentList){
+                    commodityMapper.addCommodityDocument(ditem);
+                }
+            }
+            //添加商品价格时间设置
+            commodityMapper.deletePriceByCommodityId(commodity.getProductId());
+            if(CommodityPriceList!=null&&CommodityPriceList.size()>0){
+                for (CommodityPrice pitem:CommodityPriceList){
+                    commodityMapper.addCommodityPrices(pitem);
+                }
+            }
+            return commodityMapper.updateGood(commodity);
+        }catch (Exception e){
+            logger.error("CommodityServiceImpl|publishGoods,error message:" + e.getMessage() ,e);
+            return -1;
+        }
     }
+
+
 
 
     /**添加座位编号*/

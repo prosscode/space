@@ -19,7 +19,13 @@ public interface CommodityService {
     public int updateGoodType(Integer typeId,Integer shopId,String typeName);
 
     /**查询商品*/
-    public PageEntity getGoods(String productName,Integer pageNo,Integer pageSize);
+    public PageEntity getGoods(String productName,
+                               Integer pageNo,
+                               Integer pageSize,
+                               Integer productCategoryNo,
+                               Integer shopId,
+                               Integer productStatus,
+                               String keyWord);
 
     /** 检查是否有相同的商品名*/
     public int checkProductName(String productName);
@@ -31,7 +37,7 @@ public interface CommodityService {
     public int addGood(Commodity commodity);
 
     /**删除商品*/
-    public int deleteAndUpGoods(List<Integer> productIds,List<Object> opNumber);
+    public int deleteAndUpGoods(List<Integer> productIds,Integer opNumber,List<Object> setValues);
 
     /** 更新商品*/
     public int updateGood(Commodity commodity);

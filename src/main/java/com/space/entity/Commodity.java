@@ -1,8 +1,11 @@
 package com.space.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @describe: 商品
@@ -23,13 +26,37 @@ public class Commodity implements Serializable {
     private String productImage;
     // 描述
     private String productDesc;
-    // 分类
+    //商品分类编号
+    private int productCategoryNo;
+    // 商品分类名称
     private String productCategory;
-    // 库存
+
+    // 商品库存  库存为0时，表示[已售馨]
     private String productStocks;
     //创建时间
-    private String createTime;
-    // 商品状态，0-未上架，1-上架
-    private String productStatus;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone= "GMT+8")
+    private Date createTime;
+    //商品更新时间
+    private Date updateTime;
+    //  商品状态，0-未上架，1-上架
+    private int productStatus;
+    //商品卖点详情
+    private String productSellDesc;
+    //   是否显示剩余商品件数，0代表不显示、1代表显示
+    private boolean showSurplus;
+    // 商品是否参加分销返利,0不参加、1参加
+    private boolean isJoinpartsell;
+    //商品上架时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone= "GMT+8")
+    private Date publishTime;
 
+    //-------------------------------返回结果字段-----------------------------------
+    //商品文档关联
+    public List<CommodityDocument> CommodityDocumentList;
+    //商品价格关联
+    public List<CommodityPrice> CommodityPriceList;
 }
+
+
+
+

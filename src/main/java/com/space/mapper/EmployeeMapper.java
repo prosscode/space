@@ -3,6 +3,7 @@ package com.space.mapper;
 import com.space.entity.Staff;
 import com.space.entity.StaffType;
 import org.apache.ibatis.annotations.Param;
+import org.omg.CORBA.PUBLIC_MEMBER;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,14 @@ public interface EmployeeMapper {
 
     public int deleteStaffType(@Param("shopMark")String shopMark,@Param("staffTypeName")String staffTypeName);
 
-    public List<String> getStaffTypes(@Param("shopMark")String shopMark);
+    public int deleteStaffTypeById(@Param("staffTypeId")Integer staffTypeId);
+
+    public  int updateStaffType(StaffType staffType);
+
+    public List<StaffType> getStaffTypes(@Param("shopMark")String shopMark,
+                                      @Param("staffTypeName") String staffTypeName,
+                                      @Param("pageNo") Integer pageNo,
+                                      @Param("pageSize") Integer pageSize);
 
     public int addStaff(Staff staff);
 
@@ -29,9 +37,15 @@ public interface EmployeeMapper {
                          @Param("pageNo") Integer pageNo,
                          @Param("pageSize") Integer pageSize);
 
+    public StaffType  getStaffTypeById(@Param("staffTypeId")Integer staffTypeId);
+
     public int getStaffsCount(@Param("shopMark")String shopMark,
                                 @Param("staffName") String staffName,
                                  @Param("staffType") String staffType,
                                  @Param("dateFrom") Date dateFrom,
                                  @Param("dateTo") Date dateTo);
+
+     public  int deleteStaffById(@Param("staffId")Integer staffId);
+
+     public  int updateStaff(@Param("staff")Staff staff);
 }

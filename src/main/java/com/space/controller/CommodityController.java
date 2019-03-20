@@ -74,10 +74,15 @@ public class CommodityController extends BaseExceptionHandler {
     @RequestMapping(value = "/getGoods",method = RequestMethod.GET)
     public PageEntity getGoods(@RequestParam(name="productName",defaultValue="")String productName,
                                @RequestParam(name="pageNo",defaultValue="1")Integer pageNo ,
-                               @RequestParam(name="pageSize",defaultValue="20") Integer pageSize){
+                               @RequestParam(name="pageSize",defaultValue="20") Integer pageSize,
+                               @RequestParam(name="productCategoryNo") Integer productCategoryNo,
+                               @RequestParam(name="shopId") Integer shopId,
+                               @RequestParam(name="productStatus") Integer productStatus,
+                               @RequestParam(name="keyWord") String keyWord){
         logger.info("CommodityController|getGoods,productName: "+productName);
         pageNo = (pageNo -1) * pageSize;
-        PageEntity pageEntity = commodityService.getGoods(productName,pageNo,pageSize);
+
+        PageEntity pageEntity = commodityService.getGoods(productName,pageNo,pageSize,productCategoryNo,shopId,productStatus,keyWord);
         return pageEntity;
     }
 
@@ -85,24 +90,27 @@ public class CommodityController extends BaseExceptionHandler {
     /**发布商品*/
     @ApiOperation(value = "发布商品")
     @RequestMapping(value = "/publishGoods",method = RequestMethod.POST)
-    public int publishGoods(@RequestBody Commodity commodity) throws Exception {
+    public int publishGoods(@RequestBody Commodity commodity,@RequestParam(name="shopId",required = true)Integer shopId) throws Exception {
+        if(shopId>0){
+            commodity.setShopId(shopId);
+        }
         //查询名字是否已经存在
         int nameCount = commodityService.checkProductName(commodity.getProductName());
         if (nameCount > 0) {
             throw new Exception("商品名称已存在。");
         }
-        // 添加创建时间
-        String currentTime = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
-        commodity.setCreateTime(currentTime);
+        commodity.setCreateTime(new Date());
         logger.info("CommodityController|publishGoods,commodity: "+commodity);
         return commodityService.addGood(commodity);
+
     }
 
 
     /** 删除和上架商品*/
     @ApiOperation(value = "删除和上架商品")
-    @RequestMapping(value = "/deleteAndUpGood",method = RequestMethod.POST)
-    public int deleteAndUpGoods(@RequestBody Map<String,List<Object>> param) throws Exception {
+    @RequestMapping(value = "/deleteAndUpGood/{optNumber}",method = RequestMethod.POST)
+    public int deleteAndUpGoods(@RequestBody Map<String,List<Object>> param,
+                                @PathVariable(value = "optNumber",required = true)int optNumber) throws Exception {
         List<Object> Ids = param.get("productIds");
         //转化List<Integer>
         List<Integer> productIds=new ArrayList<>();
@@ -112,9 +120,9 @@ public class CommodityController extends BaseExceptionHandler {
             productIds.add(parseInt);
         }
         logger.info("CommodityController|deleteAndUpGood,productIds:" + productIds.toString());
-        List<Object> opNumber = param.get("opNumber");
+        //List<Object> opNumber = param.get("opNumber");
 
-        int opInt = Integer.parseInt(opNumber.get(0).toString());
+        int opInt =optNumber; //Integer.parseInt(opNumber.get(0).toString());
 
         if(opInt == 0){
             // 如果是删除，先检测商品中是否有上架
@@ -123,13 +131,17 @@ public class CommodityController extends BaseExceptionHandler {
                 throw new Exception("删除的商品中存在上架商品，请先下架商品。");
             }
         }
-       return commodityService.deleteAndUpGoods(productIds, opNumber);
-
+        List<Object> setValues = param.get("setValues");
+       return commodityService.deleteAndUpGoods(productIds, opInt,setValues);
     }
 
     /** 更新商品*/
     @RequestMapping(value = "/updateGood",method = RequestMethod.POST)
-    public int updateGood(@RequestBody Commodity commodity) {
+    public int updateGood(@RequestBody Commodity commodity,@RequestParam(name="shopId",required = true)Integer shopId){
+        //如果是商户修改，强制更改为当前商户ID
+        if(shopId>0){
+            commodity.setShopId(shopId);
+        }
         logger.info("CommodityController|updateGood,commodity: "+commodity);
         return commodityService.updateGood(commodity);
     }

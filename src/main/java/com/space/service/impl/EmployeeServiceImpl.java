@@ -24,7 +24,6 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private static Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
-
     @Autowired
     private EmployeeMapper employeeMapper;
 
@@ -53,8 +52,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /** 得到商家设置的员工分类*/
     @Override
-    public List<String> getStaffTypes(String shopMark) {
-        List<String> staffTypes = employeeMapper.getStaffTypes(shopMark);
+    public List<StaffType> getStaffTypes(String shopMark,String staffTypeName,Integer pageNo,Integer pageSize) {
+        List<StaffType> staffTypes = employeeMapper.getStaffTypes(shopMark,staffTypeName,pageNo,pageSize);
         return staffTypes;
     }
 

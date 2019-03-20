@@ -3,7 +3,7 @@ package com.space.entity;
 import lombok.Data;
 
 /**
- * @describe:
+ * @describe: 商品桌位
  * @author: 彭爽pross
  * @date: 2019/03/10
  */

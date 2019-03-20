@@ -8,17 +8,23 @@
         <result column="product_name" property="productName" />
         <result column="product_image" property="productImage" />
         <result column="product_description" property="productDesc" />
+        <result column="product_categoryNo" property="productCategoryNo" />
         <result column="product_category" property="productCategory" />
         <result column="product_stocks" property="productStocks" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="product_status" property="productStatus" />
+        <result column="product_sell_desc" property="productSellDesc" />
+        <result column="show_surplus" property="showSurplus" />
+        <result column="is_joinpartsell" property="isJoinpartsell" />
+        <result column="publish_time" property="publishTime" />
 
         <result column="start_time" property="startTime" />
         <result column="end_time" property="endTime" />
         <result column="product_price" property="productPrice" />
         <result column="offer_price" property="offerPrice" />
     </resultMap>
+
 
     <resultMap id="CommodityType" type="com.space.entity.CommodityType">
         <id column="type_id" property="typeId" />
@@ -62,17 +68,48 @@
         update product_type set type_name=#{typeName} where shop_id=#{shopId} and type_id=#{typeId}
     </update>
 
-    <!--查询商品-->
+    <!--查询商品 -->
     <select id="getGoods" resultMap="BaseResultMap">
-        SELECT product_id,shop_id,product_name,product_category,product_stocks,product_description,create_time,product_status
+        SELECT *
         FROM product_info where 1 = 1
         <if test="productName!=null and productName!=''">
             AND product_name like '%${productName}%'
+        </if>
+        <if test="productCategoryNo>0">
+            AND product_categoryNo =#{productCategoryNo}
+        </if>
+        <if test="shopId>0">
+            AND shop_id=#{shopId}
+        </if>
+        <if test="productStatus>-1">
+            AND product_status=#{productStatus}
+        </if>
+        <if test="keyWord!=null and keyWord!=''">
+            AND product_name like '%${keyWord}%'
         </if>
         <if test="pageNo >= 0 and pageSize > 0">
             limit #{pageNo},#{pageSize}
         </if>
     </select>
+    <!--新增商品-->
+    <insert id="addGood" parameterType="com.space.entity.Commodity">
+        INSERT INTO product_info(shop_id,product_name,product_description,product_categoryNo,product_category,product_stocks,product_status,product_sell_desc,show_surplus,is_joinpartsell,publish_time)
+        VALUES (
+        #{shopId},
+        #{productName},
+        #{productDesc},
+        #{productCategoryNo},
+        #{productCategory},
+        #{productStocks},
+        #{productStatus},
+        #{productSellDesc},
+        #{showSurplus},
+        #{isJoinpartsell},
+        #{publishTime}
+        )
+    </insert>
+
+
 
     <!--查询商品总数-->
     <select id="getGoodsCount" resultType="Integer">
@@ -80,6 +117,19 @@
         <if test="productName!=null and productName!=''">
             AND product_name like '%${productName}%'
         </if>
+        <if test="productCategoryNo>0">
+            AND product_categoryNo =#{productCategoryNo}
+        </if>
+        <if test="shopId>0">
+            AND shop_id=#{shopId}
+        </if>
+        <if test="productStatus>-1">
+            AND product_status=#{productStatus}
+        </if>
+        <if test="keyWord!=null and keyWord!=''">
+            AND product_name like '%${keyWord}%'
+        </if>
+
     </select>
 
     <!-- 检查是否有相同的商品名称-->
@@ -87,21 +137,10 @@
         SELECT count(*) FROM product_info where product_name = #{productName,jdbcType=VARCHAR}
     </select>
 
-    <insert id="addGood" parameterType="com.space.entity.Commodity">
-        INSERT INTO product_info(shop_id,product_name,product_image,product_description,product_category,product_stocks,create_time)
-        VALUES (
-            #{shopId},
-            #{productName},
-            #{productImage},
-            #{productDesc},
-            #{productCategory},
-            #{productStocks},
-            #{createTime}
-        )
-    </insert>
+
 
     <!-- 检查需要删除的商品有没有上架-->
-    <select id="checkProductUp" parameterType="java.util.List">
+    <select id="checkProductUp" parameterType="java.util.List"  resultType="Integer">
         <if test="productIds!=null and productIds.size() > 0">
             SELECT COUNT(*) FROM product_info WHERE product_status = 1 and product_id in
             <foreach collection="productIds" item="productId" open="(" close=")" separator=",">
@@ -111,7 +150,7 @@
     </select>
 
     <!-- 删除商品 -->
-    <delete id="deleteProduct" parameterType="java.util.List">
+    <delete id="deleteProducts" parameterType="java.util.List">
         <if test="productIds!=null and productIds.size() > 0">
             DELETE FROM product_info where product_id in
             <foreach collection="productIds" item="productId" open="(" close=")" separator=",">
@@ -120,21 +159,34 @@
         </if>
     </delete>
 
-    <!-- 删除商品的价格-->
-    <delete id="deletePrice" parameterType="java.util.List">
-        <if test="productIds!=null and productIds.size() > 0">
-            DELETE FROM product_price where product_id in
-            <foreach collection="productIds" item="productId" open="(" close=")" separator=",">
-                #{productId}
-            </foreach>
-        </if>
-    </delete>
+
 
     <!--上架商品，改变状态值-->
     <update id="upProduct" parameterType="java.util.List">
         <if test="productIds!=null and productIds.size() > 0">
-            UPDATE product_info set product_status = 1 where product_id in
-            <foreach collection="productIds" item="productId" open="(" close=")" separator=",">
+            UPDATE product_info
+            <if test="optNum==1">
+                set product_status = 1
+            </if>
+            <if test="optNum==2">
+                set product_status = 2
+            </if>
+            <if test="optNum==3">
+                <foreach collection="setValues" index="index" item="value" >
+                    <if test="index==0">
+                        set product_categoryNo = #{value},
+                    </if>
+                    <if test="index==1">
+                         product_category = #{value}
+                    </if>
+                  /*  jdbcType=VARCHAR*/
+                </foreach>
+            </if>
+            <if test="optNum==4">
+
+            </if>
+             WHERE product_id in
+            <foreach collection="productIds" index="index" item="productId" open="(" close=")" separator=",">
                 #{productId}
             </foreach>
         </if>
@@ -142,21 +194,24 @@
 
     <!--更新商品-->
     <update id="updateGood" parameterType="com.space.entity.Commodity">
-        update product_info set product_id = #{productId},
-        <if test="shopId > 0">
+        update product_info set 1=1,
+<!--        <if test="shopId > 0">
             ,shop_id = #{shopId}
-        </if>
+        </if>-->
         <if test="productName!=null and productName!=''">
             ,product_name = #{productName}
         </if>
-        <if test="productImage!=null and productImage!=''">
+   <!--     <if test="productImage!=null and productImage!=''">
             ,product_image = #{productImage}
         </if>
         <if test="productImage!=null and productImage!=''">
             ,product_image = #{productImage}
-        </if>
+        </if>-->
         <if test="productDesc!=null and productDesc!=''">
             ,product_description = #{productDesc}
+        </if>
+        <if test="productCategoryNo>0">
+            ,product_category = #{productCategory}
         </if>
         <if test="productCategory!=null and productCategory!=''">
             ,product_category = #{productCategory}
@@ -164,6 +219,11 @@
         <if test="productStocks!=null and productStocks!=''">
             ,product_stocks = #{productStocks}
         </if>
+        ,product_status = #{productStatus}
+        ,product_sell_desc = #{productSellDesc}
+        ,show_surplus = #{showSurplus}
+        ,is_joinpartsell = #{isJoinpartsell}
+        ,publish_time = #{publishTime}
         WHERE product_id = #{productId}
     </update>
 
@@ -180,5 +240,103 @@
     <!--删除桌位-->
     <delete id="deleteSeat">
         delete from shop_seat where seat_id=#{seatId} and shop_id=#{shopId}
+    </delete>
+
+    <!--//////////////////商品关联文档/////////////////////-->
+    <resultMap id="CommodityDocumentMap" type="com.space.entity.CommodityDocument">
+        <id column="id" property="id" />
+        <result column="commodityId" property="commodityId"/>
+        <result column="documentId" property="documentId"/>
+        <result column="shopId" property="shopId"/>
+    </resultMap>
+    <!--1.查询所有-->
+    <select id="getCommodityDocuments" resultMap="CommodityDocumentMap" parameterType="java.util.List">
+        <if test="commodityIds!=null and commodityIds.size() > 0">
+            select * from commodity_document where commodityId  IN
+            <foreach collection="commodityIds" item="commodityId" open="(" close=")" separator=",">
+                #{commodityId}
+            </foreach>
+        </if>
+    </select>
+    <!--2.查询详情-->
+<!--    <select id="getCommodityDocument" resultMap="CommodityDocumentMap">
+        select * from commodity_document where shop_id=#{shopId} AND id=#{id}
+    </select>-->
+    <!--3.增加-->
+    <insert id="addCommodityDocument">
+        insert into commodity_document(commodityId,documentId,shopId)
+        values (#{commodityId},#{documentId},#{shopId})
+    </insert>
+    <!--4.删除 根据商品ID-->
+    <delete id="deleteCommodityDocumentByCommodityId" parameterType="Integer">
+        delete from commodity_document where  commodityId = #{commodityId};
+        DELETE FROM  document_info WHERE  documentId IN
+       (SELECT documentId FROM  commodity_document where  commodityId = #{commodityId})
+    </delete>
+    <!--4.删除 根据多个商品ID-->
+    <delete id="deleteCommodityDocumentByCommodityIds" parameterType="java.util.List">
+        <if test="commodityIds!=null and commodityIds.size() > 0">
+            DELETE FROM commodity_document where commodityId in
+            <foreach collection="commodityIds" item="commodityId" open="(" close=")" separator=",">
+                #{commodityId}
+            </foreach>
+           <!-- DELETE FROM  document_info
+            <where>
+                documentId in
+                (SELECT documentId FROM  commodity_document
+                <where>
+                    commodityId in
+                    <foreach collection="commodityIds" item="commodityId" open="(" close=")" separator=",">
+                        #{commodityId}
+                    </foreach>
+                </where>
+                )
+            </where>-->
+        </if>
+    </delete>
+    <!--5.修改-->
+
+    <!--//////////////////商品价格关联/////////////////////-->
+<!--    <resultMap id="CommodityPriceMap" type="com.space.entity.CommodityPrice">
+        <id column="product_id" property="product_id" />
+        <result column="commodityId" property="commodityId"/>
+        <result column="documentId" property="documentId"/>
+        <result column="shopId" property="shopId"/>
+    </resultMap>-->
+    <!--1.查询所有-->
+    <select id="getCommodityPrices" resultMap="BaseResultMap">
+        select * from product_price where 1=1
+        /* 商品ID*/
+        <if test="commodityId>0">
+            AND   product_id=#{commodityId}
+        </if>
+        /* 商户ID*/
+        <if test="shopId>0">
+            AND   shop_id=#{shopId}
+        </if>
+        /* 商品名称*/
+        <if test="product_name!=null and product_name!=''">
+            AND  product_name LIKE  '%#{commodityName}%'
+        </if>
+    </select>
+    <!--2.增加-->
+    <insert id="addCommodityPrices">
+        insert into product_price(product_id,shop_id,product_name,start_time,end_time,product_price,offer_price)
+        values (#{productId},#{shopId},#{productName},#{startTime},#{endTime},#{productPrice},#{offerPrice})
+    </insert>
+    <!--3. 删除 根据多个商品ID-->
+    <delete id="deletePrice" parameterType="java.util.List">
+        <if test="commodityIds!=null and commodityIds.size() > 0">
+            DELETE FROM product_price where product_id in
+            <foreach collection="commodityIds" item="commodityId" open="(" close=")" separator=",">
+                #{commodityId}
+            </foreach>
+        </if>
+    </delete>
+    <!--4. 删除 根据商品ID-->
+    <delete id="deletePriceByCommodityId" >
+        <if test="CommodityId>0">
+            DELETE FROM product_price where product_id = #{commodityId}
+        </if>
     </delete>
 </mapper>
