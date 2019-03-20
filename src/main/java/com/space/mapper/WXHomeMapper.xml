@@ -11,6 +11,7 @@
         <result column="shop_logo_photo" property="shopLogoPhoto"/>
         <!--人均消费-->
         <result column="per_capita_consumption" property="perCapitaConsumption" />
+        <result column="shop_address" property="shopAddress" />
     </resultMap>
 
     <resultMap id="GoodInfo" type="com.space.entity.Commodity">
@@ -30,10 +31,24 @@
         <result column="seat_status" property="seatStatus" />
         <result column="seat_count" property="seatCount" />
     </resultMap>
+    
+    <resultMap id="CouponInfo" type="com.space.entity.CouponInfo">
+        <id column="id" property="id" />
+        <result column="shopId" property="shopId" />
+        <result column="securitiesNo" property="securitiesNo" />
+        <result column="securitiesType" property="securitiesType" />
+        <result column="worth" property="worth"/>
+        <result column="useCondition" property="useCondition" />
+        <result column="amontCondition" property="amontCondition" />
+        <result column="activeDateType" property="activeDateType" />
+        <result column="activeRange" property="activeRange"/>
+        <result column="useDesc" property="useDesc"/>
+    </resultMap>
 
     <!--查询商家基本信息-->
     <select id="getShop" resultMap="BaseResultMap">
-        select shop.shop_id,shop.shop_mark,shop.shop_logo_photo,shop.shop_name,shop.shop_industry,shop.per_capita_consumption
+        select shop.shop_id,shop.shop_mark,shop.shop_logo_photo,shop.shop_name,shop.shop_industry,
+        shop.per_capita_consumption,shop.shop_address
         from space_shop shop where 1=1
         <if test="provice!=null and provice!=''">
             and shop.shop_provice = #{provice}
@@ -71,6 +86,12 @@
         select seat.shop_id,seat.seat_mark,seat.seat_num,area.type_name,area.seat_count,seat.seat_status
         from shop_seat seat left join area_type_info area on seat.type_id=area.type_id
         where seat.shop_id=#{shopId}
+    </select>
+
+    <!--查询优惠券-->
+    <select id="getCouponInfo" resultMap="CouponInfo">
+        select id,shopId,securitiesNo,securitiesType,worth,useCondition,amontCondition,activeDateType,activeRange,useDesc
+         from shop_market_securities where shopId=#{shopId}
     </select>
 </mapper>
 

@@ -1,5 +1,6 @@
 package com.space.service.impl;
 
+import com.space.entity.CouponInfo;
 import com.space.entity.SeatInfo;
 import com.space.entity.ShopHome;
 import com.space.exception.PageEntity;
@@ -54,4 +55,16 @@ public class WXHomeServiceImpl implements WXHomeService {
         entity.setCount(0);
         return entity;
     }
+
+
+    /**拿到优惠券信息*/
+    @Override
+    public PageEntity getCouponInfo(Integer shopId) {
+        List<CouponInfo> couponInfo = wxHomeMapper.getCouponInfo(shopId);
+        PageEntity entity = new PageEntity();
+        entity.setList(couponInfo);
+        entity.setCount(0);
+        return entity;
+    }
+
 }

@@ -56,11 +56,20 @@ public class WXHomeController {
         wxHomeService.getGoodInfo(shopId,productName);
     }
 
+    /**拿到座位信息*/
     @RequestMapping(value = "/getSeatInfo")
     public PageEntity getSeatInfo(@RequestParam(name="shopId")Integer shopId){
         logger.info("WXHomeController|getSeatInfo,shopId:"+shopId);
         PageEntity seatInfo = wxHomeService.getSeatInfo(shopId);
         return seatInfo;
+    }
+
+    /**拿到优惠券信息*/
+    @RequestMapping(value = "/getCouponInfo")
+    public PageEntity getCouponInfo(@RequestParam(name="shopId")Integer shopId){
+        logger.info("WXHomeController|getCouponInfo,shopId:"+shopId);
+        PageEntity info = wxHomeService.getCouponInfo(shopId);
+        return info;
     }
 
 }

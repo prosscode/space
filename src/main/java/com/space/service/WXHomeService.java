@@ -10,4 +10,6 @@ public interface WXHomeService {
 
     public PageEntity getSeatInfo(Integer shopId);
 
+    public PageEntity getCouponInfo(Integer shopId);
+
 }

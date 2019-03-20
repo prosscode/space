@@ -1,5 +1,6 @@
 package com.space.mapper;
 
+import com.space.entity.CouponInfo;
 import com.space.entity.SeatInfo;
 import com.space.entity.ShopHome;
 import org.apache.ibatis.annotations.Param;
@@ -19,4 +20,7 @@ public interface WXHomeMapper {
                             @Param("productName")String productName);
 
     public List<SeatInfo> getSeatInfo(@Param("shopId") Integer shopId);
+
+    public List<CouponInfo> getCouponInfo(@Param("shopId")Integer shopId);
 }
+
