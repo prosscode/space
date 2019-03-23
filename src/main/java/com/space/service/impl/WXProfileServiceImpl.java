@@ -1,11 +1,15 @@
 package com.space.service.impl;
 
+import com.space.entity.UserPartSell;
+import com.space.exception.PageEntity;
 import com.space.mapper.WXProfileMapper;
 import com.space.service.WXProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @describe: 用户个人信息相关
@@ -26,9 +30,15 @@ public class WXProfileServiceImpl implements WXProfileService {
         return wxProfileMapper.getPartsellLevel(shopId);
     }
 
-    /** 查询用户身份*/
+    /** 查询用户分销身份*/
     @Override
-    public Integer getUserIdentity(Integer userId) {
-        return wxProfileMapper.getUserIdentity(userId);
+    public PageEntity getUserIdentity(Integer userId) {
+        List<UserPartSell> userIdentity = wxProfileMapper.getUserIdentity(userId);
+        String userName = userIdentity.get(0).getSuperUserName();
+        System.out.println(userName+"=========");
+        PageEntity entity = new PageEntity();
+        entity.setList(userIdentity);
+        entity.setCount(0);
+        return entity;
     }
 }

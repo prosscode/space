@@ -1,5 +1,6 @@
 package com.space.controller;
 
+import com.space.exception.PageEntity;
 import com.space.service.WXProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,9 @@ public class WXProfileController {
     @Autowired
     private WXProfileService wxProfileService;
 
-    /**查询用户是不是分销员*/
+    /**查询用户分销员记录*/
     @RequestMapping(value = "/getUserIdentity")
-    public Integer getUserIdentity(@RequestParam(name = "userId") Integer userId){
+    public PageEntity getUserIdentity(@RequestParam(name = "userId") Integer userId){
         logger.info("WXProfileController|getUserIdentity,userId:"+userId);
         return wxProfileService.getUserIdentity(userId);
     }
@@ -35,5 +36,7 @@ public class WXProfileController {
         logger.info("WXProfileController|getPartsellLevel,shopId:"+shopId);
         return wxProfileService.getPartsellLevel(shopId);
     }
+
+    /** 我的下级*/
 
 }
