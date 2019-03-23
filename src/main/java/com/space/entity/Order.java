@@ -3,6 +3,7 @@ package com.space.entity;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @describe: 订单
@@ -51,6 +52,13 @@ public class Order {
     private  Integer payMethod;
     //流水更新时间
     private Date  modifyDate;
+    //到店开始时间
+    private Date orderReachStartDate;
+    //到店结束时间
+    private Date orderReachEndDate;
+
+    //返回订单商品
+    private List<OrderProduct> orderProductList;
 
  /*   结果返回字段 不用于数据库字段*/
     // 签单人名称
