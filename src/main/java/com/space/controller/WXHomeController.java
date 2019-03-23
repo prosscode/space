@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date: 2019/03/17
  */
 @RestController
-@RequestMapping(value = "/wx")
+@RequestMapping(value = "/wx/home")
 public class WXHomeController {
 
     private static Logger logger = LoggerFactory.getLogger(WXHomeController.class);

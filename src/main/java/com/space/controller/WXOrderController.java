@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping(value = "/wx")
+@RequestMapping(value = "/wx/order")
 public class WXOrderController {
 
     private static Logger logger = LoggerFactory.getLogger(WXOrderController.class);
