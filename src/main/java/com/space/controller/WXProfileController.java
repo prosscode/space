@@ -37,6 +37,11 @@ public class WXProfileController {
         return wxProfileService.getPartsellLevel(shopId);
     }
 
-    /** 我的下级*/
-
+    /**存酒/取酒信息*/
+    @RequestMapping(value = "/getUserStored")
+    public PageEntity getUserStored(@RequestParam(name = "phone") String phone,
+                              @RequestParam(name = "type")String type){
+        logger.info("WXProfileController|getUserStored,phone："+phone+",type:"+type);
+        return wxProfileService.getUserStored(phone,type);
+    }
 }

@@ -1,5 +1,6 @@
 package com.space.service.impl;
 
+import com.space.entity.StoredDrink;
 import com.space.entity.UserPartSell;
 import com.space.exception.PageEntity;
 import com.space.mapper.WXProfileMapper;
@@ -35,9 +36,18 @@ public class WXProfileServiceImpl implements WXProfileService {
     public PageEntity getUserIdentity(Integer userId) {
         List<UserPartSell> userIdentity = wxProfileMapper.getUserIdentity(userId);
         String userName = userIdentity.get(0).getSuperUserName();
-        System.out.println(userName+"=========");
         PageEntity entity = new PageEntity();
         entity.setList(userIdentity);
+        entity.setCount(0);
+        return entity;
+    }
+
+    /**查询存酒和取酒*/
+    @Override
+    public PageEntity getUserStored(String phone, String type) {
+        List<StoredDrink> stored = wxProfileMapper.getUserStored(phone, type);
+        PageEntity entity = new PageEntity();
+        entity.setList(stored);
         entity.setCount(0);
         return entity;
     }

@@ -7,4 +7,6 @@ public interface WXProfileService {
     public Integer getPartsellLevel(Integer shopId);
 
     public PageEntity getUserIdentity(Integer userId);
+
+    public PageEntity getUserStored(String phone,String type);
 }
