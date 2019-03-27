@@ -1,14 +1,15 @@
 package com.space.controller;
 
+import com.space.entity.Order;
+import com.space.entity.OrderProduct;
 import com.space.exception.PageEntity;
 import com.space.service.WXHomeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @describe: 小程序主页接口
@@ -78,4 +79,20 @@ public class WXHomeController {
         logger.info("WXHomeController|getWaiterInfo,shopMark:"+shopMark);
         return wxHomeService.getWaiterInfo(shopMark);
     }
+
+    /** 添加订单*/
+    @RequestMapping(value = "/addOrder")
+    public Integer addOrder(@RequestBody Order order){
+        logger.info("WXHomeController|addOrder,order belong shopId:"+order.getShopId());
+        return wxHomeService.addOrder(order);
+    }
+
+    /** 添加订单的商品详情*/
+    @RequestMapping(value = "/addOrderProduct")
+    public int addOrderProduct(@RequestBody List<OrderProduct> orderProduct){
+        logger.info("WXHomeController|addOrderProduct，size："+orderProduct.size());
+        return wxHomeService.addOrderProduct(orderProduct);
+    }
+
 }
+

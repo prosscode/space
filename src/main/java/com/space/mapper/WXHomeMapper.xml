@@ -113,5 +113,20 @@
     <select id="getWaiterInfo" resultMap="StaffInfo">
         select * from shop_staff where shop_mark = #{shopMark} and staff_type_name like '%服务员%'
     </select>
+
+    <!--添加订单-->
+    <insert id="addOrder" parameterType="com.space.entity.Order" useGeneratedKeys="true" keyProperty="order_id">
+        insert into shop_order(shop_id,order_no,order_name,order_price,order_waiter_id,order_user,order_seat,order_user_phone,order_type,order_date,order_status)
+        values (#{shopId},#{orderNo},#{orderName},#{orderPrice},#{orderWaiterId},#{orderUser},#{orderSeat},#{orderUserPhone},#{orderType},#{orderDate},#{orderStatus})
+    </insert>
+
+    <!--添加订单的商品详情-->
+    <insert id="addOrderProduct" parameterType="java.util.List">
+        insert into shop_order_product_detail(order_id,product_id,product_name,product_num,product_price,product_amount)
+        values
+        <foreach collection ="list" item="product" index= "index" separator =",">
+            (#{product.orderId}, #{product.productId},#{product.productName},#{product.productPrice}, #{product.productNum},#{product.productAmount})
+        </foreach >
+    </insert>
 </mapper>
 

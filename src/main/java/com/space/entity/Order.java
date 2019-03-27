@@ -1,5 +1,6 @@
 package com.space.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -36,6 +37,7 @@ public class Order {
     //订单类型
     private Integer orderType;
     //订单创建时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone= "GMT+8")
     private Date orderDate;
     //订单状态，0-待付款  1-待服务 2-已服务 3-已完成 4-已关闭  105-退款中  106-退款成功 107-退款失败
     private Integer orderStatus;

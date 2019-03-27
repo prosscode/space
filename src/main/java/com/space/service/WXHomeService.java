@@ -1,6 +1,10 @@
 package com.space.service;
 
+import com.space.entity.Order;
+import com.space.entity.OrderProduct;
 import com.space.exception.PageEntity;
+
+import java.util.List;
 
 public interface WXHomeService {
 
@@ -13,5 +17,9 @@ public interface WXHomeService {
     public PageEntity getCouponInfo(Integer shopId);
 
     public PageEntity getWaiterInfo(String shopMark);
+
+    public Integer addOrder(Order order);
+
+    public int addOrderProduct(List<OrderProduct> orderProduct);
 
 }

@@ -8,7 +8,7 @@ import lombok.Data;
  * @date: 2019/03/22
  */
 @Data
-public class OrderProduct {
+public class OrderProduct extends Order{
     private Integer id;
     private Integer orderId;
     private Integer productId;
@@ -16,6 +16,4 @@ public class OrderProduct {
     private Double productPrice;
     private Integer productNum;
     private Double productAmount;
-
-    private String productImage;
 }
