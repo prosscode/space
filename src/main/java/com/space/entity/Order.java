@@ -71,6 +71,8 @@ public class Order {
     private String joinUser;
     //拼吧费用方式比如 AA等之类
     private String   joinUserAmountMethod;
+    //拼吧订单参与人 暂定逗号分隔 “张三,李四”
+    private String joinUserPhone;
     //签单人用户ID
     private Integer signerId;
     //订单支付类型
