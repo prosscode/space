@@ -48,9 +48,9 @@ public class ShopDrinkInfoServiceImpl implements ShopDrinkInfoService {
     @Override
     public PageEntity getList(Integer shopId, String type,
                               String keyWord, Integer pageNo, Integer pageSize){
-        List<ShopDrinkInfo> list = shopDrinkInfoMapper.getList(shopId, type,type ,pageNo, pageSize);
+        List<ShopDrinkInfo> list = shopDrinkInfoMapper.getList(shopId, type,keyWord ,pageNo, pageSize);
         PageEntity entity = new PageEntity();
-        int count = shopDrinkInfoMapper.getCount(shopId, type,type);
+        int count = shopDrinkInfoMapper.getCount(shopId, type,keyWord);
         entity.setList(list);
         entity.setCount(count);
         return entity;

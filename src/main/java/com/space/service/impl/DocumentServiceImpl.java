@@ -1,14 +1,19 @@
 package com.space.service.impl;
 
+
 import com.space.entity.DocumentInfo;
+
 import com.space.mapper.DocumentInfoMapper;
+
 import com.space.service.DocumentService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 
 /**
@@ -38,8 +43,9 @@ public class DocumentServiceImpl implements DocumentService{
     }
     /** 添加文档*/
     @Override
-    public  DocumentInfo add( DocumentInfo documentInfo){
-        return  documentInfoMapper.add(documentInfo);
+    public  DocumentInfo add( DocumentInfo documentInfo) throws Exception {
+          documentInfoMapper.add(documentInfo);
+          return  documentInfo;
     }
 
 

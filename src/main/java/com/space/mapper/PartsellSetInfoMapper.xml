@@ -26,7 +26,7 @@
     <!--修改-->
     <update id="update" parameterType="com.space.entity.PartsellSetInfo">
         update partsell_set_info
-        set shopId=#{shopId},
+        set
         partSellLevel=#{partSellLevel},
         commissionRolePartA=#{commissionRolePartA},
         commissionRolePartB=#{commissionRolePartB},

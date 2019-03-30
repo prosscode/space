@@ -16,13 +16,15 @@
         <result column="product_status" property="productStatus" />
         <result column="product_sell_desc" property="productSellDesc" />
         <result column="show_surplus" property="showSurplus" />
-        <result column="is_joinpartsell" property="isJoinpartsell" />
+        <result column="is_joinpartsell" property="joinPartSell" />
         <result column="publish_time" property="publishTime" />
 
         <result column="start_time" property="startTime" />
         <result column="end_time" property="endTime" />
         <result column="product_price" property="productPrice" />
         <result column="offer_price" property="offerPrice" />
+
+        <result column="price" property="price" />
     </resultMap>
 
 
@@ -42,6 +44,14 @@
         <result column="seat_mark" property="seatMark"/>
         <result column="seat_type" property="seatType"/>
         <result column="seat_num" property="seatNum"/>
+    </resultMap>
+
+    <!--//////////////////商品关联文档/////////////////////-->
+    <resultMap id="CommodityDocumentMap" type="com.space.entity.CommodityDocument">
+        <id column="id" property="id" />
+        <result column="commodityId" property="commodityId"/>
+        <result column="documentId" property="documentId"/>
+        <result column="shopId" property="shopId"/>
     </resultMap>
 
     <!--新增分组，商品和座位-->
@@ -104,7 +114,7 @@
         #{productStatus},
         #{productSellDesc},
         #{showSurplus},
-        #{isJoinpartsell},
+        #{joinPartSell},
         #{publishTime}
         )
     </insert>
@@ -159,7 +169,11 @@
         </if>
     </delete>
 
-
+    <!--4.删除 根据商品ID-->
+    <delete id="deleteCommodityDocumentByPId"  parameterType="Integer">
+        delete from commodity_document
+        WHERE  commodityId =#{productId}
+    </delete>
 
     <!--上架商品，改变状态值-->
     <update id="upProduct" parameterType="java.util.List">
@@ -194,7 +208,7 @@
 
     <!--更新商品-->
     <update id="updateGood" parameterType="com.space.entity.Commodity">
-        update product_info set 1=1,
+        update product_info set product_id = #{productId}
 <!--        <if test="shopId > 0">
             ,shop_id = #{shopId}
         </if>-->
@@ -222,7 +236,7 @@
         ,product_status = #{productStatus}
         ,product_sell_desc = #{productSellDesc}
         ,show_surplus = #{showSurplus}
-        ,is_joinpartsell = #{isJoinpartsell}
+        ,is_joinpartsell = #{joinPartSell}
         ,publish_time = #{publishTime}
         WHERE product_id = #{productId}
     </update>
@@ -245,13 +259,7 @@
         delete from shop_seat where seat_id=#{seatId} and shop_id=#{shopId}
     </delete>
 
-    <!--//////////////////商品关联文档/////////////////////-->
-    <resultMap id="CommodityDocumentMap" type="com.space.entity.CommodityDocument">
-        <id column="id" property="id" />
-        <result column="commodityId" property="commodityId"/>
-        <result column="documentId" property="documentId"/>
-        <result column="shopId" property="shopId"/>
-    </resultMap>
+
     <!--1.查询所有-->
     <select id="getCommodityDocuments" resultMap="CommodityDocumentMap" parameterType="java.util.List">
         <if test="commodityIds!=null and commodityIds.size() > 0">
@@ -266,16 +274,11 @@
         select * from commodity_document where shop_id=#{shopId} AND id=#{id}
     </select>-->
     <!--3.增加-->
-    <insert id="addCommodityDocument">
+    <insert id="addCommodityDocument" parameterType="com.space.entity.CommodityDocument" >
         insert into commodity_document(commodityId,documentId,shopId)
         values (#{commodityId},#{documentId},#{shopId})
     </insert>
-    <!--4.删除 根据商品ID-->
-    <delete id="deleteCommodityDocumentByCommodityId" parameterType="Integer">
-        delete from commodity_document where  commodityId = #{commodityId};
-        DELETE FROM  document_info WHERE  documentId IN
-       (SELECT documentId FROM  commodity_document where  commodityId = #{commodityId})
-    </delete>
+
     <!--4.删除 根据多个商品ID-->
     <delete id="deleteCommodityDocumentByCommodityIds" parameterType="java.util.List">
         <if test="commodityIds!=null and commodityIds.size() > 0">
@@ -300,14 +303,17 @@
     <!--5.修改-->
 
     <!--//////////////////商品价格关联/////////////////////-->
-<!--    <resultMap id="CommodityPriceMap" type="com.space.entity.CommodityPrice">
-        <id column="product_id" property="product_id" />
-        <result column="commodityId" property="commodityId"/>
-        <result column="documentId" property="documentId"/>
-        <result column="shopId" property="shopId"/>
-    </resultMap>-->
+    <resultMap id="CommodityPriceMap" type="com.space.entity.CommodityPrice">
+        <result column="product_id" property="productId" />
+        <result column="shop_id" property="shopId" />
+        <result column="product_name" property="productName" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime"/>
+        <result column="product_price" property="productPrice"/>
+        <result column="offer_price" property="offerPrice"/>
+    </resultMap>
     <!--1.查询所有-->
-    <select id="getCommodityPrices" resultMap="BaseResultMap">
+    <select id="getCommodityPrices" resultMap="CommodityPriceMap">
         select * from product_price where 1=1
         /* 商品ID*/
         <if test="commodityId>0">
@@ -322,8 +328,13 @@
             AND  product_name LIKE  '%#{commodityName}%'
         </if>
     </select>
+
+    <!--1.查询所有-->
+    <select id="getPricesByCommodityId" resultMap="CommodityPriceMap">
+        select * from product_price where  product_id=#{commodityId}
+    </select>
     <!--2.增加-->
-    <insert id="addCommodityPrices">
+    <insert id="addCommodityPrices"  parameterType="com.space.entity.CommodityPrice" >
         insert into product_price(product_id,shop_id,product_name,start_time,end_time,product_price,offer_price)
         values (#{productId},#{shopId},#{productName},#{startTime},#{endTime},#{productPrice},#{offerPrice})
     </insert>
@@ -337,9 +348,10 @@
         </if>
     </delete>
     <!--4. 删除 根据商品ID-->
-    <delete id="deletePriceByCommodityId" >
-        <if test="CommodityId>0">
-            DELETE FROM product_price where product_id = #{commodityId}
+    <delete id="deletePriceByCommodityId"  parameterType="Integer">
+        <if test="commodityId>0">
+            DELETE FROM product_price
+            where product_id = #{commodityId}
         </if>
     </delete>
 </mapper>

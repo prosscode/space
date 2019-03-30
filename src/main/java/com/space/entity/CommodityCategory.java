@@ -32,6 +32,9 @@ public class CommodityCategory implements Serializable {
     //商家ID
     private  Integer shopId;
 
+    //结果返回字段
+    //是否展开和折叠
+    private  boolean spread;
     //返回字段
     //子级分类
     private List<CommodityCategory> children;

@@ -12,6 +12,6 @@ public interface DocumentService {
     /** 删除文档*/
     public int deleteByIds( String[] documentIds);
     /** 添加文档*/
-    public  DocumentInfo add( DocumentInfo documentInfo);
+    public  DocumentInfo add( DocumentInfo documentInfo) throws Exception;;
 }
 

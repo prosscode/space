@@ -1,5 +1,6 @@
 package com.space.controller;
 
+import com.space.config.DefinedConfig;
 import com.space.entity.Commodity;
 import com.space.entity.DocumentInfo;
 import com.space.exception.BaseExceptionHandler;
@@ -15,8 +16,10 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.Document;
@@ -36,38 +39,46 @@ public class DocumentController extends BaseExceptionHandler {
 
     @Autowired
     private DocumentService documentService;
+    @Value("${file.uploadPath}")
+    private String uploadPath;
+
+    @Value("${file.downLoadPath}")
+    private String downLoadPath;
 
     /** 处理文件上传 支持多文件*/
     @RequestMapping(value="/upload", method = RequestMethod.POST)
-    public @ResponseBody List<DocumentInfo> upload(@RequestParam("files") MultipartFile[] files
-            ,@RequestParam("documentType") Integer documentType
-            ,@RequestParam("refSequenceNo") Integer refSequenceNo
-            , HttpServletRequest request) {
+    public @ResponseBody List<DocumentInfo> upload(@RequestParam("multipartFile") MultipartFile[] martFile
+            ,@RequestParam(value = "documentType",required =true) Integer documentType
+            ,@RequestParam(value="refSequenceNo",required =false,defaultValue ="0") Integer refSequenceNo
+            , HttpServletRequest request) throws Exception {
         List<DocumentInfo> documents =new ArrayList<>();
-        if(files.length>0){
+
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        List<MultipartFile> files = multipartRequest.getFiles("file");
+       // Map<String, MultipartFile>  ss=multipartRequest.getFileMap();
+        if(files.size()>0){
             for(MultipartFile file:files){
-                String path="";
                 //文件名称
                 String fileName = file.getOriginalFilename();
                 //文件类型
                 String contentType = file.getContentType();
                 //后缀名
                 String substring =fileName.substring(fileName.lastIndexOf("."));
-                String transFileName = UUID.randomUUID().toString().replaceAll("-", "")+"."+substring;
-                String filePath = request.getSession().getServletContext().getRealPath("file/upload/");
-                try {
-                    FileUtil.uploadFile(file.getBytes(), filePath, transFileName);
-                    //添加到文档库
-                    DocumentInfo documentInfo=new DocumentInfo();
-                    documentInfo.setDocumentId("doc"+ UUID.randomUUID().toString().replaceAll("-", ""));
-                    documentInfo.setContentType(contentType);
-                    documentInfo.setUrl("file/upload/"+transFileName);
-                    documentInfo.setDocumentType(documentType);
-                    documentInfo.setTitle(fileName);
-                    documentService.add(documentInfo);
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
+                //文件名
+                String transFileName = UUID.randomUUID().toString().replaceAll("-", "")+substring;
+                String filePath =uploadPath;// config.getUploadPath();// request.getSession().getServletContext().getRealPath("file/upload/");
+                FileUtil.uploadFile(file.getBytes(), filePath, transFileName);
+                //添加到文档库
+                String projectPath= System.getProperty("user.dir");
+                DocumentInfo documentInfo=new DocumentInfo();
+                documentInfo.setDocumentId("doc"+ UUID.randomUUID().toString().replaceAll("-", ""));
+                documentInfo.setContentType(contentType);
+                documentInfo.setUrl("file/upload/"+transFileName);
+                documentInfo.setDocumentType(documentType);
+                documentInfo.setTitle(fileName);
+                documentInfo.setRefSequenceNo(refSequenceNo);
+                documentService.add(documentInfo);
+                documents.add(documentInfo);
             }
         }
         //返回json

@@ -37,6 +37,7 @@ public class Commodity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone= "GMT+8")
     private Date createTime;
     //商品更新时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone= "GMT+8")
     private Date updateTime;
     //  商品状态，0-未上架，1-上架
     private int productStatus;
@@ -45,21 +46,21 @@ public class Commodity implements Serializable {
     //   是否显示剩余商品件数，0代表不显示、1代表显示
     private boolean showSurplus;
     // 商品是否参加分销返利,0不参加、1参加
-    private boolean isJoinpartsell;
+    private boolean joinPartSell;
     //商品上架时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone= "GMT+8")
     private Date publishTime;
 
     //-------------------------------返回结果字段-----------------------------------
     //商品单价 根据时间点自动计算
-    public  double Price;
+    public  double price;
     //默认展示图片
     public  DocumentInfo defaultDocument;
 
     //文档数据
     public  List<DocumentInfo> documentInfos;
     //商品价格关联
-    public List<CommodityPrice> CommodityPriceList;
+    public List<CommodityPrice> commodityPriceList;
 }
 
 

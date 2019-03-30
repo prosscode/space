@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.ShopOrderPlanMapper">
+    <resultMap id="ResultMap" type="com.space.entity.ShopOrderPlan">
+        <id column="id" property="id"/>
+        <result column="shopId" property="shopId"/>
+        <result column="planOrderNo" property="planOrderNo"/>
+        <result column="userName" property="userName"/>
+        <result column="userPhone" property="userPhone"/>
+        <result column="sex" property="sex"/>
+        <result column="planToTime" property="planToTime"/>
+        <result column="expireTime" property="expireTime"/>
+        <result column="keepMinutes" property="keepMinutes"/>
+        <result column="peopleNumber" property="peopleNumber"/>
+        <result column="seatNumber" property="seatNumber"/>
+        <result column="waiterNo" property="waiterNo"/>
+        <result column="marKetManagerNo" property="marKetManagerNo"/>
+        <result column="status" property="status"/>
+        <result column="decisionMoney" property="decisionMoney"/>
+        <result column="createDate" property="createDate"/>
+        <!--  结果返回字段-->
+        <result column="statusStr" property="statusStr"/>
+        <result column="waiterName" property="waiterName"/>
+        <result column="marKetManagerName" property="marKetManagerName"/>
+    </resultMap>
+
+    <!--新增-->
+    <insert id="add" parameterType="com.space.entity.ShopOrderPlan" useGeneratedKeys="true" keyProperty="id">
+        INSERT  into shop_order_plan (shopId,planOrderNo,userName,userPhone,sex,planToTime,
+        expireTime,keepMinutes,peopleNumber,seatNumber,waiterNo,marKetManagerNo,status,decisionMoney)
+        VALUES (#{shopId},#{planOrderNo},#{userName},#{userPhone},#{sex},#{planToTime},#{expireTime}
+        ,#{keepMinutes},#{peopleNumber},#{seatNumber},#{waiterNo},#{marKetManagerNo},#{status},#{decisionMoney})
+    </insert>
+    <!--删除 根据ID-->
+    <delete id="deleteById">
+        DELETE from shop_order_plan
+        WHERE id =#{id};
+
+        DELETE  FROM  shop_order_product_detail
+        WHERE  order_id=(SELECT  order_id FROM shop_order  WHERE  order_no=(SELECT planOrderNo FROM shop_order_plan WHERE  id=#{id}));
+
+        DELETE  FROM  shop_order
+        WHERE  order_no=(SELECT planOrderNo FROM shop_order_plan WHERE  id=#{id});
+    </delete>
+    <!--更新-->
+    <update id="update" parameterType="com.space.entity.ShopOrderPlan">
+        UPDATE  shop_order_plan
+        SET
+        planOrderNo=#{planOrderNo},
+        userName=#{userName},
+        userPhone=#{userPhone},
+        sex=#{sex},
+        planToTime=#{planToTime},
+        expireTime=#{expireTime},
+        keepMinutes=#{keepMinutes},
+        peopleNumber=#{peopleNumber},
+        seatNumber=#{seatNumber},
+        waiterNo=#{waiterNo},
+        marKetManagerNo=#{marKetManagerNo},
+        status=#{status},
+        decisionMoney=#{decisionMoney}
+        WHERE  id=#{id}
+    </update>
+    <!--查询详情 根据ID-->
+    <select id="getInfoById" resultMap="ResultMap">
+        select *,
+        (CASE status  WHEN 100 THEN  '正常'
+        WHEN  201 THEN  '过期取消'
+        WHEN  202 THEN  '撤销预定'
+        WHEN  203 THEN  '商家取消'
+        ELSE '正常'
+        END
+        ) statusStr  from shop_order_plan
+        where id =#{id}
+    </select>
+
+    <!--多条件查询-->
+    <select id="getList" resultMap="ResultMap">
+        SELECT * FROM shop_order_plan WHERE 1=1
+        <if test="shopId>0">
+            AND shopId=#{shopId}
+        </if>
+        <if test="startToTime!=null and startToTime!=''">
+            AND planToTime>=#{startToTime}
+        </if>
+        <if test="endToTime!=null and endToTime!=''">
+            AND #{endToTime}>=planToTime
+        </if>
+        <if test="keyWord!=null and keyWord!=''">
+            AND (userName  like  '%${keyWord}%' OR  planOrderNo LIKE  '%${keyWord}%')
+
+        </if>
+        <if test="pageNo >0 and pageSize > 0">
+            LIMIT ${(pageNo-1)*pageSize},${pageSize};
+        </if>
+    </select>
+
+    <!--多条件查询-->
+    <select id="getCount" resultType="Integer">
+        SELECT COUNT(*) FROM shop_order_plan WHERE 1=1
+        <if test="shopId>0">
+            AND shopId=#{shopId}
+        </if>
+        <if test="startToTime!=null and startToTime!=''">
+            AND planToTime>=#{startToTime}
+        </if>
+        <if test="endToTime!=null and endToTime!=''">
+            AND #{endToTime}>=planToTime
+        </if>
+        <if test="keyWord!=null and keyWord!=''">
+            AND (userName  like  '%${keyWord}%' OR  planOrderNo LIKE  '%${keyWord}%')
+        </if>
+    </select>
+</mapper>

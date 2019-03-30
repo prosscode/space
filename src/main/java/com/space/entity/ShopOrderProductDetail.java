@@ -21,12 +21,15 @@ public class ShopOrderProductDetail implements Serializable {
     //商品id
     private Integer productId;
     //商品名称
-    private Integer producName;
+    private String productName;
     //商品数量
     private Integer productNum;
     //商品单价
-    private Integer productPrice;
+    private Double productPrice;
     //商品金额
-    private Integer productAmount;
+    private Double productAmount;
 
+    /*  返回字段*/
+    //商品详情
+    public  Commodity commodityInfo;
 }

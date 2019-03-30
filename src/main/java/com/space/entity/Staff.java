@@ -21,7 +21,7 @@ public class Staff {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone= "GMT+8")
     private String staffDate;
-    private String shopMark;
+    private Integer shopMark;
 
     private String staffGender;
     private String staffDesc;

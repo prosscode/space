@@ -15,10 +15,12 @@
         <result column="staff_gender" property="staffGender"/>
         <result column="staff_desc" property="staffDesc"/>
         <result column="staff_status" property="staffStatus"/>
+
+
     </resultMap>
     <!-- 商家员工分类-->
     <resultMap id="shopStaffTypeResultMap" type="com.space.entity.StaffType">
-        <result column="staff_type_id" property="staffTypeId"/>
+        <id column="staff_type_id" property="staffTypeId"/>
         <result column="staff_mark" property="staffMark"/>
         <result column="staff_type_name" property="staffTypeName"/>
         <result column="staff_type_commission" property="staffTypeCommission"/>
@@ -26,10 +28,13 @@
         <result column="staff_type_number" property="staffTypeNumber"/>
         <result column="status" property="status"/>
         <result column="role_id" property="roleId"/>
+        <result column="shop_mark" property="shopMark"/>
+        <result column="roleName" property="roleName"/>
     </resultMap>
 
     <!--添加员工分类-->
-    <insert id="addStaffType" parameterType="com.space.entity.StaffType" keyProperty="staff_type_id" useGeneratedKeys="true">
+    <insert id="addStaffType" parameterType="com.space.entity.StaffType" keyProperty="staffTypeId"
+            useGeneratedKeys="true">
         insert into shop_staff_type(shop_mark,staff_type_name,staff_type_commission,staff_type_desc,staff_type_number,status,role_id)
         values (#{shopMark},#{staffTypeName},#{staffTypeCommission},#{staffTypeDesc},#{staffTypeNumber},#{status},#{roleId})
     </insert>
@@ -46,14 +51,13 @@
 
     <!--删除员工分类根据主键ID-->
     <delete id="deleteStaffTypeById">
-        delete from shop_staff_type where staff_type_id=#{staff_type_id}
+        delete from shop_staff_type where staff_type_id=#{staffTypeId}
     </delete>
 
     <!--修改员工类型-->
     <update id="updateStaffType" parameterType="com.space.entity.StaffType">
         update shop_staff_type
-         set staff_mark=#{staffMark},
-          shop_mark=#{staffMark},
+         set
           staff_type_name=#{staffTypeName},
           staff_type_commission=#{staffTypeCommission},
             staff_type_desc=#{staffTypeDesc},
@@ -63,9 +67,10 @@
           where staff_type_id=#{staffTypeId}
     </update>
     <!--得到员工分类 根据ID-->
-    <select id="getStaffTypeById"  resultMap="shopStaffTypeResultMap">
+    <select id="getStaffTypeById" resultMap="shopStaffTypeResultMap">
         select * from shop_staff_type where staff_type_id=#{staffTypeId}
     </select>
+
 
     <!--添加员工-->
     <insert id="addStaff" useGeneratedKeys="true" keyProperty="staffId">
@@ -95,7 +100,10 @@
 
     <!--查询员工 分页查询-->
     <select id="getStaffs" resultMap="BaseResultMap">
-        select * from shop_staff where shop_mark = #{shopMark}
+        select * from shop_staff where  1=1
+        <if test="shopMark>0">
+            and shop_mark = #{shopMark}
+        </if>
         <if test="staffName!=null and staffName!=''">
             and staff_name = #{staffName}
         </if>
@@ -115,7 +123,10 @@
 
     <!--查询员工总数-->
     <select id="getStaffsCount" resultType="Integer">
-        select count(*) from shop_staff where shop_mark = #{shopMark}
+        select count(*) from shop_staff where 1=1
+        <if test="shopMark>0">
+            and shop_mark = #{shopMark}
+        </if>
         <if test="staffName!=null and staffName!=''">
             and staff_name = #{staffName}
         </if>
@@ -156,7 +167,6 @@
         staff_type_name=#{staffTypeName},
         staff_desc=#{staffDesc},
         staff_sale=#{staffSale},
-        shop_mark=#{shopMark}
         where staff_id=#{staffId}
     </update>
 </mapper>

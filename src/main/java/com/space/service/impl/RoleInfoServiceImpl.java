@@ -75,11 +75,17 @@ public class RoleInfoServiceImpl implements RoleInfoService {
                               Integer pageNo, Integer pageSize) {
 
         List<RoleInfo> list = roleInfoMapper.getList(shopId, roleName, pageNo, pageSize);
-        PageEntity entity = new PageEntity();
-        int count = roleInfoMapper.getRolesCount(shopId, roleName);
-        entity.setList(list);
-        entity.setCount(count);
-        return entity;
+        PageEntity pageEntity = new PageEntity();
+        pageEntity.setList(list);
+        //涉及到分页
+        if (pageNo > 0 && pageSize > 0) {
+            int rowsCount = roleInfoMapper.getRolesCount(shopId,roleName);
+            pageEntity.setCount(rowsCount);
+        }
+        else {
+            pageEntity.setCount(list.size());
+        }
+        return pageEntity;
     }
 
     @Override

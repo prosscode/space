@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.ShopUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.space.entity.User">
+        <id column="user_id" property="userId" />
+
+        <result column="user_name" property="userName" />
+        <result column="shop_mark" property="shopMark" />
+        <result column="user_phone" property="userPhone" />
+        <result column="user_wechat" property="userWechat" />
+        <result column="user_pay" property="userPay" />
+        <result column="user_rebate" property="userRebate" />
+        <result column="user_withdrawal" property="userWithdrawal" />
+        <result column="user_offline" property="userOffline" />
+        <result column="user_role" property="userRole" />
+
+        <result column="nextLevelNum" property="nextLevelNum" />
+        <result column="orderCount" property="orderCount" />
+        <result column="enterDrinkCount" property="enterDrinkCount" />
+        <result column="userTypeStr" property="userTypeStr" />
+    </resultMap>
+
+    <!--添加用户-->
+    <insert id="add" parameterType="com.space.entity.User">
+        insert into shop_user(user_name,shop_mark,user_phone,user_wechat)
+        values (#{userName},#{shopMark},#{userPhone},#{userWechat})
+    </insert>
+    <!--删除 根据id-->
+    <delete id="deleteById">
+        DELETE from shop_user
+        where user_id =#{id}
+    </delete>
+
+
+    <!--修改-->
+    <update id="update" parameterType="com.space.entity.User">
+        update shop_user
+        set
+        user_name=#{userName},
+        user_phone=#{userPhone},
+        user_wechat=#{userWechat},
+
+        where user_id=#{id}
+    </update>
+    <!--查询 根据ID-->
+    <select id="getInfoById" resultMap="BaseResultMap">
+       SELECT A.*,
+(SELECT COUNT(id) FROM shop_user_part_sell WHERE superUserId=A.user_id)  nextLevelNum,
+(SELECT COUNT(order_user_phone) FROM shop_order WHERE order_user_phone=A.user_phone)  orderCount,
+(SELECT SUM(drinkCount) FROM shop_drink_info
+WHERE phone=A.user_phone AND type='enter')  enterDrinkCount,
+(CASE A.user_role
+	WHEN 0 THEN '普通用户'
+	WHEN 1 THEN '分销员'
+	WHEN 2 THEN '黑名单用户'
+	ELSE '普通用户'
+END ) userTypeStr
+FROM shop_user  A
+WHERE A.user_id=#{id}
+    </select>
+    <!--查询用户-->
+    <select id="getList" resultMap="BaseResultMap">
+        SELECT A.*,
+        (SELECT COUNT(id) FROM shop_user_part_sell WHERE superUserId=A.user_id)  nextLevelNum,
+        (SELECT COUNT(order_user_phone) FROM shop_order WHERE order_user_phone=A.user_phone)  orderCount,
+        (SELECT SUM(drinkCount) FROM shop_drink_info
+        WHERE phone=A.user_phone AND type='enter')  enterDrinkCount,
+        (CASE A.user_role
+        WHEN 0 THEN '普通用户'
+        WHEN 1 THEN '分销员'
+        WHEN 2 THEN '黑名单用户'
+        ELSE '普通用户'
+        END ) userTypeStr
+        FROM shop_user  A
+        WHERE  1=1
+        <if test="shopMark >0">
+           AND A.shop_mark = #{shopMark},
+        </if>
+        <if test="userName != null and userName!=''">
+            AND   A.user_name = #{userName},
+        </if>
+        <if test="userPhone != null and userPhone!=''">
+            AND  A.user_phone = #{userPhone},
+        </if>
+        <if test="userWechat != null and userWechat!=''">
+            AND  A.user_wechat = #{userWechat},
+        </if>
+        <if test="userRole > -1 and userRole != null">
+            AND  A.user_role = #{userRole}
+        </if>
+        <if test="pageNo >= 0 and pageSize > 0">
+            LIMIT ${(pageNo-1)*pageSize},${pageSize};
+        </if>
+
+    </select>
+
+    <!--查询用户数量-->
+    <select id="getCount" resultType="Integer">
+        select count(*) from shop_user where 1=1
+        <if test="shop_mark >0">
+            AND A.shop_mark = #{shopMark},
+        </if>
+        <if test="userName != null and userName!=''">
+            AND user_name = #{userName},
+        </if>
+        <if test="userPhone != null and userPhone!=''">
+            AND user_phone = #{userPhone},
+        </if>
+        <if test="userWechat != null and userWechat!=''">
+            AND  user_wechat = #{userWechat},
+        </if>
+        <if test="userRole > -1 and userRole != null">
+            AND  user_role = #{userRole}
+        </if>
+
+    </select>
+</mapper>

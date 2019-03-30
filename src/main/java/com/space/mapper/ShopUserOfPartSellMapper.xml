@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.ShopUserOfPartSellMapper">
+
+ <!--   id
+    userId
+    commission
+    sumMoney
+    superUserId
+    nextUserNum
+    joinDate
+    isActive-->
+
+    <resultMap id="ResultMap" type="com.space.entity.ShopUserOfPartSell">
+        <id column="id" property="id"/>
+        <result column="shopId" property="shopId"/>
+        <result column="userId" property="userId"/>
+        <result column="commission" property="commission"/>
+        <result column="sumMoney" property="sumMoney"/>
+        <result column="superUserId" property="superUserId"/>
+        <result column="nextUserNum" property="nextUserNum"/>
+        <result column="joinDate" property="joinDate"/>
+        <result column="isActive" property="isActive"/>
+        <!--  结果返回字段-->
+        <result column="userName" property="userName"/>
+        <result column="userPhone" property="userPhone"/>
+        <result column="superUserName" property="superUserName"/>
+    </resultMap>
+
+    <!--新增-->
+    <insert id="add" parameterType="com.space.entity.ShopUserOfPartSell" useGeneratedKeys="true" keyProperty="id">
+        INSERT  into shop_user_part_sell (shopId,userId,commission,sumMoney,superUserId,nextUserNum,
+        joinDate,isActive)
+        VALUES (#{shopId},#{userId},#{commission},#{sumMoney},#{superUserId},#{nextUserNum},#{joinDate}
+        ,#{isActive})
+    </insert>
+    <!--删除 根据ID-->
+    <delete id="deleteById">
+        DELETE from shop_user_part_sell
+        WHERE id =#{id};
+    </delete>
+    <!--更新-->
+    <update id="update" parameterType="com.space.entity.ShopUserOfPartSell">
+        UPDATE  shop_user_part_sell
+        SET
+        userId=#{userId},
+        commission=#{commission},
+        sumMoney=#{sumMoney},
+        superUserId=#{superUserId},
+        nextUserNum=#{nextUserNum},
+        joinDate=#{joinDate},
+        isActive=#{isActive}
+        WHERE  id=#{id}
+    </update>
+    <!--查询详情 根据ID-->
+    <select id="getInfoById" resultMap="ResultMap">
+        select A.*,B.user_name,B.user_phone  from shop_user_part_sell A
+LEFT JOIN shop_user B
+ON A.userId =B.user_id
+        where A.id =#{id}
+    </select>
+
+    <!--多条件查询-->
+    <select id="getList" resultMap="ResultMap">
+        select A.*,B.user_name userName,B.user_phone  userPhone from shop_user_part_sell A
+        LEFT JOIN shop_user B
+        ON A.userId =B.user_id WHERE 1=1
+        <if test="shopId>0">
+            AND A.shopId=#{shopId}
+        </if>
+        <if test="userPhone!=null and userPhone!=''">
+            AND B.user_phone  LIKE  '%#{userPhone}%'
+        </if>
+        <if test="joinStartDate!=null and joinStartDate!=''">
+            AND joinDate>= #{joinStartDate}
+        </if>
+        <if test="joinEndDate!=null and joinEndDate!=''">
+            AND #{joinEndDate}>=joinDate
+        </if>
+        <if test="userName!=null and userName!=''">
+            AND B.user_name   like  '%${userName}%'
+
+        </if>
+        <if test="pageNo >0 and pageSize > 0">
+            LIMIT ${(pageNo-1)*pageSize},${pageSize};
+        </if>
+    </select>
+
+    <!--多条件查询-->
+    <select id="getCount" resultType="Integer">
+        select  COUNT(A.id)  from shop_user_part_sell A
+        LEFT JOIN shop_user B
+        ON A.userId =B.user_id  WHERE 1=1
+        <if test="shopId>0">
+            AND A.shopId=#{shopId}
+        </if>
+        <if test="userPhone!=null and userPhone!=''">
+            AND B.user_phone  LIKE  '%#{userPhone}%'
+        </if>
+        <if test="joinStartDate!=null and joinStartDate!=''">
+            AND joinDate>= #{joinStartDate}
+        </if>
+        <if test="joinEndDate!=null and joinEndDate!=''">
+            AND #{joinEndDate}>=joinDate
+        </if>
+        <if test="userName!=null and userName!=''">
+            AND B.user_name   like  '%${userName}%'
+        </if>
+    </select>
+</mapper>

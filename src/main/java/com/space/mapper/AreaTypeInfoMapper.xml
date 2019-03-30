@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.AreaTypeInfoMapper">
+
+    <resultMap id="ResultMap" type="com.space.entity.AreaTypeInfo">
+        <id column="type_id" property="typeId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="type_name" property="typeName"/>
+        <result column="seat_count" property="seatCount"/>
+        <result column="create_time" property="createTime"/>
+        <result column="label" property="label"/>
+    </resultMap>
+
+    <!--新增-->
+    <insert id="add" parameterType="com.space.entity.AreaTypeInfo" useGeneratedKeys="true" keyProperty="typeId">
+        INSERT  into area_type_info (shop_id,type_name,seat_count,create_time)
+        VALUES (#{shopId},#{typeName},#{seatCount},#{createTime})
+    </insert>
+    <!--删除 根据ID-->
+    <delete id="deleteById">
+        DELETE from area_type_info
+        WHERE type_id =#{id}
+    </delete>
+    <!--更新-->
+    <update id="update" parameterType="com.space.entity.AreaTypeInfo">
+        UPDATE  area_type_info
+        SET
+        type_name=#{typeName},
+        seat_count=#{seatCount}
+        WHERE  type_id=#{typeId}
+    </update>
+    <!--查询详情 根据ID-->
+    <select id="getInfoById" resultMap="ResultMap">
+        select * from area_type_info
+        where type_id =#{id}
+    </select>
+
+    <!--多条件查询-->
+    <select id="getList" resultMap="ResultMap">
+        SELECT * FROM area_type_info WHERE 1=1
+        <if test="shopId>0">
+            AND shop_id=#{shopId}
+        </if>
+        <if test="typeName!=null and typeName!=''">
+            AND type_name  like  '%${typeName}%'
+        </if>
+        <if test="pageNo >0 and pageSize > 0">
+            LIMIT ${(pageNo-1)*pageSize},${pageSize};
+        </if>
+    </select>
+
+    <!--多条件查询-->
+    <select id="getCount"  resultType="Integer">
+        SELECT COUNT(*) FROM area_type_info WHERE 1=1
+        <if test="shopId>0">
+            AND shop_id=#{shopId}
+        </if>
+        <if test="typeName!=null and typeName!=''">
+            AND type_name  like  '%${typeName}%'
+        </if>
+
+    </select>
+</mapper>

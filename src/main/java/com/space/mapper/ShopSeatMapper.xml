@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.ShopSeatMapper">
+
+    <resultMap id="BaseResultMap" type="com.space.entity.ShopSeat">
+        <id column="seat_id" property="seatId"/>
+        <result column="shop_Id" property="shopId"/>
+        <result column="type_id" property="typeId"/>
+        <result column="seat_mark" property="seatMark"/>
+        <result column="seat_num" property="seatNum"/>
+        <result column="seat_status" property="seatStatus"/>
+    </resultMap>
+
+    <!--新增-->
+    <insert id="add" parameterType="com.space.entity.ShopSeat" keyProperty="seatId" useGeneratedKeys="true">
+        INSERT  into shop_seat (shop_id,type_id,seat_mark,seat_num,seat_status)
+        VALUES (#{shopId},#{typeId},#{seatMark} ,#{seatNum},#{seatStatus})
+    </insert>
+    <!--删除 根据id-->
+    <delete id="deleteById">
+        DELETE from shop_seat
+        where seat_id =#{id}
+    </delete>
+    <!--修改-->
+    <update id="update" parameterType="com.space.entity.ShopSeat">
+        update shop_seat
+        set
+        type_id=#{typeId},
+        seat_mark=#{seatMark},
+        seat_num=#{seatNum},
+        seat_status=#{seatStatus}
+        where seat_id=#{seatId}
+    </update>
+    <!--查询 根据ID-->
+    <select id="getInfoById" resultMap="BaseResultMap">
+        select * from shop_seat
+        where seat_id =#{id}
+    </select>
+
+    <!--条件 查询-->
+    <select id="getList" resultMap="BaseResultMap">
+        select * from shop_seat WHERE 1=1
+        <if test="shopId>0">
+            and shop_id=#{shopId}
+        </if>
+        <if test="typeId>0">
+            and type_id =#{typeId}
+        </if>
+        <if test="seatMark!=null and seatMark!=''">
+            AND seat_mark  like  '%${seatMark}%'
+
+        </if>
+        <if test="pageNo >0 and pageSize > 0">
+            LIMIT ${(pageNo-1)*pageSize},${pageSize};
+        </if>
+
+    </select>
+    <select id="getCount"  resultType="Integer">
+        select COUNT(*) from shop_seat WHERE 1=1
+        <if test="shopId>0">
+            and shop_id=#{shopId}
+        </if>
+        <if test="typeId>0">
+            and type_id =#{typeId}
+        </if>
+        <if test="seatMark!=null and seatMark!=''">
+            AND seat_mark  like  '%${seatMark}%'
+        </if>
+    </select>
+
+</mapper>

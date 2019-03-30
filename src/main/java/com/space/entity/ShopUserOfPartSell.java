@@ -16,6 +16,8 @@ public class ShopUserOfPartSell implements Serializable {
     private static final long serialVersionUID = 1L;
     //主键
     private Integer id;
+    //商家ID
+    private Integer shopId;
     //分销用户ID
     private Integer userId;
     //已结算佣金
@@ -30,7 +32,7 @@ public class ShopUserOfPartSell implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone= "GMT+8")
     private Date joinDate;
     //状态 是否有效
-    private Double isActive;
+    private Integer isActive;
 
     /*结果查询返回字段*/
     //分销用户名称

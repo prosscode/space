@@ -18,6 +18,9 @@ public interface DocumentInfoMapper {
     /** 删除文档*/
     public int deleteByIds(@Param("documentIds")String[] documentIds);
     /** 添加文档*/
-    public  DocumentInfo add(@Param("documentInfo")DocumentInfo documentInfo);
-
+    public  int add(DocumentInfo documentInfo);
+    /** 添加文档*/
+    public  int update(DocumentInfo documentInfo);
+    /** 添加文档*/
+    public  int insertBatch(List<DocumentInfo> documents);
 }

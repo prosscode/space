@@ -27,9 +27,13 @@ public class RoleController extends BaseExceptionHandler {
     private RoleInfoService roleInfoService;
     /** 保存角色 新增或者更新 id 0代表新增 大于0代表修改*/
     @RequestMapping(value = "{id}",method = RequestMethod.PUT)
-    public RoleInfo save(@RequestBody RoleInfo roleInfo,@PathVariable(value = "id",required = true)Integer id) throws Exception{
+    public RoleInfo save(@RequestBody RoleInfo roleInfo,@PathVariable(value = "id",required = true)Integer id,@RequestParam(name = "shopId",required = true)Integer shopId) throws Exception{
         if(id!=roleInfo.getRoleId())
             throw  new Exception("请求参数错误!");
+        //商家ID
+        if(shopId==null||shopId<=0)
+            throw  new Exception("请求参数错误!");
+        roleInfo.setShopId(shopId);
         if(id<=0){
             roleInfo=  roleInfoService.add(roleInfo);
         }
@@ -51,10 +55,10 @@ public class RoleController extends BaseExceptionHandler {
 
     /** 分页查询角色*/
     @RequestMapping(value = "list",method = RequestMethod.GET)
-    public PageEntity   getList(@RequestParam(name="shopId",required = true)Integer shopId,
-                                @RequestParam(name="roleName",required = true)String roleName,
-                                @RequestParam(name="pageNo",required = true)Integer pageNo,
-                                @RequestParam(name="pageSize",required = true)Integer pageSize){
+    public PageEntity   getList(@RequestParam(name="shopId",required = false,defaultValue ="0")Integer shopId,
+                                @RequestParam(name="roleName",required = false)String roleName,
+                                @RequestParam(name="pageNo",required = false,defaultValue ="0")Integer pageNo,
+                                @RequestParam(name="pageSize",required = false,defaultValue ="0")Integer pageSize){
         PageEntity entity = roleInfoService.getList(shopId,roleName, pageNo, pageSize);
         return entity;
     }

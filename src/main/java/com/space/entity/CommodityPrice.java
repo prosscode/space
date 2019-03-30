@@ -11,7 +11,10 @@ import java.io.Serializable;
  */
 
 @Data
-public class CommodityPrice extends Commodity implements Serializable {
+public class CommodityPrice implements Serializable {
+    private Integer productId; //
+    private Integer shopId; //
+    private String productName; //
     private Integer startTime; //开始时间 整点数
     private Integer endTime;    //结束时间 整点数
     private Double productPrice; //商品价格

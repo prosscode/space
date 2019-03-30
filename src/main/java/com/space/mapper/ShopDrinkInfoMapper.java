@@ -12,8 +12,8 @@ public interface ShopDrinkInfoMapper {
     public  int update(ShopDrinkInfo shopDrinkInfo);
     public  ShopDrinkInfo getInfoById(@Param("id")Integer id);
 
-    public List<ShopDrinkInfo> getList(@Param("shopId")Integer shopId, @Param("roleName")String type,
+    public List<ShopDrinkInfo> getList(@Param("shopId")Integer shopId, @Param("type")String type,
                                   @Param("keyWord")String keyWord,@Param("pageNo")Integer pageNo, @Param("pageSize")Integer pageSize);
 
-    public int getCount(@Param("shopId")Integer shopId, @Param("roleName")String type, @Param("keyWord")String keyWord);
+    public int getCount(@Param("shopId")Integer shopId, @Param("type")String type, @Param("keyWord")String keyWord);
 }

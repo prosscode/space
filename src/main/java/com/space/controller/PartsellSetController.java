@@ -28,8 +28,8 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping(value = "/partSell/set")
-@Api(tags="商品管理模块")
+    @RequestMapping(value = "/partSell/set")
+@Api(tags="分销设置模块")
 public class PartsellSetController extends BaseExceptionHandler {
     private static Logger logger = LoggerFactory.getLogger(CommodityController.class);
 
@@ -52,11 +52,14 @@ public class PartsellSetController extends BaseExceptionHandler {
 
     /** 添加或者更新 */
     @RequestMapping(value = "/save/{id}",method = RequestMethod.POST)
-    public  PartsellSetInfo save(@RequestBody PartsellSetInfo partsellSetInfo,@PathVariable("id")Integer id) throws Exception {
-        logger.info("PartsellSetController|save:"+id);
-        partsellSetInfo.setId(id);
+    public  PartsellSetInfo save(@RequestBody PartsellSetInfo partsellSetInfo,@PathVariable("id")Integer id,@RequestParam(name = "shopId",required = true)Integer shopId) throws Exception {
         if(partsellSetInfo.getId()!=id)
             throw new Exception("参数请求错误");
+        //商家ID
+        if(shopId==null||shopId<=0)
+            throw  new Exception("请求参数错误!");
+        partsellSetInfo.setShopId(shopId);
+
         return partsellSetInfoService.save(partsellSetInfo);
     }
 

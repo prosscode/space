@@ -28,8 +28,10 @@ public class ShopOrderPlan implements Serializable {
     // 性别 0 男 1女
     private  boolean sex;
     // 预抵时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone= "GMT+8")
     private  Date planToTime;
     // 过期时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone= "GMT+8")
     private  Date expireTime;
     // 保留时间 分钟
     private  Integer keepMinutes;
@@ -49,6 +51,13 @@ public class ShopOrderPlan implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone= "GMT+8")
     private  Date createDate;
 
+    /*   模型字段,不代表数据库字段*/
+    //订单数据
+    public  Order order;
+
+    public  String statusStr;
+    public  String waiterName;
+    public  String marKetManagerName;
 }
 
 

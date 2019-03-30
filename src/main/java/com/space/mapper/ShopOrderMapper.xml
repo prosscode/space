@@ -3,39 +3,109 @@
 <mapper namespace="com.space.mapper.ShopOrderMapper">
 
     <resultMap id="BaseResultMap" type="com.space.entity.Order">
-        <id column="order_id" property="orderId" />
-        <result column="order_no" property="orderMark" />
-        <result column="order_name" property="orderName" />
-        <result column="order_price" property="orderPrice" />
-        <result column="order_waiter_id" property="orderWaiterId" />
-        <result column="order_user" property="orderUser" />
-        <result column="order_seat" property="orderSeat" />
-        <result column="order_commission" property="orderCommission" />
-        <result column="order_type" property="orderType" />
-        <result column="order_date" property="orderDate" />
-        <result column="shop_id" property="shopId" />
-        <result column="join_user" property="joinUser" />
-        <result column="order_status" property="orderStatus" />
-        <result column="signer_id" property="signerId" />
-        <result column="pay_method" property="payMethod" />
-        <result column="modify_date" property="modifyDate" />
+        <id column="order_id" property="orderId"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="order_name" property="orderName"/>
+        <result column="order_price" property="orderPrice"/>
+
+        <result column="order_original_amount" property="orderOriginalAmount"/>
+        <result column="order_actual_amount" property="orderActualAmount"/>
+        <result column="order_give_amount" property="orderGiveAmount"/>
+        <result column="order_securities_no" property="orderSecuritiesNo"/>
+        <result column="order_discount" property="orderDiscount"/>
+        <result column="order_securities_amount" property="orderSecuritiesAmount"/>
+        <result column="order_seat_amount" property="orderSeatAmount"/>
+
+        <result column="order_waiter_id" property="orderWaiterId"/>
+        <result column="order_user" property="orderUser"/>
+        <result column="order_people_num" property="orderPeopleNum"/>
+        <result column="order_seat" property="orderSeat"/>
+        <result column="order_user_phone" property="orderUserPhone"/>
+        <result column="order_commission" property="orderCommission"/>
+        <result column="order_return_status" property="orderReturnStatus"/>
+        <result column="order_type" property="orderType"/>
+        <result column="order_date" property="orderDate"/>
+        <result column="order_reach_start_date" property="orderReachStartDate"/>
+        <result column="order_reach_end_date" property="orderReachEndDate"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="join_user" property="joinUser"/>
+        <result column="join_user_phone" property="joinUserPhone"/>
+        <result column="join_user_amount_method" property="joinUserAmountMethod"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="signer_id" property="signerId"/>
+        <result column="pay_method" property="payMethod"/>
+        <result column="payment_number" property="paymentNumber"/>
+        <result column="payment_time" property="paymentTime"/>
+        <result column="modify_date" property="modifyDate"/>
+        <!-- 结果返回字段-->
+        <result column="signer" property="signer"/>
+        <result column="orderWaiterName" property="orderWaiterName"/>
+        <result column="OrderStatusStr" property="OrderStatusStr"/>
     </resultMap>
+
+    <!--新增-->
+    <insert id="add" parameterType="com.space.entity.Order" useGeneratedKeys="true" keyProperty="orderId" >
+        INSERT  into shop_order (order_no,order_name,order_price,order_original_amount,order_actual_amount
+        ,order_give_amount,order_securities_no,order_discount,order_securities_amount,order_seat_amount
+        ,order_waiter_id,order_user,order_people_num,order_seat,order_user_phone
+        ,order_commission,order_return_status ,order_type ,order_date ,order_reach_start_date ,order_reach_end_date ,shop_id
+         ,join_user ,join_user_phone,join_user_amount_method,order_status ,signer_id ,pay_method,payment_number,payment_time)
+        VALUES (#{orderNo},#{orderName},#{orderPrice} ,#{orderOriginalAmount},#{orderActualAmount},#{orderGiveAmount}
+        ,#{orderSecuritiesNo},#{orderDiscount},#{orderWaiterId},#{orderUser},#{orderPeopleNum},#{orderSeat}
+        ,#{orderSecuritiesAmount},#{orderActualAmount}
+        ,#{orderUserPhone},#{orderCommission},#{orderReturnStatus},#{orderType},#{orderDate},#{orderReachStartDate},#{orderReachEndDate}
+        ,#{shopId},#{joinUser},#{joinUserPhone},#{joinUserAmountMethod},#{orderStatus},#{signerId},#{payMethod},#{paymentNumber},#{paymentTime})
+    </insert>
+    <!--更新-->
+    <update id="update" parameterType="com.space.entity.Order">
+        UPDATE  shop_order
+        SET  order_name=#{orderName},
+        order_price=#{orderPrice},
+         order_original_amount=#{orderOriginalAmount},
+          order_actual_amount=#{orderActualAmount},
+           order_give_amount=#{orderGiveAmount},
+            order_securities_no=#{orderSecuritiesNo},
+             order_discount=#{orderDiscount},
+                order_securities_amount=#{orderSecuritiesAmount},
+                   order_seat_amount=#{orderActualAmount},
+        order_waiter_id=#{orderWaiterId},
+        order_user=#{orderUser},
+        order_people_num=#{orderPeopleNum},
+        order_seat=#{orderSeat},
+        order_user_phone=#{orderUserPhone},
+        order_commission=#{orderCommission},
+          order_return_status=#{orderReturnStatus},
+        order_type=#{orderType},
+        order_reach_start_date=#{orderReachStartDate},
+        order_reach_end_date=#{orderReachEndDate},
+
+        join_user=#{joinUser},
+          join_user_phone=#{joinUserPhone},
+            join_user_amount_method=#{joinUserAmountMethod},
+        order_status=#{orderStatus},
+         signer_id=#{signerId},
+        pay_method=#{payMethod},
+           payment_number=#{paymentNumber},
+              payment_time=#{paymentTime},
+        WHERE  order_id=#{orderId}
+    </update>
+
     <!--查询 分页、多条件查询-->
     <select id="getList" resultMap="BaseResultMap">
         select * from shop_order where 1=1
         <if test="shopId>0">
-            AND  shop_id = #{shopId}
+            AND shop_id = #{shopId}
         </if>
         <if test="orderNo != null and orderNo!=''">
-            and order_no = '%#{orderNo}%'
+            and order_no  LIKE CONCAT('%',#{orderNo,jdbcType=VARCHAR},'%')
         </if>
         <if test="orderName!=null and orderName!=''">
-            and order_name = '%#{orderName}%'
+            and order_name  LIKE CONCAT('%',#{orderName,jdbcType=VARCHAR},'%')
         </if>
-        <if test="orderType >= 0">
+        <if test="orderType >0">
             and order_type = #{orderType}
         </if>
-        <if test="orderStatus >= 0">
+        <if test="orderStatus !=-1">
             and order_status = #{orderStatus}
         </if>
         <if test="dateFrom !=null and dateFrom!=''">
@@ -44,9 +114,36 @@
         <if test="dateTo!=null and dateTo!=''">
             and order_date &lt;= #{dateTo}
         </if>
-        <if test="pageNo >= 0 and pageSize > 0">
-            limit #{pageNo},#{pageSize}
+        <if test="pageNo > 0 and pageSize > 0">
+            LIMIT ${(pageNo-1)*pageSize},${pageSize};
         </if>
+    </select>
+
+    <!--查询 分页、多条件查询-->
+    <select id="getCount"  resultType="Integer">
+        select COUNT(*) from shop_order where 1=1
+        <if test="shopId>0">
+            AND shop_id = #{shopId}
+        </if>
+        <if test="orderNo != null and orderNo!=''">
+            and order_no  LIKE CONCAT('%',#{orderNo,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="orderName!=null and orderName!=''">
+            and order_name  LIKE CONCAT('%',#{orderName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="orderType >0">
+            and order_type = #{orderType}
+        </if>
+        <if test="orderStatus !=0">
+            and order_status = #{orderStatus}
+        </if>
+        <if test="dateFrom !=null and dateFrom!=''">
+            and order_date &gt;= #{dateFrom}
+        </if>
+        <if test="dateTo!=null and dateTo!=''">
+            and order_date &lt;= #{dateTo}
+        </if>
+
     </select>
     <!--查询 详情 根据ID-->
     <select id="getInfoById" resultMap="BaseResultMap">
@@ -56,16 +153,33 @@
     <select id="getInfoByNo" resultMap="BaseResultMap">
         select * from shop_order where order_no = #{orderNo}
     </select>
+
+    <!--查询 详情 根据卓位编号获取最新的订单-->
+    <select id="getLastInfoByDeskNo" resultMap="BaseResultMap">
+     SELECT  * FROM shop_order
+WHERE order_seat =#{orderSeat}
+ORDER BY order_date DESC
+Limit 0,1
+    </select>
     <!--删除 根据Id-->
-    <delete id="deleteById" >
+    <delete id="deleteById">
         DELETE  FROM  shop_order
-        WHERE  order_id = #{orderId}
+        WHERE  order_id = #{orderId};
+
+        DELETE  FROM  shop_order_product_detail
+        WHERE  order_id=#{orderId};
     </delete>
 
     <!--删除 根据多个ID-->
     <delete id="deleteByIds" parameterType="java.util.List">
         <if test="orderIds!=null and orderIds.length>0">
-            DELETE  FROM  shop_order
+            DELETE FROM shop_order
+            where order_id in
+            <foreach collection="orderIds" item="orderId" open="(" close=")" separator=",">
+                #{orderId}
+            </foreach>
+
+            DELETE FROM shop_order_product_detail
             where order_id in
             <foreach collection="orderIds" item="orderId" open="(" close=")" separator=",">
                 #{orderId}
