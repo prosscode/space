@@ -101,5 +101,7 @@ public class Order {
     //订单状态
     public String OrderStatusStr;
 
+    private List<OrderProduct> orderProductList;
+
 
 }
