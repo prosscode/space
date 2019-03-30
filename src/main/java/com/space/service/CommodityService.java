@@ -41,7 +41,7 @@ public interface CommodityService {
     public int deleteAndUpGoods(List<Integer> productIds,Integer opNumber,List<Object> setValues);
 
     /** 更新商品*/
-    public int updateGood(Commodity commodity);
+    public int updateGood(Commodity commodity,Integer optNum);
     /** 商品详情  根据ID optNum<=0时 商品基础数据,当等于1时 返回携带文档。价格关联数据*/
     public Commodity GetGoodById(Integer commodityId, Integer optNum);
 

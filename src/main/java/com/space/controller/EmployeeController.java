@@ -28,8 +28,12 @@ public class EmployeeController {
 
     /** 新建员工分类*/
     @RequestMapping(value = "/addStaffType", method = RequestMethod.POST)
-    public int addStaffType(@RequestBody StaffType staffType) throws Exception{
+    public int addStaffType(@RequestBody StaffType staffType,@RequestParam(name = "shopId",required = true)Integer shopId) throws Exception{
         logger.info("EmployeeController|addStaffType,staffTypeName:"+staffType.getStaffTypeName());
+        //商家ID
+        if(shopId==null||shopId<=0)
+            throw  new Exception("请求参数错误!");
+        staffType.setShopMark(shopId);
         int type = employeeService.addStaffType(staffType);
         return type;
     }
@@ -37,22 +41,34 @@ public class EmployeeController {
 
     /** 删除员工分类*/
     @RequestMapping(value = "/deleteStaffType",method = RequestMethod.GET)
-    public int deleteStaffType(@RequestParam(name = "shopMark",required = true)String shopMark,
+    public int deleteStaffType(@RequestParam(name = "shopMark",required = true)Integer shopMark,
                                @RequestParam(name = "staffTypeName",required = true)String staffTypeName){
         logger.info("EmployeeController|deleteStaffType,shopMark:"+shopMark+",staffTypeName"+staffTypeName);
         int staffType = employeeService.deleteStaffType(shopMark, staffTypeName);
         return staffType;
     }
 
+    /** 删除员工分类 根据ID*/
+    @RequestMapping(value = "/deleteStaffTypeById",method = RequestMethod.DELETE)
+    public int deleteStaffTypeById(Integer staffTypeId){
+        return  employeeService.deleteStaffTypeById(staffTypeId);
+    }
+
+    /** 员工分类修改*/
+    @RequestMapping(value = "/updateStaffType",method = RequestMethod.POST)
+    public  int updateStaffType(StaffType staffType){
+        return  employeeService.updateStaffType(staffType);
+    }
+
 
     /** 得到商家的员工分类*/
     @RequestMapping(value = "getStaffTypes",method = RequestMethod.GET)
-    public List<StaffType> getStaffTypes(@RequestParam(name = "shopMark",required = true)String shopMark
+    public List<StaffType> getStaffTypes(@RequestParam(name = "shopId",required = true)Integer shopId
             ,@RequestParam(name = "staffTypeName",required = true)String staffTypeName
             ,@RequestParam(name = "pageNo",required = true)Integer pageNo
             ,@RequestParam(name = "pageSize",required = true)Integer pageSize){
-        logger.info("EmployeeController|getStaffTypes,shopMark:"+shopMark);
-        return employeeService.getStaffTypes(shopMark,staffTypeName,pageNo,pageSize);
+        logger.info("EmployeeController|getStaffTypes,shopMark:"+shopId);
+        return employeeService.getStaffTypes(shopId,staffTypeName,pageNo,pageSize);
     }
 
     /** 添加员工*/
@@ -65,7 +81,7 @@ public class EmployeeController {
 
     /** 查询员工*/
     @RequestMapping(value = "getStaffs",method = RequestMethod.GET)
-    public PageEntity getStaffs(@RequestParam(name="shopMark",required = true)String shopMark,
+    public PageEntity getStaffs(@RequestParam(name="shopId",required = true)Integer shopId,
                                 @RequestParam(name="staffName",defaultValue="")String staffName,
                                 @RequestParam(name="staffType",defaultValue="")String staffType,
                                 @RequestParam(name = "dateFrom", required = false) Date dateFrom,
@@ -74,9 +90,31 @@ public class EmployeeController {
                                 @RequestParam(name="pageSize",defaultValue="20")Integer pageSize){
         logger.info("EmployeeController|getStaffs,pageNo:"+pageNo+",pageSize"+pageSize);
         pageNo = (pageNo -1) * pageSize;
-        PageEntity entity = employeeService.getStaffs(shopMark,staffName, staffType, dateFrom, dateTo, pageNo, pageSize);
+        PageEntity entity = employeeService.getStaffs(shopId,staffName, staffType, dateFrom, dateTo, pageNo, pageSize);
         return entity;
+    }
+    /** 查询员工分类详情 根据ID*/
 
+    @RequestMapping(value = "getStaffTypeById",method = RequestMethod.GET)
+    public StaffType  getStaffTypeById(Integer staffTypeId){
+        return  employeeService.getStaffTypeById(staffTypeId);
     }
 
+    /** 查询员工详情 根据ID*/
+    @RequestMapping(value = "getStaffById",method = RequestMethod.GET)
+    public Staff  getStaffById(Integer staffTypeId){
+        return  employeeService.getStaffById(staffTypeId);
+    }
+
+    /** 删除*/
+    @RequestMapping(value = "deleteStaffById",method = RequestMethod.DELETE)
+    public  int deleteStaffById(Integer staffId){
+        return  employeeService.deleteStaffById(staffId);
+    }
+
+    /** 修改员工*/
+    @RequestMapping(value = "updateStaff",method = RequestMethod.POST)
+    public  int updateStaff(Staff staff){
+        return  employeeService.updateStaff(staff);
+    }
 }

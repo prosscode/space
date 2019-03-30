@@ -3,12 +3,17 @@
 <mapper namespace="com.space.mapper.DocumentInfoMapper">
 
     <resultMap id="documentInfoResMap" type="com.space.entity.DocumentInfo">
-        <id column="id" property="id" />
-        <result column="parentId" property="parentId" />
-        <result column="name" property="name" />
-        <result column="categoryDesc" property="categoryDesc" />
-        <result column="modityDate" property="modityDate" />
-        <result column="shopId" property="shopId" />
+        <id column="documentId" property="documentId" />
+        <result column="documentType" property="documentType" />
+        <result column="contentType" property="contentType" />
+        <result column="refCategory" property="refCategory" />
+        <result column="refId" property="refId" />
+        <result column="refSequenceNo" property="refSequenceNo" />
+        <result column="title" property="title" />
+        <result column="summary" property="summary" />
+        <result column="url" property="url" />
+        <result column="markers" property="markers" />
+        <result column="state" property="state" />
     </resultMap>
 
     <!--  &lt;!&ndash;添加用户&ndash;&gt;
@@ -47,5 +52,30 @@
         ,#{refCategory},#{refId},#{refSequenceNo},#{title},#{summary}
         ,#{url},#{markers},#{state})
     </insert>
+    <!--更新-->
+    <update id="update" parameterType="com.space.entity.DocumentInfo">
+        UPDATE  document_info
+        SET
+        documentType=#{documentType},
+        contentType=#{contentType},
+         refCategory=#{refCategory},
+          refId=#{refId},
+           refSequenceNo=#{refSequenceNo},
+            summary=#{summary},
+                    url=#{url},
+                            markers=#{markers}
+        WHERE  documentId=#{documentId}
+    </update>
 
+    <!--新增 批量插入-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        <if test="documents!=null and documents.size()>0">
+            INSERT  into document_info VALUES
+            <foreach collection="documents" item="item" index="index" separator=",">
+                (#{item.documentId},#{item.documentType},#{item.contentType}
+                ,#{item.refCategory},#{item.refId},#{item.refSequenceNo},#{item.title},#{item.summary}
+                ,#{item.url},#{item.markers},#{item.state})
+            </foreach>
+        </if>
+    </insert>
 </mapper>

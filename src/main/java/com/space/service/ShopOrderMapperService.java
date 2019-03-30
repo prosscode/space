@@ -10,7 +10,9 @@ import java.util.List;
 
 public interface ShopOrderMapperService {
 
-    public List<Order> getList(Integer shopId,
+    public  Order add(Order order);
+    public  Order update(Order order);
+    public PageEntity getList(Integer shopId,
                                String orderNo,
                                String orderName,
                                Integer orderType,
@@ -27,5 +29,7 @@ public interface ShopOrderMapperService {
     public Order getInfoById(Integer orderId);
 
     public Order getInfoByNo(String orderNo);
+
+    public Order getLastInfoByDeskNo(String orderSeat);
 
 }

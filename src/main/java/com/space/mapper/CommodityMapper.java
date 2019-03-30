@@ -39,7 +39,11 @@ public  interface CommodityMapper {
                                     @Param("productStatus")Integer productStatus,
                                     @Param("keyWord")String keyWord);
 
-    public int getGoodsCount(@Param("productName") String productName);
+    public int getGoodsCount(@Param("productName") String productName,
+                             @Param("productCategoryNo")Integer productCategoryNo,
+                             @Param("shopId")Integer shopId,
+                             @Param("productStatus")Integer productStatus,
+                             @Param("keyWord")String keyWord);
 
     /** 检查是否有相同的商品名*/
     public int checkProductName(@Param("productName") String productName);
@@ -59,10 +63,10 @@ public  interface CommodityMapper {
 
 
     /** 更新任务*/
-    public int updateGood(@Param("commodity") Commodity commodity);
+    public int updateGood(Commodity commodity);
 
     /** 商品详情*/
-    public Commodity getCommodityById(@Param("commdityId") Integer commdityId);
+    public Commodity getCommodityById(@Param("commodityId") Integer commodityId);
 
     /**新增桌位编号*/
     public int addSeatMark(@Param("shopId") Integer shopId,
@@ -80,9 +84,9 @@ public  interface CommodityMapper {
     /**查询所有*/
     public List<CommodityDocument> getCommodityDocuments(@Param("commodityIds")List<Integer> commodityIds);
     /**增加*/
-    public int  addCommodityDocument(@Param("CommodityDocument") CommodityDocument commodityDocument);
+    public int  addCommodityDocument(CommodityDocument commodityDocument);
     /**删除 根据商品ID*/
-    public int  deleteCommodityDocumentByCommodityId(@Param("commodityId")Integer commodityId);
+    public int  deleteCommodityDocumentByPId(@Param("productId")Integer productId);
 
     /**删除 根据多个商品ID*/
     public int  deleteCommodityDocumentByCommodityIds(@Param("commodityIds")List<Integer> commodityIds);
@@ -100,6 +104,6 @@ public  interface CommodityMapper {
             ,@Param("commodityId")Integer commodityId
             ,@Param("commodityName")String commodityName);
     /** 添加商品价格数据 */
-    public int  addCommodityPrices(@Param("CommodityPrice") CommodityPrice commodityPrice);
+    public int  addCommodityPrices( CommodityPrice commodityPrice);
 
 }

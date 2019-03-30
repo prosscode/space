@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -97,15 +95,22 @@ public class CommodityServiceImpl implements CommodityService {
         logger.info("CommodityServiceImpl|getGoods,productName:" + productName + ",pageNo:" + pageNo + ",pageSize" + pageSize);
         // 查询
         List<Commodity> goods = commodityMapper.getGoods(productName, pageNo, pageSize, productCategoryNo, shopId, productStatus, keyWord);
+        List<Commodity>  newGoodsList =new ArrayList<>();
         if(optNum>=1){
             for (Commodity item:goods){
                 item= GetGoodById(item.getProductId(),optNum);
+                double price =item.getPrice();
+                item.setPrice(price);
+                newGoodsList.add(item);
             }
         }
+        else {
+            newGoodsList =goods;
+        }
         // 总数
-        int goodsCount = commodityMapper.getGoodsCount(productName);
+        int goodsCount = commodityMapper.getGoodsCount(productName, productCategoryNo, shopId, productStatus, keyWord);
         PageEntity pageEntity = new PageEntity();
-        pageEntity.setList(goods);
+        pageEntity.setList(newGoodsList);
         pageEntity.setCount(goodsCount);
         return pageEntity;
     }
@@ -183,10 +188,28 @@ public class CommodityServiceImpl implements CommodityService {
                 int curDateHour=Integer.parseInt( f.format(curDate));
                 for (CommodityPrice price : CommodityPriceList) {
                     if (price.getStartTime() <= curDateHour && curDateHour <= price.getEndTime()) {
-                        model.setPrice(price.getPrice());
+                        model.setPrice(price.getProductPrice());
                         break;
                     }
                 }
+                Collections.sort(CommodityPriceList, new Comparator<CommodityPrice>() {
+                    public int compare(CommodityPrice u1, CommodityPrice u2) {
+                        return new Double(u2.getEndTime()).compareTo(new Double(u1.getEndTime())); //升序
+                        // return new Double(u2.getSalary()).compareTo(new Double(u2.getSalary())); //降序
+                    }
+                });
+
+                if(model.getPrice()<=0){
+                    Calendar c = Calendar.getInstance();
+                    int hour = c.get(Calendar.HOUR);
+                    if(hour>=CommodityPriceList.get(0).getEndTime()){
+                        model.setPrice(CommodityPriceList.get(0).getProductPrice());
+                    }
+                    else {
+                        model.setPrice(CommodityPriceList.get(CommodityPriceList.size()-1).getProductPrice());
+                    }
+                }
+                model.setCommodityPriceList(CommodityPriceList);
             }
         }
         return model;
@@ -233,31 +256,40 @@ public class CommodityServiceImpl implements CommodityService {
      * 更新商品
      */
     @Override
-    public int updateGood(Commodity commodity) {
+    public int updateGood(Commodity commodity,Integer optNum) {
         try {
-            List<DocumentInfo> documentInfos = commodity.getDocumentInfos();
-            // List<CommodityDocument> CommodityDocumentList =commodity.getCommodityDocumentList();
-            //删除商品图片
-            commodityMapper.deleteCommodityDocumentByCommodityId(commodity.getProductId());
-            //添加商品图片
-            if (documentInfos != null && documentInfos.size() > 0) {
-                for (DocumentInfo ditem : documentInfos) {
-                    CommodityDocument commodityDocument = new CommodityDocument();
-                    commodityDocument.setCommodityId(commodity.getProductId());
-                    commodityDocument.setShopId(commodity.getShopId());
-                    commodityDocument.setDocumentId(ditem.getDocumentId());
-                    commodityMapper.addCommodityDocument(commodityDocument);
+            //更新其他数据
+            if(optNum>=1){
+                //刪除商品文档关联表
+                Integer productId=commodity.getProductId();
+                commodityMapper.deleteCommodityDocumentByPId(productId);
+                List<DocumentInfo> documentInfos = commodity.getDocumentInfos();
+                //添加商品图片
+                if (documentInfos != null) {
+                    for (DocumentInfo ditem : documentInfos) {
+                        CommodityDocument commodityDocument = new CommodityDocument();
+                        commodityDocument.setCommodityId(commodity.getProductId());
+                        commodityDocument.setShopId(commodity.getShopId());
+                        commodityDocument.setDocumentId(ditem.getDocumentId());
+                        commodityMapper.addCommodityDocument(commodityDocument);
+                        documentInfoMapper.update(ditem);
+                    }
+                }
+                //先删除 在添加
+                //添加商品价格时间设置
+                commodityMapper.deletePriceByCommodityId(commodity.getProductId());
+                //商品价格关联
+                List<CommodityPrice> CommodityPriceList = commodity.getCommodityPriceList();
+                if (CommodityPriceList != null) {
+                    for (CommodityPrice pitem : CommodityPriceList) {
+                        pitem.setShopId(commodity.getShopId());
+                        pitem.setProductId(commodity.getProductId());
+                        pitem.setProductName(commodity.getProductName());
+                        commodityMapper.addCommodityPrices(pitem);
+                    }
                 }
             }
-            //商品价格关联
-            List<CommodityPrice> CommodityPriceList = commodity.getCommodityPriceList();
-            //添加商品价格时间设置
-            commodityMapper.deletePriceByCommodityId(commodity.getProductId());
-            if (CommodityPriceList != null && CommodityPriceList.size() > 0) {
-                for (CommodityPrice pitem : CommodityPriceList) {
-                    commodityMapper.addCommodityPrices(pitem);
-                }
-            }
+            //更新商品基础数据
             return commodityMapper.updateGood(commodity);
         } catch (Exception e) {
             logger.error("CommodityServiceImpl|publishGoods,error message:" + e.getMessage(), e);

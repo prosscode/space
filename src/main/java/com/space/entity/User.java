@@ -12,7 +12,7 @@ public class User {
 
     private Integer userId;
     private String userName;
-    private String shopMark;
+    private Integer shopMark;
     private String userPhone;
     private String userWechat;
     // 支付金额
@@ -25,4 +25,9 @@ public class User {
     private Integer userOffline;
     private Integer userRole;
 
+
+    private Integer nextLevelNum;
+    private Integer orderCount;
+    private Integer enterDrinkCount;
+    private String userTypeStr;
 }

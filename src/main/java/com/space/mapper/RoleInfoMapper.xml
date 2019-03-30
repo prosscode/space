@@ -13,7 +13,7 @@
         <result column="is_show_sys" property="isShowSys"/>
     </resultMap>
     <!--新增-->
-    <insert id="add" parameterType="com.space.entity.RoleInfo" keyProperty="id" useGeneratedKeys="true">
+    <insert id="add" parameterType="com.space.entity.RoleInfo" keyProperty="roleId" useGeneratedKeys="true">
         INSERT  into role_info (shop_id,role_name,role_remark,is_active,create_date,is_show_shop,is_show_sys)
         VALUES (#{shopId},#{roleName},#{roleRemark} ,#{isActive},#{createDate},#{isShowShop},#{isShowSys})
     </insert>
@@ -25,7 +25,7 @@
     <!--修改-->
     <update id="update" parameterType="com.space.entity.RoleInfo">
         update role_info
-        set shop_Id=#{shopId},
+        set
         role_name=#{roleName},
         role_remark=#{roleRemark},
         commissionRolePartB=#{isActive},
@@ -44,23 +44,24 @@
     <select id="getList" resultMap="BaseResultMap">
         select * from role_info WHERE 1=1
         <if test="shopId>0">
-            and shop_id &lt;= #{shopId}
+            and shop_id=#{shopId}
         </if>
         <if test="roleName!=null and roleName!=''">
-            and role_name  like  '%#{roleName}%'
+            AND role_name  like  '%${roleName}%'
+
         </if>
         <if test="pageNo >=1 and pageSize > 0">
-            limit (#{pageNo}-1)*(#{pageSize}),#{pageSize}
+            LIMIT ${(pageNo-1)*pageSize},${pageSize};
         </if>
 
     </select>
     <select id="getRolesCount"  resultType="Integer">
         select COUNT(*) from role_info WHERE 1=1
         <if test="shopId>0">
-            and shop_id &lt;= #{shopId}
+            and shop_id=#{shopId}
         </if>
         <if test="roleName!=null and roleName!=''">
-            and role_name  like  '%#{roleName}%'
+            AND role_name  like  '%${roleName}%'
         </if>
 
     </select>

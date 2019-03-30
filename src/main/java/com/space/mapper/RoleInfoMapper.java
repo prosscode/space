@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
-/** 分销设置*/
+/** 角色管理*/
 public interface RoleInfoMapper {
 
     public  int add(RoleInfo roleInfo);

@@ -32,7 +32,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public int addStaffType(StaffType staffType) throws Exception {
         //检查有没有重复的员工分类
-        String shopMark = staffType.getShopMark();
+        Integer shopMark = staffType.getShopMark();
         String staffTypeName = staffType.getStaffTypeName();
         int checkStaffType = employeeMapper.checkStaffType(shopMark, staffTypeName);
         if(checkStaffType > 0){
@@ -45,14 +45,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /** 删除员工分类*/
     @Override
-    public int deleteStaffType(String shopMark, String staffTypeName) {
+    public int deleteStaffType(Integer shopMark, String staffTypeName) {
         int staffType = employeeMapper.deleteStaffType(shopMark, staffTypeName);
         return staffType;
+    }
+    /** 删除员工分类 根据ID*/
+    @Override
+    public int deleteStaffTypeById(Integer staffTypeId){
+        return  employeeMapper.deleteStaffTypeById(staffTypeId);
+    }
+
+    /** 员工分类修改*/
+    @Override
+    public  int updateStaffType(StaffType staffType){
+        return  employeeMapper.updateStaffType(staffType);
     }
 
     /** 得到商家设置的员工分类*/
     @Override
-    public List<StaffType> getStaffTypes(String shopMark,String staffTypeName,Integer pageNo,Integer pageSize) {
+    public List<StaffType> getStaffTypes(Integer shopMark,String staffTypeName,Integer pageNo,Integer pageSize) {
         List<StaffType> staffTypes = employeeMapper.getStaffTypes(shopMark,staffTypeName,pageNo,pageSize);
         return staffTypes;
     }
@@ -77,7 +88,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**查询员工*/
     @Override
-    public PageEntity getStaffs(String shopMark,String staffName, String staffType, Date dateFrom, Date dateTo, Integer pageNo, Integer pageSize) {
+    public PageEntity getStaffs(Integer shopMark,String staffName, String staffType, Date dateFrom, Date dateTo, Integer pageNo, Integer pageSize) {
 
         List<Staff> staffs = employeeMapper.getStaffs(shopMark,staffName, staffType, dateFrom, dateTo, pageNo, pageSize);
         PageEntity entity = new PageEntity();
@@ -85,5 +96,29 @@ public class EmployeeServiceImpl implements EmployeeService {
         entity.setList(staffs);
         entity.setCount(count);
         return entity;
+    }
+
+    @Override
+    public StaffType  getStaffTypeById(Integer staffTypeId){
+        return  employeeMapper.getStaffTypeById(staffTypeId);
+    }
+    @Override
+    public int getStaffsCount(Integer shopMark,String staffName, String staffType, Date dateFrom, Date dateTo){
+        return  employeeMapper.getStaffsCount(shopMark,staffName, staffType, dateFrom, dateTo);
+    }
+
+
+    @Override
+    public  int deleteStaffById(Integer staffId){
+        return  employeeMapper.deleteStaffById(staffId);
+    }
+
+    @Override
+    public  int updateStaff(Staff staff){
+        return  employeeMapper.updateStaff(staff);
+    }
+    @Override
+    public Staff  getStaffById(Integer staffId){
+        return employeeMapper.getStaffById(staffId);
     }
 }

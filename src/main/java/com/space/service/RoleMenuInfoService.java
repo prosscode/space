@@ -7,6 +7,7 @@ import com.space.exception.PageEntity;
 
 import java.util.List;
 
+/**角色权限*/
 public interface RoleMenuInfoService {
      public  List<RoleMenuInfo>  getMenusByRoleId(Integer roleId);
 }

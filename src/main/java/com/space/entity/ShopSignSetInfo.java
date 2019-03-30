@@ -21,16 +21,19 @@ public class ShopSignSetInfo implements Serializable {
     //签单员工ID
     private Integer staffId;
     //签单金额
-    private Double signAmont;
+    private Double signAmount;
     //签单数量
     private Integer signNum;
     //签单状态
-    private Integer signStatus;
+    private boolean signStatus;
 
-
-    /*结果查询返回字段*/
+   /* 结果查询返回字段*/
     //员工类别名称
     private   String staffCategoryName;
+    private   String staffPhone;
     //签单人员名称
     private   String staffName;
+    //签单总额
+    private  Double signSumAmont;
+
 }

@@ -3,20 +3,54 @@
 <mapper namespace="com.space.mapper.CommodityCategoryMapper">
 
     <resultMap id="CommodityCategoryData" type="com.space.entity.CommodityCategory">
-        <id column="id" property="id" />
-        <result column="parentId" property="parentId" />
-        <result column="name" property="name" />
-        <result column="categoryDesc" property="categoryDesc" />
-        <result column="modityDate" property="modityDate" />
-        <result column="shopId" property="shopId" />
+        <id column="id" property="id"/>
+        <result column="parentId" property="parentId"/>
+        <result column="name" property="name"/>
+        <result column="categoryDesc" property="categoryDesc"/>
+        <result column="modifyDate" property="modifyDate"/>
+        <result column="shopId" property="shopId"/>
     </resultMap>
 
-  <!--  &lt;!&ndash;添加用户&ndash;&gt;
-    <insert id="addUser" parameterType="com.space.entity.User">
-        insert into shop_user(user_name,shop_mark,user_phone,user_wechat)
-        values (#{userName},#{shopMark},#{userPhone},#{userWechat})
+    <!--新增-->
+    <insert id="add" parameterType="com.space.entity.CommodityCategory" useGeneratedKeys="true" keyProperty="id">
+        INSERT  into commoditycategory_info (parentId,name,categoryDesc,shopId)
+        VALUES (#{parentId},#{name},#{categoryDesc},#{shopId})
     </insert>
--->
+    <!--删除 根据ID-->
+    <delete id="deleteById">
+        DELETE from commoditycategory_info
+        WHERE id =#{id};
+    </delete>
+    <!--删除 根据ID-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        DELETE from commoditycategory_info
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+      <!--  <if test="ids!=null and ids.size() > 0">
+
+        </if>-->
+    </delete>
+    <!--获取子级ids 根据PID-->
+    <select id="getChildIdStrByPId" resultType="String">
+     	SELECT  getChildrencategory(#{pid});
+    </select>
+
+    <!--更新-->
+    <update id="update" parameterType="com.space.entity.CommodityCategory">
+        UPDATE  commoditycategory_info
+        SET
+        parentId=#{parentId},
+        name=#{name},
+        categoryDesc=#{categoryDesc}
+        WHERE  id=#{id}
+    </update>
+    <!--查询详情 根据ID-->
+    <select id="getInfoById" resultMap="CommodityCategoryData">
+        select  * FROM  commoditycategory_info
+        where id =#{id}
+    </select>
 
     <!--查询商品分类-->
     <select id="GetData" resultMap="CommodityCategoryData">
@@ -24,7 +58,7 @@
         <if test="shopId>0">
             AND shopId = #{shopId}
         </if>
-
     </select>
+
 
 </mapper>

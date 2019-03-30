@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.ShopSignSetInfoMapper">
+
+    <resultMap id="signResultMap" type="com.space.entity.ShopSignSetInfo">
+        <id column="id" property="id"/>
+        <result column="shopId" property="shopId"/>
+        <result column="staffCategoryNo" property="staffCategoryNo"/>
+        <result column="staffId" property="staffId"/>
+        <result column="signAmount" property="signAmount"/>
+        <result column="signNum" property="signNum"/>
+        <result column="signStatus" property="signStatus"/>
+        <!-- 结果查询返回字段-->
+
+        <result column="staffCategoryName" property="staffCategoryName"/>
+        <result column="staffPhone" property="staffPhone"/>
+        <result column="staffName" property="staffName"/>
+        <result column="signSumAmont" property="signSumAmont"/>
+    </resultMap>
+
+    <!--新增-->
+    <insert id="add" parameterType="com.space.entity.ShopSignSetInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT  into shop_sign_set_info (shopId,staffCategoryNo,staffId,signAmount,signStatus)
+        VALUES (#{shopId},#{staffCategoryNo},#{staffId},#{signAmount},#{signStatus})
+    </insert>
+    <!--删除 根据ID-->
+    <delete id="deleteById">
+        DELETE from shop_sign_set_info
+        WHERE id =#{id}
+    </delete>
+    <!--更新-->
+    <update id="update" parameterType="com.space.entity.ShopSignSetInfo">
+        UPDATE  shop_sign_set_info
+        SET
+        staffCategoryNo=#{staffCategoryNo},
+        staffId=#{staffId},
+        signAmount=#{signAmount},
+        signStatus=#{signStatus}
+        WHERE  id=#{id}
+    </update>
+    <!--查询详情 根据ID-->
+    <select id="getInfoById" resultMap="signResultMap">
+
+SELECT A.*,B.staff_name staffName,B.staff_type_name staffCategoryName FROM shop_sign_set_info A
+LEFT JOIN shop_staff B
+ON A.staffId =B.staff_id
+        where A.id =#{id}
+
+    </select>
+
+    <!--多条件查询-->
+    <select id="getList" resultMap="signResultMap">
+        SELECT A.*,B.staff_name staffName,B.staff_type_name staffCategoryName FROM shop_sign_set_info A
+        LEFT JOIN shop_staff B
+        ON A.staffId =B.staff_id
+        WHERE 1=1
+        <if test="shopId>0">
+            AND A.shop_id=#{shopId}
+        </if>
+        <if test="staffCategoryNo>0">
+            AND A.staffCategoryNo =#{staffCategoryNo}
+        </if>
+        <if test="staffId>0">
+            AND A.staffId =#{staffId}
+        </if>
+        <if test="pageNo >0 and pageSize > 0">
+            LIMIT ${(pageNo-1)*pageSize},${pageSize};
+        </if>
+    </select>
+
+    <!--多条件查询-->
+    <select id="getCount" resultType="Integer">
+        SELECT COUNT(*) FROM shop_sign_set_info WHERE 1=1
+        <if test="shopId>0">
+            AND A.shop_id=#{shopId}
+        </if>
+        <if test="staffCategoryNo>0">
+            AND A.staffCategoryNo =#{staffCategoryNo}
+        </if>
+        <if test="staffId>0">
+            AND A.staffId =#{staffId}
+        </if>
+    </select>
+
+    <!--统计汇总-->
+    <select id="summarySignInfo"  resultMap="signResultMap">
+
+      SELECT B.staff_name staffName,B.staffTypeName staffCategoryName,B.staffPhone,SUM(A.signAmont) signSumAmont,Count(*) signNum,signStatus FROM shop_sign_set_info A
+LEFT JOIN shop_staff B
+ON A.staffId =B.staff_id
+GROUP BY A.staffId
+    </select>
+</mapper>

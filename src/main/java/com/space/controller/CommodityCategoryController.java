@@ -1,6 +1,8 @@
 package com.space.controller;
 
+import com.space.entity.AreaSeatPriceSet;
 import com.space.entity.Commodity;
+import com.space.entity.CommodityCategory;
 import com.space.exception.BaseExceptionHandler;
 import com.space.exception.PageEntity;
 import com.space.service.CommodityCategoryService;
@@ -26,25 +28,48 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/commodity/category")
-@Api(tags="商品管理模块")
+@Api(tags="商品分类")
 public class CommodityCategoryController extends BaseExceptionHandler {
     private static Logger logger = LoggerFactory.getLogger(CommodityController.class);
 
     @Autowired
     private CommodityCategoryService commodityCategoryService;
 
- /*   *//** 查询所有分组*//*
-    @RequestMapping(value = "/list",method = RequestMethod.GET)
-    public List<com.space.entity.CommodityCategory> list(@RequestParam(name="shopId",required = true,defaultValue ="0")Integer shopId){
-        logger.info("CommodityCategoryController|list,shopId:"+shopId);
-        return commodityCategoryService.GetDataWithNodes(shopId);
-    }*/
+    /** 保存 新增或者更新 id 0代表新增 大于0代表修改*/
+    @RequestMapping(value = "{id}",method = RequestMethod.PUT)
+    public CommodityCategory save(@RequestBody CommodityCategory commodityCategory, @PathVariable(value = "id",required = true)Integer id, @RequestParam(name = "shopId",required = true)Integer shopId) throws Exception{
+        if(id!=commodityCategory.getId())
+            throw  new Exception("请求参数错误!");
 
-    /** 查询所有分组*/
-    @RequestMapping(value = "/list/{shopId}",method = RequestMethod.GET)
-    public List<com.space.entity.CommodityCategory> list(@PathVariable("shopId")int shopId){
-        logger.info("CommodityCategoryController|list,shopId:"+shopId);
-        return commodityCategoryService.GetDataWithNodes(shopId);
+        //商家ID
+        if(shopId==null||shopId<=0)
+            throw  new Exception("请求参数错误!");
+        commodityCategory.setShopId(shopId);
+        if(id<=0){
+            commodityCategory=  commodityCategoryService.add(commodityCategory);
+        }
+        else {
+            commodityCategory=  commodityCategoryService.update(commodityCategory);
+        }
+        return  commodityCategory;
     }
+    /** 删除 根据ID*/
+    @RequestMapping(value = "{id}",method = RequestMethod.DELETE)
+    public  int deleteById(@PathVariable(value = "id",required = true)Integer id) throws Exception{
+        return  commodityCategoryService.deleteById(id);
+    }
+    /** 查询单个 根据ID*/
+    @RequestMapping(value = "{id}",method = RequestMethod.GET)
+    public  CommodityCategory getInfoById(@PathVariable(value = "id",required = true)Integer id) throws Exception{
+        return  commodityCategoryService.getInfoById(id);
+    }
+    /** 查询所有分组*/
+    @RequestMapping(value = "/list",method = RequestMethod.GET)
+    public List<com.space.entity.CommodityCategory> list(@RequestParam(name="shopId",required = true)Integer shopId
+        ,@RequestParam(name="spread",required = false,defaultValue ="false")boolean spread){
+        logger.info("CommodityCategoryController|list,shopId:"+shopId);
+        return commodityCategoryService.GetDataWithNodes(shopId,spread);
+    }
+
 
 }

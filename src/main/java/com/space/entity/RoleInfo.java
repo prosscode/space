@@ -21,8 +21,8 @@ public class RoleInfo implements Serializable{
 
     private  Integer roleId;
     private  Integer shopId;
-    private  Integer roleName;
-    private  Integer roleRemark;
+    private  String roleName;
+    private  String roleRemark;
     private  boolean isActive;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone= "GMT+8")
     private  Date createDate;

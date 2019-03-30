@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.AreaSeatPriceSetMapper">
+
+    <resultMap id="ResultMap" type="com.space.entity.AreaSeatPriceSet">
+        <id column="id" property="id"/>
+        <result column="shopId" property="shopId"/>
+        <result column="areaTypeId" property="areaTypeId"/>
+        <result column="price" property="price"/>
+        <result column="startHour" property="startHour"/>
+        <result column="endHour" property="endHour"/>
+        <result column="modifyDate" property="modifyDate"/>
+       <!-- //结果返回字段-->
+        <result column="areaTypeName" property="areaTypeName"/>
+        <result column="seatCount" property="seatCount"/>
+    </resultMap>
+
+    <!--新增-->
+    <insert id="add" parameterType="com.space.entity.AreaSeatPriceSet" useGeneratedKeys="true" keyProperty="id">
+        INSERT  into area_seat_price_set (shopId,areaTypeId,price,startHour,endHour,modifyDate)
+        VALUES (#{shopId},#{areaTypeId},#{price},#{startHour},#{endHour},#{modifyDate})
+    </insert>
+    <!--删除 根据ID-->
+    <delete id="deleteById">
+        DELETE from area_seat_price_set
+        WHERE id =#{id}
+    </delete>
+    <!--更新-->
+    <update id="update" parameterType="com.space.entity.AreaSeatPriceSet">
+        UPDATE  area_seat_price_set
+        SET
+        areaTypeId=#{areaTypeId},
+        price=#{price},
+        startHour=#{startHour},
+        endHour=#{endHour},
+        modifyDate=#{modifyDate}
+        WHERE  id=#{id}
+    </update>
+    <!--查询详情 根据ID-->
+    <select id="getInfoById" resultMap="ResultMap">
+        select A.*,B.type_name areaTypeName,(SELECT COUNT(seat_id) FROM shop_seat WHERE  type_id=areaTypeId) seatCount from area_seat_price_set A
+        LEFT  JOIN  area_type_info B
+        ON  A.areaTypeId=B.type_id
+        where A.id =#{id}
+    </select>
+
+    <!--多条件查询-->
+    <select id="getList" resultMap="ResultMap">
+        select A.*,B.type_name areaTypeName,(SELECT COUNT(seat_id) FROM shop_seat WHERE  type_id=areaTypeId) seatCount from area_seat_price_set A
+        LEFT  JOIN  area_type_info B
+        ON  A.areaTypeId=B.type_id WHERE 1=1
+        <if test="shopId>0">
+            AND A.shopId=#{shopId}
+        </if>
+        <if test="areaTypeId>0">
+            AND A.areaTypeId=#{areaTypeId}
+        </if>
+        <if test="pageNo >0 and pageSize > 0">
+            LIMIT ${(pageNo-1)*pageSize},${pageSize};
+        </if>
+    </select>
+
+    <!--多条件查询 返回行数-->
+    <select id="getCount"  resultType="Integer">
+        SELECT COUNT(*) FROM area_seat_price_set WHERE 1=1
+        <if test="shopId>0">
+            AND shopId=#{shopId}
+        </if>
+        <if test="areaTypeId>0">
+            AND areaTypeId=#{areaTypeId}
+        </if>
+    </select>
+</mapper>
