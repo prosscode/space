@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.mapper.WXProfileMapper">
+
+    <resultMap id="UserPartSell" type="com.space.entity.UserPartSell">
+        <id column="id" property="id" />
+        <result column="shopId" property="shopId"/>
+        <result column="userId" property="userId"/>
+        <result column="commission" property="commission"/>
+        <result column="sumMoney" property="sumMoney"/>
+        <result column="superUserId" property="superUserId"/>
+        <result column="user_name" property="superUserName"/>
+        <result column="nextUserNum" property="nextUserNum"/>
+        <result column="joinDate" property="joinDate"/>
+        <result column="isActive" property="isActive"/>
+    </resultMap>
+
+
+    <resultMap id="StoredDrink" type="com.space.entity.StoredDrink">
+        <id column="id" property="id" />
+        <result column="shopId" property="shopId"/>
+        <result column="userName" property="userName"/>
+        <result column="phone" property="phone"/>
+        <result column="startTime" property="startTime"/>
+        <result column="endTime" property="endTime"/>
+        <result column="commodityNo" property="commodityNo"/>
+        <result column="drinkName" property="drinkName"/>
+        <result column="drinkCount" property="drinkCount"/>
+        <result column="brokeRage" property="brokeRage"/>
+        <result column="type" property="type"/>
+        <result column="modifyDate" property="modifyDate"/>
+    </resultMap>
+
+    <select id="getPartsellLevel" parameterType="Integer" resultType="Integer">
+        select partSellLevel from partsell_set_info where shopId = #{shopId} and isActive = 1
+    </select>
+
+    <select id="getUserIdentity" parameterType="Integer" resultMap="UserPartSell">
+        select part.*,users.user_name from shop_user_part_sell part left join shop_user users on users.user_id = part.superUserId
+        where part.userId=#{userId} and part.isActive = 0
+    </select>
+
+    <select id="getUserStored" resultMap="StoredDrink">
+        select * from shop_drink_info where phone=#{phone} and `type`=#{type}
+    </select>
+</mapper>

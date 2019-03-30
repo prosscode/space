@@ -1,7 +1,6 @@
 package com.space.utils;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 /**
  * @describe:
@@ -16,7 +15,7 @@ public class InfoEncryption {
      * @throws Exception
      */
     public static String encryptBASE64(String password) throws Exception{
-        return (new BASE64Encoder().encodeBuffer(password.getBytes()));
+        return new String(Base64.encodeBase64(password.getBytes()));
     }
 
     /**
@@ -26,7 +25,7 @@ public class InfoEncryption {
      * @throws Exception
      */
     public static String decryptBASE64(String password) throws Exception {
-        byte[] bytes = new BASE64Decoder().decodeBuffer(password);
+        byte[] bytes = Base64.decodeBase64(password);
         String str = new String(bytes);
         return str;
     }
