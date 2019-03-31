@@ -53,4 +53,16 @@
         where detail.order_id=#{orderId}
     </select>
 
+    <!--添加拼吧订单-->
+    <insert id="addSpellOrder" parameterType="com.space.entity.Order" useGeneratedKeys="true" keyProperty="orderId">
+     insert into shop_order(shop_id,order_no,order_name,order_price,order_original_amount,order_actual_amount,
+     order_seat_amount,order_give_amount,order_securities_no,order_securities_amount,order_discount,order_waiter_id,
+     order_user,order_seat,order_user_phone,order_type,order_date,order_status,order_people_num,join_user_amount_method,
+     per_capita_consumption)
+     values (#{shopId},#{orderNo},#{orderName},#{orderPrice},#{orderOriginalAmount},#{orderActualAmount},
+     #{orderSeatAmount},#{orderGiveAmount},#{orderSecuritiesNo},#{orderSecuritiesAmount},#{orderDiscount},
+     #{orderWaiterId},#{orderUser},#{orderSeat},#{orderUserPhone},#{orderType},#{orderDate},#{orderStatus},
+     #{orderPeopleNum},#{joinUserAmountMethod},#{perCapitaConsumption})
+    </insert>
+
 </mapper>

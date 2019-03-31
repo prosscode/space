@@ -17,4 +17,6 @@ public interface WXOrderMapper {
                                         @Param("orderStatus")Integer orderStatus);
 
     public List<OrderProduct> getOrderProduct(@Param("orderId")Integer orderId);
+
+    public int addSpellOrder(Order order);
 }

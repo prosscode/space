@@ -1,10 +1,12 @@
 package com.space.controller;
 
+import com.space.entity.Order;
 import com.space.exception.PageEntity;
 import com.space.service.WXOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,5 +40,12 @@ public class WXOrderController {
         logger.info("WXOrderController|getUserOrderInfo,orderUserPhone:"+orderUserPhone+",orderStatus:"+orderStatus);
         PageEntity orderInfo = wxOrderService.getUserOrderInfo(orderUserPhone, orderStatus);
         return orderInfo;
+    }
+
+    /** 添加拼吧订单*/
+    @RequestMapping(value = "/addSpellOrder")
+    public Integer addSpellOrder(@RequestBody Order order){
+        logger.info("WXOrderController|addSpellOrder,shopId:"+order.getShopId());
+        return wxOrderService.addSpellOrder(order);
     }
 }
