@@ -18,6 +18,10 @@ public class Order {
     private Integer orderId;
     //商户ID
     private Integer shopId;
+    // 商家名称
+    private String shopName;
+    // 拼吧的人均消费
+    private Double perCapitaConsumption;
     //订单号
     private String orderNo;
     //订单名称
