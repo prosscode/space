@@ -58,6 +58,17 @@ public class WXHomeController {
         return wxHomeService.getPhotos(shopId);
     }
 
+    /**拿到优惠券信息*/
+    @RequestMapping(value = "/getCouponInfo")
+    public PageEntity getCouponInfo(@RequestParam(name="shopId",required = true)Integer shopId){
+        logger.info("WXHomeController|getCouponInfo,shopId:"+shopId);
+        PageEntity info = wxHomeService.getCouponInfo(shopId);
+        return info;
+    }
+
+
+
+
     /**
      * 通过shopId，拿到商品信息
      * @param shopId
@@ -77,13 +88,7 @@ public class WXHomeController {
         return seatInfo;
     }
 
-    /**拿到优惠券信息*/
-    @RequestMapping(value = "/getCouponInfo")
-    public PageEntity getCouponInfo(@RequestParam(name="shopId")Integer shopId){
-        logger.info("WXHomeController|getCouponInfo,shopId:"+shopId);
-        PageEntity info = wxHomeService.getCouponInfo(shopId);
-        return info;
-    }
+
 
     /**拿到服务员信息*/
     @RequestMapping(value = "/getWaiterInfo")

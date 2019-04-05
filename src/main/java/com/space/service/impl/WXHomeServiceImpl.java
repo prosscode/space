@@ -89,6 +89,21 @@ public class WXHomeServiceImpl implements WXHomeService {
         return entity;
     }
 
+    /**拿到优惠券信息*/
+    @Override
+    public PageEntity getCouponInfo(Integer shopId) {
+        List<CouponInfo> couponInfo = wxHomeMapper.getCouponInfo(shopId);
+        PageEntity entity = new PageEntity();
+        entity.setList(couponInfo);
+        entity.setCount(0);
+        return entity;
+    }
+
+
+
+
+
+
 
 
     /**查询商品信息*/
@@ -105,16 +120,6 @@ public class WXHomeServiceImpl implements WXHomeService {
         List<SeatInfo> seatInfo = wxHomeMapper.getSeatInfo(shopId);
         PageEntity entity = new PageEntity();
         entity.setList(seatInfo);
-        entity.setCount(0);
-        return entity;
-    }
-
-    /**拿到优惠券信息*/
-    @Override
-    public PageEntity getCouponInfo(Integer shopId) {
-        List<CouponInfo> couponInfo = wxHomeMapper.getCouponInfo(shopId);
-        PageEntity entity = new PageEntity();
-        entity.setList(couponInfo);
         entity.setCount(0);
         return entity;
     }

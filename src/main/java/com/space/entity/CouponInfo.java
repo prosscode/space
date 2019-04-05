@@ -1,6 +1,9 @@
 package com.space.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @describe: 优惠券
@@ -19,5 +22,7 @@ public class CouponInfo {
     private Integer activeDateType;
     private Integer activeRange;
     private String useDesc;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private Date createDate;
 
 }

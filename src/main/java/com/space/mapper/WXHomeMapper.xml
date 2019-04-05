@@ -48,6 +48,7 @@
         <result column="activeDateType" property="activeDateType" />
         <result column="activeRange" property="activeRange"/>
         <result column="useDesc" property="useDesc"/>
+        <result column="createDate" property="createDate"/>
     </resultMap>
 
     <resultMap id="StaffInfo" type="com.space.entity.Staff">
@@ -110,6 +111,12 @@
         where shop.shopId=#{shopId}
     </select>
 
+    <!--查询优惠券-->
+    <select id="getCouponInfo" resultMap="CouponInfo">
+        select id,shopId,securitiesNo,securitiesType,worth,useCondition,
+        amontCondition,activeDateType,activeRange,useDesc,createDate
+        from shop_market_securities where shopId=#{shopId}
+    </select>
 
 
 
@@ -129,11 +136,6 @@
         where seat.shop_id=#{shopId}
     </select>
 
-    <!--查询优惠券-->
-    <select id="getCouponInfo" resultMap="CouponInfo">
-        select id,shopId,securitiesNo,securitiesType,worth,useCondition,amontCondition,activeDateType,activeRange,useDesc
-        from shop_market_securities where shopId=#{shopId}
-    </select>
 
     <!--查询服务员-->
     <select id="getWaiterInfo" resultMap="StaffInfo">
