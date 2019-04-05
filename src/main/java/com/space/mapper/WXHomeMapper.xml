@@ -88,6 +88,9 @@
         <if test="filter==2">
             order by per_capita_consumption
         </if>
+        <if test="pageNo >= 0 and pageSize > 0">
+            limit #{pageNo},#{pageSize}
+        </if>
     </select>
 
     <!--拿到商家的评分-->

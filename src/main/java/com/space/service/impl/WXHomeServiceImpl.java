@@ -36,11 +36,11 @@ public class WXHomeServiceImpl implements WXHomeService {
     /**查询商家*/
     @Override
     public PageEntity getShop(Integer filter, String provice, String city, String district, String type, String barName,
-                              Double longUser,Double latUser) {
+                              Double longUser,Double latUser,Integer pageNo,Integer pageSize) {
         logger.info("WXHomeServiceImpl|getShop,filter:"+filter);
         List<WXShopInfo> infoList = null;
 
-        infoList = wxHomeMapper.getShop(filter, provice, city, district, type, barName);
+        infoList = wxHomeMapper.getShop(filter, provice, city, district, type, barName,pageNo,pageSize);
 
         for(WXShopInfo shop:infoList){
             Integer shopId = shop.getShopId();

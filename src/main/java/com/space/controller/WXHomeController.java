@@ -42,9 +42,12 @@ public class WXHomeController {
                               @RequestParam(name="type",defaultValue = "")String type,
                               @RequestParam(name="barName",defaultValue = "")String barName,
                               @RequestParam(name="longUser",defaultValue = "0") Double longUser,
-                              @RequestParam(name="latiUser",defaultValue = "0") Double latUser){
+                              @RequestParam(name="latiUser",defaultValue = "0") Double latUser,
+                              @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                              @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize){
         logger.info("WXHomeController|getShop,type:"+type+",filter:"+filter+",longUser:"+longUser+",latUser:"+latUser);
-        PageEntity shop = wxHomeService.getShop(filter, provice, city, district, type, barName,longUser,latUser);
+        pageNo = (pageNo - 1) * pageSize;
+        PageEntity shop = wxHomeService.getShop(filter, provice, city, district, type, barName,longUser,latUser,pageNo,pageSize);
         return shop;
     }
 

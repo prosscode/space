@@ -14,7 +14,9 @@ public interface WXHomeMapper {
                                     @Param("city") String city,
                                     @Param("district") String district,
                                     @Param("type") String type,
-                                    @Param("barName") String barName);
+                                    @Param("barName") String barName,
+                                    @Param("pageNo")Integer pageNo,
+                                    @Param("pageSize") Integer pageSize);
 
     public Double getShopScore(@RequestParam("shopId")Integer shopId);
 

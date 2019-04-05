@@ -9,7 +9,7 @@ import java.util.List;
 public interface WXHomeService {
 
     public PageEntity getShop(Integer filter, String provice, String city, String district, String type, String barName,
-                              Double longUser,Double latUser);
+                              Double longUser,Double latUser,Integer pageNo,Integer pageSize);
 
     public PageEntity getPhotos(Integer shopId);
 
