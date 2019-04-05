@@ -48,6 +48,13 @@ public class WXHomeController {
         return shop;
     }
 
+    /**查询商家相册*/
+    @RequestMapping(value = "/getPhotos",method = RequestMethod.GET)
+    public PageEntity getPhotos(@RequestParam(name = "shopId",required = true)Integer shopId){
+        logger.info("WXHomeController|getPhotos,shopId:"+shopId);
+        return wxHomeService.getPhotos(shopId);
+    }
+
     /**
      * 通过shopId，拿到商品信息
      * @param shopId

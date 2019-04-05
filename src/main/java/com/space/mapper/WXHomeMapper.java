@@ -20,6 +20,8 @@ public interface WXHomeMapper {
 
     public String getShopLogo(@RequestParam("shopId")Integer shopId);
 
+    public List<String> getPhotos(@RequestParam("shopId")Integer shopId);
+
     public void getGoodInfo(@Param("shopId") Integer shopId,
                             @Param("productName")String productName);
 

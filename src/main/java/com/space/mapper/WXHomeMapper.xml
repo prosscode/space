@@ -101,6 +101,16 @@
         where doc.shopId=#{shopId} and doc.type='logo'
     </select>
 
+    <!--查询商家相册-->
+    <select id="getPhotos" parameterType="Integer" resultType="String">
+        select info.url from shop_document shop left join document_info info on shop.documentId=info.documentId
+        where shop.shopId=#{shopId}
+    </select>
+
+
+
+
+
     <!--查询商品信息-->
     <select id="getGoodInfo" resultMap="GoodInfo">
         select * from product_info where shop_id=#{shopId}

@@ -11,6 +11,8 @@ public interface WXHomeService {
     public PageEntity getShop(Integer filter, String provice, String city, String district, String type, String barName,
                               Double longUser,Double latUser);
 
+    public PageEntity getPhotos(Integer shopId);
+
     public void getGoodInfo(Integer shopId,String productName);
 
     public PageEntity getSeatInfo(Integer shopId);

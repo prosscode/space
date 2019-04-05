@@ -79,6 +79,18 @@ public class WXHomeServiceImpl implements WXHomeService {
         return entity;
     }
 
+    /**查询商家相册*/
+    @Override
+    public PageEntity getPhotos(Integer shopId) {
+        List<String> photos = wxHomeMapper.getPhotos(shopId);
+        PageEntity entity = new PageEntity();
+        entity.setList(photos);
+        entity.setCount(photos.size());
+        return entity;
+    }
+
+
+
     /**查询商品信息*/
     @Override
     public void getGoodInfo(Integer shopId,String productName) {
