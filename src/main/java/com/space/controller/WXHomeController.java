@@ -36,13 +36,15 @@ public class WXHomeController {
      */
     @RequestMapping(value = "/getShop",method = RequestMethod.GET)
     public PageEntity getShop(@RequestParam(name="filter",defaultValue = "0")Integer filter,
-                        @RequestParam(name="provice",defaultValue = "")String provice,
-                        @RequestParam(name="city",defaultValue = "")String city,
-                        @RequestParam(name="district",defaultValue = "")String district,
-                        @RequestParam(name="type",defaultValue = "")String type,
-                        @RequestParam(name="barName",defaultValue = "")String barName){
-        logger.info("WXHomeController|getShop,type:"+type+",filter:"+filter);
-        PageEntity shop = wxHomeService.getShop(filter, provice, city, district, type, barName);
+                              @RequestParam(name="provice",defaultValue = "")String provice,
+                              @RequestParam(name="city",defaultValue = "")String city,
+                              @RequestParam(name="district",defaultValue = "")String district,
+                              @RequestParam(name="type",defaultValue = "")String type,
+                              @RequestParam(name="barName",defaultValue = "")String barName,
+                              @RequestParam(name="longUser",defaultValue = "0") Double longUser,
+                              @RequestParam(name="latiUser",defaultValue = "0") Double latUser){
+        logger.info("WXHomeController|getShop,type:"+type+",filter:"+filter+",longUser:"+longUser+",latUser:"+latUser);
+        PageEntity shop = wxHomeService.getShop(filter, provice, city, district, type, barName,longUser,latUser);
         return shop;
     }
 

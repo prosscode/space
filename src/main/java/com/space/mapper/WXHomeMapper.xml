@@ -2,16 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.space.mapper.WXHomeMapper">
 
-    <resultMap id="BaseResultMap" type="com.space.entity.ShopHome">
+    <resultMap id="BaseResultMap" type="com.space.wxEntity.WXShopInfo">
         <id column="shop_id" property="shopId" />
-        <result column="shop_mark" property="shopMark" />
-        <result column="shop_name" property="barName" />
-        <result column="shop_industry" property="industry"/>
-        <result column="shop_door_photo" property="shopDoorPhoto" />
-        <result column="shop_logo_photo" property="shopLogoPhoto"/>
-        <!--人均消费-->
+        <result column="shop_name" property="shopName" />
+        <result column="shop_industry" property="shopIndustry"/>
+        <result column="shop_provice" property="shopProvice"/>
+        <result column="shop_city" property="shopCity" />
+        <result column="shop_district" property="shopDistrict"/>
+        <result column="shop_address" property="shopAddress"/>
+        <result column="shop_desc" property="shopDesc" />
+        <result column="businessStartTime" property="businessStartTime"/>
+        <result column="businessEndTime" property="businessEndTime"/>
         <result column="per_capita_consumption" property="perCapitaConsumption" />
-        <result column="shop_address" property="shopAddress" />
+
+        <result column="latitude" property="latitude"/>
+        <result column="longitude" property="longitude"/>
     </resultMap>
 
     <resultMap id="GoodInfo" type="com.space.entity.Commodity">
@@ -62,30 +67,38 @@
 
     <!--查询商家基本信息-->
     <select id="getShop" resultMap="BaseResultMap">
-        select shop.shop_id,shop.shop_mark,shop.shop_logo_photo,shop.shop_name,shop.shop_industry,
-        shop.per_capita_consumption,shop.shop_address
-        from space_shop shop where 1=1
+        select shop_id,shop_name,shop_industry,shop_provice,shop_city,shop_district,shop_address,shop_desc
+        per_capita_consumption,businessStartTime,businessEndTime
+        from space_shop where 1=1
         <if test="provice!=null and provice!=''">
-            and shop.shop_provice = #{provice}
+            and shop_provice = #{provice}
         </if>
         <if test="city!=null and city!=''">
-            and shop.shop_city = #{city}
+            and shop_city = #{city}
         </if>
         <if test="district!=null and district!=''">
-            and shop.shop_district = #{district}
+            and shop_district = #{district}
         </if>
         <if test="type!=null and type!=''">
-            and shop.shop_industry like '%${type}%'
+            and shop_industry like '%${type}%'
         </if>
-        <if test="filter==0">
-            and 1=1
-        </if>
-        <if test="filter==1">
-            and 1=1
+        <if test="barName!=null and barName!=''">
+            and shop_name like '%${barName}%'
         </if>
         <if test="filter==2">
-            order by info.per_capita_consumption
+            order by per_capita_consumption
         </if>
+    </select>
+
+    <!--拿到商家的评分-->
+    <select id="getShopScore" parameterType="Integer" resultType="Double">
+        select avg(order_shop_score) from shop_order where shop_id=#{shopId} and order_shop_score_status = 1
+    </select>
+
+    <!--拿到商家的logo图片-->
+    <select id="getShopLogo" parameterType="Integer" resultType="String">
+        select info.url from shop_document doc left join document_info info on doc.documentId=info.documentId
+        where doc.shopId=#{shopId} and doc.type='logo'
     </select>
 
     <!--查询商品信息-->
